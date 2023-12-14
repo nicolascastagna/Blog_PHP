@@ -1,28 +1,34 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+namespace App\public;
 
-use App\lib\View;
+use App\controllers\Contact;
+use App\controllers\Homepage;
+use App\controllers\post\IndexPost;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Slim\Factory\AppFactory;
 
-$view = new View();
+use Slim\Views\Twig;
+use Slim\Views\TwigMiddleware;
 
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$page = ltrim($path, '/');
+require __DIR__ . '/../vendor/autoload.php';
 
-$page = empty($page) ? 'accueil' : $page;
+$app = AppFactory::create();
 
-switch ($page) {
-    case 'accueil':
-        echo $view->render('homepage.twig', ['title' => 'Homepage']);
-        break;
-    case 'post':
-        echo $view->render('post.twig', ['title' => 'page d\'article']);
-        break;
-    case 'contact':
-        echo $view->render('contact.twig', ['test' => 'contact']);
-        break;
-    default:
-        header('HTTP/1.0 404 Not Found');
-        echo $view->render('error.twig');
-        break;
-}
+$twig = Twig::create(
+    __DIR__ . '/../templates',
+    ['cache' => false]
+);
+
+$app->add(TwigMiddleware::create($app, $twig));
+
+$app->get('/', [Homepage::class, 'homepage']);
+$app->get('/blog', [IndexPost::class, 'index']);
+$app->get('/contact', [Contact::class, 'contact']);
+
+$app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {
+    return $twig->render($response->withStatus(404), 'error.twig');
+})->setName('not-found');
+
+$app->run();
