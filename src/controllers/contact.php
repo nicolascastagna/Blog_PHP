@@ -11,7 +11,7 @@ class Contact
     public function contact(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $view = new View();
-        $html = $view->render('contact.twig', ['contact' => 'page de contact']);
+        $html = $view->render('contact.twig', ['contact' => 'Contact']);
 
         $response->getBody()->write($html);
 

@@ -11,7 +11,7 @@ class Homepage
     public function homepage(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $view = new View();
-        $html = $view->render('homepage.twig', ['title' => 'Homepage']);
+        $html = $view->render('homepage.twig', ['title' => 'Blog']);
 
         $response->getBody()->write($html);
 

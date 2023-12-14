@@ -29,6 +29,6 @@ $app->get('/contact', [Contact::class, 'contact']);
 
 $app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {
     return $twig->render($response->withStatus(404), 'error.twig');
-})->setName('not-found');
+});
 
 $app->run();
