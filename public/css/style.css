@@ -39,6 +39,7 @@ img {
 /* Header */
 header {
     background-color: black;
+    opacity: 0.9;
 }
 
 .group-menus {
@@ -193,6 +194,51 @@ nav a:hover:before {
     width: 30px;
 }
 /* Posts */
+.container-cards h2 {
+    margin: 50px 10px 25px 10px;
+}
+
+.container-posts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.card-post {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.card-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.card-header h4 {
+    margin: 0;
+}
+
+.card-content {
+    margin-bottom: 10px;
+}
+
+.card-action {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-action a {
+    text-decoration: none;
+    color: var(--primary);
+}
+.card-action a:hover {
+    transition: all 0.2s;
+    color: var(--secondary);
+}
 
 /* Comments */
 
