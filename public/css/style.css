@@ -1,0 +1,234 @@
+@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+:root {
+    --primary: #e1ad01;
+    --secondary: #095228;
+    --title: #211000;
+    --content: #707070;
+    --backgroundColorFooter: #f5f5f5;
+    --fontTitle: "Libre Baskerville", serif;
+    --fontContent: "Roboto", sans-serif;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--fontTitle);
+}
+
+p,
+a,
+li {
+    font-family: var(--fontContent);
+}
+
+body {
+    margin: auto;
+}
+
+.grid-container {
+    max-width: 1280px;
+    margin: auto;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Header */
+header {
+    background-color: black;
+}
+
+.group-menus {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: flex-end;
+    margin-left: -20px;
+}
+
+#toggle {
+    display: none;
+}
+
+/* Hamburger */
+.hamburger {
+    z-index: 99;
+    position: sticky;
+    cursor: pointer;
+    margin: 0 25px 20px 0;
+}
+
+.hamburger span {
+    position: relative;
+    width: 3em;
+    height: 5px;
+    display: block;
+    border-radius: 3px;
+    background-color: var(--primary);
+    margin-top: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+.nav {
+    position: fixed;
+    width: 100%;
+    height: 40%;
+    margin-right: -20px;
+    background-color: var(--title);
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+    transform: scale(0);
+}
+
+.nav-wrapper {
+    position: relative;
+    overflow: hidden;
+    overflow-y: auto;
+    height: 100%;
+}
+
+nav {
+    text-align: center;
+    padding-top: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+nav a {
+    position: relative;
+    text-decoration: none;
+    color: white !important;
+    font-size: 2em;
+    display: inline-block;
+    transition: color 0.2s ease-in-out;
+    letter-spacing: 1px;
+    margin: 20px 10px 20px 20px;
+}
+
+nav a:before {
+    content: "";
+    height: 0;
+    position: absolute;
+    width: 0.25em;
+    background-color: white;
+    left: -0.5em;
+    transition: all 0.2s ease-in-out;
+}
+
+nav a:hover {
+    color: var(--primary) !important;
+}
+
+nav a:hover:before {
+    height: 100%;
+}
+
+/* Animations */
+.hamburger .top-bun {
+    margin-top: 25px;
+}
+
+#toggle:checked + .hamburger .bottom-bun {
+    opacity: 0;
+    transform: rotate(45deg);
+}
+
+#toggle:checked + .hamburger .meat {
+    transform: rotate(45deg);
+    margin-top: -5px;
+}
+
+#toggle:checked + .hamburger .top-bun {
+    transform: rotate(135deg);
+}
+
+#toggle:checked + .hamburger + .nav {
+    top: 0;
+    transform: scale(1);
+}
+
+/* #toggle:checked ~ .hamburger {
+    position: fixed;
+} */
+
+/* Hero */
+.hero {
+    width: 100%;
+    display: flex;
+}
+.hero-title {
+    width: 60%;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 30px;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+.hero-title h3 {
+    font-style: italic;
+}
+.hero-img {
+    width: 40%;
+    min-width: 250px;
+}
+.sub-title {
+    padding-top: 50px;
+}
+
+/* Homepage */
+.icons-container ul {
+    display: flex;
+    flex-direction: row;
+}
+.icons-container li {
+    all: unset;
+}
+.icons-container img {
+    margin: 5px;
+    width: 30px;
+}
+/* Posts */
+
+/* Comments */
+
+/* Footer */
+footer {
+    background-color: var(--backgroundColorFooter);
+}
+.footer-container a {
+    color: var(--content);
+    text-align: justify;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+/* Media Query */
+@media all and (min-width: 1024px) {
+    .group-menus {
+        margin-left: 0;
+    }
+    .hamburger {
+        display: none;
+    }
+    .nav {
+        all: unset;
+    }
+    .nav-wrapper {
+        all: unset;
+    }
+    nav {
+        all: unset;
+    }
+    nav a {
+        color: var(--title);
+        font-size: 20px;
+        padding-right: 10px;
+    }
+}

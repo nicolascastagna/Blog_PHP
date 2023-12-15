@@ -10,11 +10,17 @@
     <meta name="author" content="Nicolas Castagna" />
     <meta name="keywords" content="Portfolio, développeur web" />
     <meta name="type" content="portfolio" />
+      <link rel="stylesheet" href="css/style.css" />
+      <script src="https://kit.fontawesome.com/5850faea1d.js" crossorigin="anonymous"></script>
    <title>{% block title %}Portfolio{% endblock %} | Nicolas Castagna</title>
 </head>
 <body>
       {% include 'navbar.twig' %}
-      {% block content %}{% endblock %}
+            <section>
+                  <main class="grid-container">
+                        {% block content %}{% endblock %}
+                  </main>
+            </section>
       {% include 'footer.twig' %}
 </body>
 </html>
