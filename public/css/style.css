@@ -76,7 +76,7 @@ header {
 .nav {
     position: fixed;
     width: 100%;
-    height: 40%;
+    height: 100vh;
     margin-right: -20px;
     background-color: var(--title);
     top: 0;
@@ -91,6 +91,8 @@ header {
     overflow: hidden;
     overflow-y: auto;
     height: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 nav {
@@ -253,6 +255,21 @@ footer {
     display: flex;
     justify-content: center;
     padding: 10px;
+}
+
+/* Error */
+.error {
+    text-align: center;
+    height: 60vh;
+    margin-top: auto;
+    margin-bottom: auto;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.error-content a {
+    text-decoration: none;
 }
 
 /* Media Query */
