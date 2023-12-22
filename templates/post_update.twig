@@ -1,0 +1,22 @@
+{% extends 'layout.twig' %}
+{% block title %}Modification d'article
+{% endblock %}
+{% block content %}
+	<div class="container-posts">
+		<div class="card-post">
+			<form method="post" enctype="multipart/form-data">
+				<div class="card-header">
+					<input type="text" id="title" name="title" value="{{ post.title }}">
+					<h4>{{ post.author }}</h4>
+					<p>{{ post.creation_date }}</p>
+				</div>
+				<div class="card-content">
+					<textarea id="chapo" name="chapo">{{ post.chapo }}</textarea>
+					<textarea id="content" name="content">{{ post.content }}</textarea>
+					<input class="input-file" type="file" name="file" id="file"/>
+				</div>
+			</div>
+			<input class="button-form" type="submit" value="Modifier"/>
+		</form>
+	</div>
+{% endblock %}

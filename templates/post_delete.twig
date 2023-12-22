@@ -1,0 +1,18 @@
+{% extends 'layout.twig' %}
+{% block title %}Suppression de l'article
+{% endblock %}
+{% block content %}
+	<div class="container-single-post">
+		<div class="title">
+			<h2>Suppression de l'article</h2>
+			<div class="actions-single-post">
+				<h3>Souhaitez-vous vraiment supprimer cette article ?</h3>
+				<form action="/post/suppression" method="post">
+					<input class="button-form" value="Supprimer" type="submit"/>
+				</form>
+				<form action="/">
+					<input class="button-form" type="button">Revenir à l'accueil</input>
+			</form>
+		</div>
+	</div>
+</div>{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'layout.twig' %}
+{% block title %}Page d'article
+{% endblock %}
+{% block content %}
+	<div class="container-posts">
+		<div class="card-post">
+			<div class="card-header">
+				<h2 class="title">{{ post.title }}</h2>
+				<h4>{{ post.author }}</h4>
+				<p>{{ post.creation_date }}</p>
+			</div>
+			<div class="card-content">
+				<p>{{ post.chapo }}</p>
+				<p>{{ post.content }}</p>
+			</div>
+			<div class="card-action">
+				<a href="#">Modifier</a>
+				<a href="#">Supprimer</a>
+			</div>
+		</div>
+		<div class="add-comments">
+			<h4>Ajoutez un commentaire</h4>
+			<form action="/" method="post">
+				<textarea name="content" id="content" required></textarea>
+			</form>
+		</div>
+		{% include 'comment.twig' %}
+	</div>
+{% endblock %}
