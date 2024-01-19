@@ -7,7 +7,7 @@ class PostSorter
     public static function sortByModificationDate(array $posts): array
     {
         usort($posts, function ($a, $b) {
-            return strtotime($b['creation_date']) - strtotime($a['creation_date']);
+            return strtotime($b->creationDate) - strtotime($a->creationDate);
         });
 
         return $posts;
