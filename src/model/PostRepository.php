@@ -11,14 +11,50 @@ class PostRepository
     public function getPost(string $id): Post
     {
         $statement = $this->connection->getConnection()->prepare(
-            "SELECT id, user_id, title, chapo, content, DATE_FORMAT(creation_date, '%d/%m/%Y à %Hh%imin%ss') AS creation_date, DATE_FORMAT(update_date, '%d/%m/%Y à %Hh%imin%ss') AS update_date, image FROM post WHERE id = ?"
+            "SELECT post.id, post.user_id, post.title, post.chapo, post.content, 
+            DATE_FORMAT(post.creation_date, '%d/%m/%Y à %Hh%imin%ss') AS creation_date, 
+            DATE_FORMAT(post.update_date, '%d/%m/%Y à %Hh%imin%ss') AS update_date, post.image, 
+            user.username 
+            FROM post 
+            LEFT JOIN user ON post.user_id = user.id
+            WHERE post.id = ?"
         );
         $statement->execute([$id]);
 
         $row = $statement->fetch();
+        $post = $this->fetchPost($row);
+
+        return $post;
+    }
+
+    public function getPosts(): array
+    {
+        $statement = $this->connection->getConnection()->query(
+            "SELECT post.id, post.user_id, post.title, post.chapo, post.content, 
+            DATE_FORMAT(post.creation_date, '%d/%m/%Y à %Hh%imin%ss') AS creation_date, 
+            DATE_FORMAT(post.update_date, '%d/%m/%Y à %Hh%imin%ss') AS update_date, post.image, 
+            user.username 
+            FROM post 
+            LEFT JOIN user ON post.user_id = user.id
+            ORDER BY post.creation_date DESC"
+        );
+
+        $rows = $statement->fetchAll();
+        $posts = [];
+
+        foreach ($rows as $row) {
+            $posts[] = $this->fetchPost($row);
+        }
+
+        return $posts;
+    }
+
+    private function fetchPost(array $row): Post
+    {
         $post = new Post();
         $post->id = $row['id'];
         $post->userId = $row['user_id'];
+        $post->username = $row['username'];
         $post->title = $row['title'];
         $post->chapo = $row['chapo'];
         $post->content = $row['content'];
@@ -27,29 +63,5 @@ class PostRepository
         $post->image = $row['image'];
 
         return $post;
-    }
-
-    public function getPosts(): array
-    {
-        $statement = $this->connection->getConnection()->query(
-            "SELECT id, user_id, title, chapo, content, DATE_FORMAT(creation_date, '%d/%m/%Y à %Hh%imin%ss') AS creation_date, DATE_FORMAT(update_date, '%d/%m/%Y à %Hh%imin%ss') AS update_date, image FROM post ORDER BY creation_date DESC LIMIT 0, 5"
-        );
-
-        $posts = [];
-        while (($row = $statement->fetch())) {
-            $post = new Post();
-            $post->id = $row['id'];
-            $post->userId = $row['user_id'];
-            $post->title = $row['title'];
-            $post->chapo = $row['chapo'];
-            $post->content = $row['content'];
-            $post->creationDate = $row['creation_date'];
-            $post->updateDate = $row['update_date'];
-            $post->image = $row['image'];
-
-            $posts[] = $post;
-        }
-
-        return $posts;
     }
 }

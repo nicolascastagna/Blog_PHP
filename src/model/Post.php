@@ -6,6 +6,7 @@ class Post
 {
     public int $id;
     public int $userId;
+    public string $username;
     public string $title;
     public string $chapo;
     public string $content;

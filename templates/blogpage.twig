@@ -10,12 +10,13 @@
 					<div class="card-post">
 						<div class="card-header">
 							<h2 class="title">{{ post.title }}</h2>
-							<h4>{{ post.author }}</h4>
-							<p>{{ post.creation_date }}</p>
+							<h4>{{ post.username }}</h4>
+							<p>Le
+								{{ post.creationDate }}</p>
 						</div>
 						<div class="card-content">
 							<p>{{ post.chapo }}</p>
-							<a href="#">Lire la suite</a>
+							<a href="/blog/article/{{ post.id }}">Lire la suite</a>
 						</div>
 						<div class="card-action">
 							<a href="#">Modifier</a>

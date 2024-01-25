@@ -4,7 +4,8 @@ namespace App\public;
 
 use App\controllers\Contact;
 use App\controllers\Homepage;
-use App\controllers\post\IndexPost;
+use App\controllers\post\Index;
+use App\controllers\post\Show;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Factory\AppFactory;
@@ -24,8 +25,10 @@ $twig = Twig::create(
 $app->add(TwigMiddleware::create($app, $twig));
 
 $app->get('/', [Homepage::class, 'homepage']);
-$app->get('/blog', [IndexPost::class, 'index']);
+$app->get('/blog', [Index::class, 'index']);
 $app->get('/contact', [Contact::class, 'contact']);
+$app->get('/blog/article/{id}', [Show::class, 'show']);
+
 
 $app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {
     return $twig->render($response->withStatus(404), 'error.twig');

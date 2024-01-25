@@ -9,7 +9,7 @@ use App\model\PostRepository;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class IndexPost
+class Index
 {
     private function getPostsRepository(): PostRepository
     {
