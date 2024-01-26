@@ -3,6 +3,7 @@
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
+use App\lib\PostIdChecker;
 use App\lib\View;
 use App\model\PostRepository;
 use Exception;
@@ -20,21 +21,32 @@ class DeletePostController
         return $postRepository;
     }
 
-    public function remove(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    public function renderDeleteForm(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
-        if (isset($args['id']) && $args['id'] > 0) {
-            $id = $args['id'];
-        } else {
-            throw new Exception('Aucun post trouvé');
-        }
-
+        $view = new View();
+        $id = PostIdChecker::getId($args);
         $post = $this->getPostsRepository()->getPost($id);
 
-        $view = new View();
-        $html = $view->render('post.twig', ['post' => $post]);
-
+        $html = $view->render('post_delete.twig', ['post' => $post]);
         $response->getBody()->write($html);
 
         return $response;
+    }
+
+    public function remove(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    {
+        if ($request->getMethod() === 'POST') {
+            $postRepository = $this->getPostsRepository();
+            $id = PostIdChecker::getId($args);
+            $success =  $postRepository->deletePost($id);
+
+            if (!$success) {
+                throw new \Exception('Impossible de supprimer l\'article !');
+            } else {
+                return $response->withHeader('Location', "/blog")->withStatus(302);
+            }
+        } else {
+            throw new \Exception('Une erreur est survenue');
+        }
     }
 }

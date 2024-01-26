@@ -32,8 +32,8 @@ $app->get('/contact', [Contact::class, 'contact']);
 $app->get('/blog/article/{id}', [ShowPostController::class, 'show']);
 $app->get('/blog/ajout-article', [AddPostController::class, 'renderCreationForm']);
 $app->post('/blog/ajout-article', [AddPostController::class, 'add']);
-$app->get('/blog/suppression-article', [DeletePostController::class, 'renderDeleteForm']);
-$app->delete('/blog/suppression-article/{id}', [DeletePostController::class, 'remove']);
+$app->get('/blog/suppression-article/{id}', [DeletePostController::class, 'renderDeleteForm']);
+$app->post('/blog/suppression-article/{id}', [DeletePostController::class, 'remove']);
 
 
 $app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {

@@ -6,7 +6,7 @@
 		<div class="card-post">
 			<div class="card-header">
 				<h2 class="title">{{ post.title }}</h2>
-				<h4>{{ post.author }}</h4>
+				<h4>{{ post.username }}</h4>
 				<p>{{ post.creation_date }}</p>
 			</div>
 			<div class="card-content">
@@ -15,7 +15,7 @@
 			</div>
 			<div class="card-action">
 				<a href="#">Modifier</a>
-				<a href="#">Supprimer</a>
+				<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
 			</div>
 		</div>
 		<div class="add-comments">

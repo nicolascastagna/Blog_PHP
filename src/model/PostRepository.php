@@ -64,6 +64,20 @@ class PostRepository
         }
     }
 
+    public function deletePost(int $id): bool
+    {
+        try {
+            $statement = $this->connection->getConnection()->prepare(
+                'DELETE FROM post WHERE id = ?'
+            );
+            $affectedLines = $statement->execute([$id]);
+
+            return ($affectedLines > 0);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     private function fetchPost(array $row): Post
     {
         $post = new Post();
