@@ -24,7 +24,7 @@ class Homepage
     public function homepage(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $posts = $this->getPostsRepository()->getPosts();
-        $sortedPosts = PostSorter::sortByModificationDate($posts);
+        $sortedPosts = PostSorter::sortByRecentDate($posts);
 
         $lastPosts = array_slice($sortedPosts, 0, 3);
         $view = new View();

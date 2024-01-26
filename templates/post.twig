@@ -10,25 +10,28 @@
 				<p>Le
 					{{post.creationDate }}
 					<em>
-						({{ post.updateDate ? 'Modifié le' : 'Le' }}
-						{{ post.updateDate ?? post.creationDate }})</em>
+						{% if post.updateDate != null %}
+							(Modifié le
+							{{ post.updateDate }})
+						{% endif %}
+					</em>
 				</p>
-			</div>
-			<div class="card-content">
-				<p>{{ post.chapo }}</p>
-				<p>{{ post.content }}</p>
-			</div>
-			<div class="card-action">
-				<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
-				<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
-			</div>
+			</p>
 		</div>
-		<div class="add-comments">
-			<h4>Ajoutez un commentaire</h4>
-			<form action="/" method="post">
-				<textarea name="content" id="content" required></textarea>
-			</form>
+		<div class="card-content">
+			<p>{{ post.chapo }}</p>
+			<p>{{ post.content }}</p>
 		</div>
-		{% include 'comment.twig' %}
+		<div class="card-action">
+			<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
+			<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
+		</div>
 	</div>
-{% endblock %}
+	<div class="add-comments">
+		<h4>Ajoutez un commentaire</h4>
+		<form action="/" method="post">
+			<textarea name="content" id="content" required></textarea>
+		</form>
+	</div>
+	{% include 'comment.twig' %}
+</div>{% endblock %}

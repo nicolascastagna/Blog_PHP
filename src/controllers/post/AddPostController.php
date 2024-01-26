@@ -34,7 +34,11 @@ class AddPostController
     {
         $formData = $request->getParsedBody();
 
-        if (!empty($formData['title']) && !empty($formData['chapo']) && !empty($formData['content'])) {
+        if (
+            !empty($formData['title']) &&
+            !empty($formData['chapo']) &&
+            !empty($formData['content'])
+        ) {
             $title = $formData['title'];
             $chapo = $formData['chapo'];
             $content = $formData['content'];

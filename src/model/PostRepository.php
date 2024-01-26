@@ -3,7 +3,6 @@
 namespace App\model;
 
 use App\lib\DatabaseConnection;
-use Exception;
 
 class PostRepository
 {
