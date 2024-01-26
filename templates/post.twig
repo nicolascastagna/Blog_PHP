@@ -7,14 +7,19 @@
 			<div class="card-header">
 				<h2 class="title">{{ post.title }}</h2>
 				<h4>{{ post.username }}</h4>
-				<p>{{ post.creation_date }}</p>
+				<p>Le
+					{{post.creationDate }}
+					<em>
+						({{ post.updateDate ? 'Modifié le' : 'Le' }}
+						{{ post.updateDate ?? post.creationDate }})</em>
+				</p>
 			</div>
 			<div class="card-content">
 				<p>{{ post.chapo }}</p>
 				<p>{{ post.content }}</p>
 			</div>
 			<div class="card-action">
-				<a href="#">Modifier</a>
+				<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
 				<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
 			</div>
 		</div>

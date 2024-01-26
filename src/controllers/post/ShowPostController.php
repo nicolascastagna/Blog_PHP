@@ -3,6 +3,7 @@
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
+use App\lib\PostIdChecker;
 use App\lib\View;
 use App\model\PostRepository;
 use Exception;
@@ -22,11 +23,7 @@ class ShowPostController
 
     public function show(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
-        if (isset($args['id']) && $args['id'] > 0) {
-            $id = $args['id'];
-        } else {
-            throw new Exception('Aucun post trouvé');
-        }
+        $id = PostIdChecker::getId($args);
 
         $post = $this->getPostsRepository()->getPost($id);
 

@@ -8,6 +8,7 @@ use App\controllers\post\AddPostController;
 use App\controllers\post\DeletePostController;
 use App\controllers\post\IndexPostController;
 use App\controllers\post\ShowPostController;
+use App\controllers\post\UpdatePostController;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Factory\AppFactory;
@@ -34,6 +35,8 @@ $app->get('/blog/ajout-article', [AddPostController::class, 'renderCreationForm'
 $app->post('/blog/ajout-article', [AddPostController::class, 'add']);
 $app->get('/blog/suppression-article/{id}', [DeletePostController::class, 'renderDeleteForm']);
 $app->post('/blog/suppression-article/{id}', [DeletePostController::class, 'remove']);
+$app->get('/blog/modification-article/{id}', [UpdatePostController::class, 'renderUpdateForm']);
+$app->post('/blog/modification-article/{id}', [UpdatePostController::class, 'update']);
 
 
 $app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {

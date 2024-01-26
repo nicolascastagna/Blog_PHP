@@ -13,14 +13,14 @@
 							<h2 class="title">{{ post.title }}</h2>
 							<h4>{{ post.username }}</h4>
 							<p>Le
-								{{ post.creationDate }}</p>
+								{{post.creationDate }}</p>
 						</div>
 						<div class="card-content">
 							<p>{{ post.chapo }}</p>
 							<a href="/blog/article/{{ post.id }}">Lire la suite</a>
 						</div>
 						<div class="card-action">
-							<a href="#">Modifier</a>
+							<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
 							<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
 						</div>
 					</div>

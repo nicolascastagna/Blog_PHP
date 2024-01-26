@@ -24,7 +24,7 @@ class IndexPostController
     {
         $posts = $this->getPostsRepository()->getPosts();
 
-        $sortedPosts = PostSorter::sortByModificationDate($posts);
+        $sortedPosts = PostSorter::sortByRecentDate($posts);
 
         $view = new View();
         $html = $view->render('blogpage.twig', ['posts' => $sortedPosts]);
