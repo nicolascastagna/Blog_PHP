@@ -3,14 +3,13 @@
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
-use App\lib\PostSorter;
 use App\lib\View;
 use App\model\PostRepository;
 use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class Show
+class DeletePostController
 {
     private function getPostsRepository(): PostRepository
     {
@@ -21,7 +20,7 @@ class Show
         return $postRepository;
     }
 
-    public function show(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    public function remove(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
         if (isset($args['id']) && $args['id'] > 0) {
             $id = $args['id'];

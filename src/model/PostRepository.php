@@ -3,6 +3,7 @@
 namespace App\model;
 
 use App\lib\DatabaseConnection;
+use Exception;
 
 class PostRepository
 {
@@ -47,6 +48,20 @@ class PostRepository
         }
 
         return $posts;
+    }
+
+    public function addPost(int $user_id, string $title, string $chapo, string $content): bool
+    {
+        try {
+            $statement = $this->connection->getConnection()->prepare(
+                'INSERT INTO post(user_id, title, chapo, content, creation_date) VALUES(?, ?, ?, ?, NOW())'
+            );
+            $affectedLines = $statement->execute([$user_id, $title, $chapo, $content]);
+
+            return ($affectedLines > 0);
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     private function fetchPost(array $row): Post

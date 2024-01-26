@@ -3,13 +3,13 @@
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
-use App\lib\PostSorter;
 use App\lib\View;
 use App\model\PostRepository;
+use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class Index
+class ShowPostController
 {
     private function getPostsRepository(): PostRepository
     {
@@ -20,14 +20,18 @@ class Index
         return $postRepository;
     }
 
-    public function index(RequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function show(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
-        $posts = $this->getPostsRepository()->getPosts();
+        if (isset($args['id']) && $args['id'] > 0) {
+            $id = $args['id'];
+        } else {
+            throw new Exception('Aucun post trouvé');
+        }
 
-        $sortedPosts = PostSorter::sortByModificationDate($posts);
+        $post = $this->getPostsRepository()->getPost($id);
 
         $view = new View();
-        $html = $view->render('blogpage.twig', ['posts' => $sortedPosts]);
+        $html = $view->render('post.twig', ['post' => $post]);
 
         $response->getBody()->write($html);
 
