@@ -12,6 +12,11 @@ use Psr\Http\Message\ResponseInterface;
 
 class UpdatePostController
 {
+    /**
+     * getPostsRepository
+     *
+     * @return PostRepository
+     */
     private function getPostsRepository(): PostRepository
     {
         $connection = new DatabaseConnection();
@@ -21,6 +26,13 @@ class UpdatePostController
         return $postRepository;
     }
 
+    /**
+     * renderUpdateForm
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function renderUpdateForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $view = new View();
@@ -31,21 +43,29 @@ class UpdatePostController
         return $response;
     }
 
+    /**
+     * update
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function update(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
         if ($request->getMethod() === 'POST') {
             $formData = $request->getParsedBody();
 
-            if (!empty($formData['title']) && !empty($formData['chapo']) && !empty($formData['content'])) {
-                $title = $formData['title'];
-                $chapo = $formData['chapo'];
-                $content = $formData['content'];
-            } else {
+            if (!isset($formData['title']) && !isset($formData['chapo']) && !isset($formData['content'])) {
                 throw new Exception('Les données du formulaire sont invalides.');
             }
+
+            $title = $formData['title'];
+            $chapo = $formData['chapo'];
+            $content = $formData['content'];
+
             $id = PostIdChecker::getId($args);
             $postRepository = $this->getPostsRepository();
-            $success =  $postRepository->updatePost($id, $title, $chapo, $content);
+            $success = $postRepository->updatePost($id, $title, $chapo, $content);
 
             if (!$success) {
                 throw new \Exception('Impossible de modifier l\'article !');

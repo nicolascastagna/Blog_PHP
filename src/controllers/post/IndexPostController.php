@@ -11,6 +11,11 @@ use Psr\Http\Message\ResponseInterface;
 
 class IndexPostController
 {
+    /**
+     * getPostsRepository
+     *
+     * @return PostRepository
+     */
     private function getPostsRepository(): PostRepository
     {
         $connection = new DatabaseConnection();
@@ -20,11 +25,19 @@ class IndexPostController
         return $postRepository;
     }
 
+    /**
+     * index
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function index(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $posts = $this->getPostsRepository()->getPosts();
 
-        $sortedPosts = PostSorter::sortByRecentDate($posts);
+        $postSorter = new PostSorter();
+        $sortedPosts = $postSorter->sortByRecentDate($posts);
 
         $view = new View();
         $html = $view->render('blogpage.twig', ['posts' => $sortedPosts]);

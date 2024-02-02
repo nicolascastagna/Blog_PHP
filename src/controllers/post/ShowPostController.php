@@ -12,6 +12,11 @@ use Psr\Http\Message\ResponseInterface;
 
 class ShowPostController
 {
+    /**
+     * getPostsRepository
+     *
+     * @return PostRepository
+     */
     private function getPostsRepository(): PostRepository
     {
         $connection = new DatabaseConnection();
@@ -21,6 +26,13 @@ class ShowPostController
         return $postRepository;
     }
 
+    /**
+     * show
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function show(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
         $id = PostIdChecker::getId($args);

@@ -2,20 +2,33 @@
 
 namespace App\lib;
 
+use Dotenv\Dotenv;
+use Exception;
+use PDO;
+
 class DatabaseConnection
 {
-    public ?\PDO $database = null;
+    private ?PDO $database = null;
 
-    public function getConnection(): \PDO
+    /**
+     * getConnection
+     *
+     * @return PDO
+     */
+    public function getConnection(): PDO
     {
         if ($this->database === null) {
-            $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+            $dotenv = Dotenv::createUnsafeImmutable(__DIR__ . '/../../');
             $dotenv->load();
 
-            $host = $_ENV['DB_HOST'];
-            $dbname = $_ENV['DB_NAME'];
-            $user = $_ENV['DB_USER'];
-            $password = $_ENV['DB_PASSWORD'];
+            $host = getenv('DB_HOST');
+            $dbname = getenv('DB_NAME');
+            $user = getenv('DB_USER');
+            $password = getenv('DB_PASSWORD');
+
+            if (empty($host) || empty($dbname) || empty($user) || empty($password)) {
+                throw new Exception('Missing required database configuration.');
+            }
 
             $this->database = new \PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $password);
         }

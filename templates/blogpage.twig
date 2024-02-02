@@ -12,8 +12,8 @@
 						<div class="card-header">
 							<h2 class="title">{{ post.title }}</h2>
 							<h4>{{ post.username }}</h4>
-							<p>Le
-								{{post.creationDate }}</p>
+							<p>{{post.updateDate ? 'Modifié le' : 'Le'}}
+								{{post.updateDate ?? post.creationDate }}</p>
 						</div>
 						<div class="card-content">
 							<p>{{ post.chapo }}</p>

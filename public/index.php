@@ -16,14 +16,11 @@ use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 $app = AppFactory::create();
 
-$twig = Twig::create(
-    __DIR__ . '/../templates',
-    ['cache' => false]
-);
+$twig = Twig::create(__DIR__ . '/../templates');
 
 $app->add(TwigMiddleware::create($app, $twig));
 
@@ -39,7 +36,7 @@ $app->get('/blog/modification-article/{id}', [UpdatePostController::class, 'rend
 $app->post('/blog/modification-article/{id}', [UpdatePostController::class, 'update']);
 
 
-$app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {
+$app->get('/{routes:.+}', function(RequestInterface $request, ResponseInterface $response) use ($twig) {
     return $twig->render($response->withStatus(404), 'error.twig');
 });
 

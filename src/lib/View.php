@@ -10,15 +10,27 @@ class View
     private $loader;
     private $twig;
 
+    /**
+     * __construct
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->loader = new FilesystemLoader('../templates');
         $this->twig = new Environment($this->loader, [
             'cache' => false,
-            'debug' => true
+            'debug' => true,
         ]);
     }
 
+    /**
+     * render
+     *
+     * @param  string $template
+     * @param  array $data
+     * @return string
+     */
     public function render(string $template, array $data = []): string
     {
         try {

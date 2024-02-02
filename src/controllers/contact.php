@@ -8,6 +8,13 @@ use Psr\Http\Message\ResponseInterface;
 
 class Contact
 {
+    /**
+     * contact
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function contact(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $view = new View();

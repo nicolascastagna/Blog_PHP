@@ -12,6 +12,11 @@ use Psr\Http\Message\ResponseInterface;
 
 class DeletePostController
 {
+    /**
+     * getPostsRepository
+     *
+     * @return PostRepository
+     */
     private function getPostsRepository(): PostRepository
     {
         $connection = new DatabaseConnection();
@@ -21,6 +26,13 @@ class DeletePostController
         return $postRepository;
     }
 
+    /**
+     * renderDeleteForm
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function renderDeleteForm(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
         $view = new View();
@@ -33,12 +45,19 @@ class DeletePostController
         return $response;
     }
 
+    /**
+     * remove
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function remove(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
         if ($request->getMethod() === 'POST') {
             $postRepository = $this->getPostsRepository();
             $id = PostIdChecker::getId($args);
-            $success =  $postRepository->deletePost($id);
+            $success = $postRepository->deletePost($id);
 
             if (!$success) {
                 throw new \Exception('Impossible de supprimer l\'article !');

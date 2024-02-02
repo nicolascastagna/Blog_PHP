@@ -10,7 +10,12 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class AddPostController
-{
+{    
+    /**
+     * getPostsRepository
+     *
+     * @return PostRepository
+     */
     private function getPostsRepository(): PostRepository
     {
         $connection = new DatabaseConnection();
@@ -20,6 +25,13 @@ class AddPostController
         return $postRepository;
     }
 
+    /**
+     * renderCreationForm
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function renderCreationForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $view = new View();
@@ -30,14 +42,21 @@ class AddPostController
         return $response;
     }
 
+    /**
+     * add
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function add(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $formData = $request->getParsedBody();
 
         if (
-            !empty($formData['title']) &&
-            !empty($formData['chapo']) &&
-            !empty($formData['content'])
+            !empty($formData['title'])
+            && !empty($formData['chapo'])
+            && !empty($formData['content'])
         ) {
             $title = $formData['title'];
             $chapo = $formData['chapo'];
@@ -47,7 +66,7 @@ class AddPostController
         }
         $user_id = 1;
         $postRepository = $this->getPostsRepository();
-        $success =  $postRepository->addPost($user_id, $title, $content, $chapo);
+        $success = $postRepository->addPost($user_id, $title, $content, $chapo);
 
         if (!$success) {
             throw new \Exception('Impossible d\'ajouter l\'article !');

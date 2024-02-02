@@ -8,6 +8,11 @@ class UserRepository
 {
     public DatabaseConnection $connection;
 
+    /**
+     * getUsers
+     *
+     * @return array
+     */
     public function getUsers(): array
     {
         $statement = $this->connection->getConnection()->query(
@@ -23,6 +28,12 @@ class UserRepository
         return $users;
     }
 
+    /**
+     * getUser
+     *
+     * @param  int $id
+     * @return User
+     */
     public function getUser(int $id): ?User
     {
         if (!is_int($id)) {
@@ -42,6 +53,12 @@ class UserRepository
         return $this->fetchUser($row);
     }
 
+    /**
+     * fetchUser
+     *
+     * @param  array $row
+     * @return User
+     */
     private function fetchUser(array $row): User
     {
         $user = new User();

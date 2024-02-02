@@ -8,7 +8,13 @@ class PostRepository
 {
     public DatabaseConnection $connection;
 
-    public function getPost(string $id): Post
+    /**
+     * getPost
+     *
+     * @param  int $id
+     * @return Post
+     */
+    public function getPost(int $id): Post
     {
         $statement = $this->connection->getConnection()->prepare(
             "SELECT post.id, post.user_id, post.title, post.chapo, post.content, 
@@ -27,6 +33,11 @@ class PostRepository
         return $post;
     }
 
+    /**
+     * getPosts
+     *
+     * @return array
+     */
     public function getPosts(): array
     {
         $statement = $this->connection->getConnection()->query(
@@ -48,6 +59,15 @@ class PostRepository
         return $posts;
     }
 
+    /**
+     * addPost
+     *
+     * @param  int $user_id
+     * @param  string $title
+     * @param  string $chapo
+     * @param  string $content
+     * @return bool
+     */
     public function addPost(int $user_id, string $title, string $chapo, string $content): bool
     {
         $statement = $this->connection->getConnection()->prepare(
@@ -58,6 +78,12 @@ class PostRepository
         return ($affectedLines > 0);
     }
 
+    /**
+     * deletePost
+     *
+     * @param  int $id
+     * @return bool
+     */
     public function deletePost(int $id): bool
     {
         $statement = $this->connection->getConnection()->prepare(
@@ -68,6 +94,15 @@ class PostRepository
         return ($affectedLines > 0);
     }
 
+    /**
+     * updatePost
+     *
+     * @param  int $id
+     * @param  string $title
+     * @param  string $chapo
+     * @param  string $content
+     * @return bool
+     */
     public function updatePost(int $id, string $title, string $chapo, string $content): bool
     {
         $statement = $this->connection->getConnection()->prepare(
@@ -78,6 +113,12 @@ class PostRepository
         return ($affectedLines > 0);
     }
 
+    /**
+     * fetchPost
+     *
+     * @param  array $row
+     * @return Post
+     */
     private function fetchPost(array $row): Post
     {
         $post = new Post();
