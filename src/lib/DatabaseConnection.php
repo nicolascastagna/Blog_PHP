@@ -18,15 +18,15 @@ class DatabaseConnection
     public function getConnection(): PDO
     {
         if ($this->database === null) {
-            $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+            $dotenv = Dotenv::createUnsafeImmutable(__DIR__ . '/../../');
             $dotenv->load();
 
-            $host = $_ENV['DB_HOST'];
-            $dbname = $_ENV['DB_NAME'];
-            $user = $_ENV['DB_USER'];
-            $password = $_ENV['DB_PASSWORD'];
+            $host = getenv('DB_HOST');
+            $dbname = getenv('DB_NAME');
+            $user = getenv('DB_USER');
+            $password = getenv('DB_PASSWORD');
 
-            if (empty($host) || empty($dbname) || empty($user) || empty($password)) {
+            if ($host === false || $dbname === false || $user === false || $password === false) {
                 throw new Exception('Missing required database configuration.');
             }
 
