@@ -6,6 +6,10 @@ use App\lib\DatabaseConnection;
 
 class PostRepository
 {
+
+    /**
+     * @var DatabaseConnection
+     */
     public DatabaseConnection $connection;
 
     /**

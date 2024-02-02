@@ -12,6 +12,11 @@ use Psr\Http\Message\ResponseInterface;
 
 class Homepage
 {
+    /**
+     * getPostsRepository
+     *
+     * @return PostRepository
+     */
     private function getPostsRepository(): PostRepository
     {
         $connection = new DatabaseConnection();
@@ -21,10 +26,18 @@ class Homepage
         return $postRepository;
     }
 
+    /**
+     * homepage
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
     public function homepage(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $posts = $this->getPostsRepository()->getPosts();
-        $sortedPosts = PostSorter::sortByRecentDate($posts);
+        $postSorter = new PostSorter();
+        $sortedPosts = $postSorter->sortByRecentDate($posts);
 
         $lastPosts = array_slice($sortedPosts, 0, 3);
         $view = new View();

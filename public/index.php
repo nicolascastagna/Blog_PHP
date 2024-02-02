@@ -8,7 +8,6 @@ use App\controllers\Homepage;
 use App\controllers\post\AddPostController;
 use App\controllers\post\DeletePostController;
 use App\controllers\post\IndexPostController;
-use App\controllers\comment\ShowCommentController;
 use App\controllers\post\ShowPostController;
 use App\controllers\post\UpdatePostController;
 use Psr\Http\Message\RequestInterface;
@@ -36,7 +35,6 @@ $app->get('/blog/suppression-article/{id}', [DeletePostController::class, 'rende
 $app->post('/blog/suppression-article/{id}', [DeletePostController::class, 'remove']);
 $app->get('/blog/modification-article/{id}', [UpdatePostController::class, 'renderUpdateForm']);
 $app->post('/blog/modification-article/{id}', [UpdatePostController::class, 'update']);
-$app->get('/blog/article/commentaire/{id}', [ShowCommentController::class, 'show']);
 $app->post('/blog/article/{id}/ajout-commentaire', [AddCommentController::class, 'add']);
 
 

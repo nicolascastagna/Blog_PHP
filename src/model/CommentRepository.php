@@ -6,6 +6,10 @@ use App\lib\DatabaseConnection;
 
 class CommentRepository
 {
+
+    /**
+     * @var DatabaseConnection
+     */
     public DatabaseConnection $connection;
 
     /**

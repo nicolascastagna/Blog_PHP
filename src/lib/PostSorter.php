@@ -13,7 +13,7 @@ class PostSorter
     public static function sortByRecentDate(array $posts): array
     {
         usort($posts, function ($asc, $desc) {
-            return strtotime($desc->creationDate) - strtotime($asc->creationDate);
+            return (strtotime($desc->creationDate) - strtotime($asc->creationDate));
         });
 
         return $posts;

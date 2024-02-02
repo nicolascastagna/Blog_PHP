@@ -12,20 +12,6 @@ use Psr\Http\Message\ResponseInterface;
 class AddCommentController
 {
     /**
-     * getPostsRepository
-     *
-     * @return PostRepository
-     */
-    private function getPostsRepository(): PostRepository
-    {
-        $connection = new DatabaseConnection();
-        $postRepository = new PostRepository();
-        $postRepository->connection = $connection;
-
-        return $postRepository;
-    }
-
-    /**
      * getCommentsRepository
      *
      * @return CommentRepository
@@ -44,9 +30,10 @@ class AddCommentController
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
+     * @param  array $args
      * @return ResponseInterface
      */
-    public function add(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    public function add(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $formData = $request->getParsedBody();
 

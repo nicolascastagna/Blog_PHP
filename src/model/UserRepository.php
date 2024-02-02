@@ -6,6 +6,10 @@ use App\lib\DatabaseConnection;
 
 class UserRepository
 {
+
+    /**
+     * @var DatabaseConnection
+     */
     public DatabaseConnection $connection;
 
     /**

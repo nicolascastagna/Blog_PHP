@@ -48,9 +48,10 @@ class UpdatePostController
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
+     * @param  array $args
      * @return ResponseInterface
      */
-    public function update(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    public function update(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         if ($request->getMethod() === 'POST') {
             $formData = $request->getParsedBody();

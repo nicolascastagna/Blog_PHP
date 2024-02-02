@@ -31,9 +31,10 @@ class DeletePostController
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
+     * @param  array $args
      * @return ResponseInterface
      */
-    public function renderDeleteForm(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    public function renderDeleteForm(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $view = new View();
         $id = PostIdChecker::getId($args);
@@ -52,7 +53,7 @@ class DeletePostController
      * @param  ResponseInterface $response
      * @return ResponseInterface
      */
-    public function remove(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    public function remove(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         if ($request->getMethod() === 'POST') {
             $postRepository = $this->getPostsRepository();

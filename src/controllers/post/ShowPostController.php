@@ -47,9 +47,10 @@ class ShowPostController
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
+     * @param  array $args
      * @return ResponseInterface
      */
-    public function show(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    public function show(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $id = PostIdChecker::getId($args);
 
