@@ -1,21 +1,14 @@
 {% extends 'layout.twig' %}
-{% block title %}Ajouter l'article
+{% block title %}Ajouter un nouvel article
 {% endblock %}
 {% block content %}
-	<div class="container-single-post">
-		<h2 class="title">Ajouter un article</h2>
-		<div class="actions-single-post">
-			<form action="/post/ajout" method="post" enctype="multipart/form-data">
-				<label for="title">Titre :</label>
-				<input type="text" name="title" id="title" required>
-				<label for="chapo">Chapo :</label>
-				<textarea name="chapo" id="chapo" required></textarea>
-				<label for="content">Contenu :</label>
-				<textarea name="content" id="content" required></textarea>
-				<label for="image">Image :</label>
-				<input type="file" name="file" id="file" accept=".jpg, .jpeg, .png">
-				<button class=" button-form" type="submit">Ajouter l'article</button>
-			</form>
-		</div>
-	</div>
+	<form action="/blog/ajout-article" method="post">
+		<label for="title">Titre :</label>
+		<input type="text" id="title" name="title" required>
+		<label for="chapo">Chapo :</label>
+		<textarea id="chapo" name="chapo" required></textarea>
+		<label for="content">Contenu :</label>
+		<textarea id="content" name="content" required></textarea>
+		<button type="submit">Ajouter l'article</button>
+	</form>
 {% endblock %}

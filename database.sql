@@ -1,11 +1,11 @@
-DROP SCHEMA IF EXISTS `BlogPHP`;
+DROP SCHEMA IF EXISTS BlogPHP;
 CREATE DATABASE `BlogPHP` DEFAULT CHARACTER SET utf8;
-USE `BlogPHP`;
+USE BlogPHP;
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `post`;
 DROP TABLE IF EXISTS `comment`;
 
-CREATE TABLE `BlogPHP`.`user`(  
+CREATE TABLE `user`(  
     `id` SMALLINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `username` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE `BlogPHP`.`user`(
     role ENUM('ROLE_USER', 'ROLE_ADMIN') NOT NULL
 );
 
-CREATE TABLE `BlogPHP`.`post`(  
+CREATE TABLE `post`(  
     `id` SMALLINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `user_id` SMALLINT NOT NULL,
     `title` VARCHAR(255) NOT NULL,
@@ -23,18 +23,18 @@ CREATE TABLE `BlogPHP`.`post`(
 	`creation_date` DATETIME NOT NULL,
 	`update_date` DATETIME DEFAULT NULL,
 	`image` VARCHAR(255) DEFAULT NULL,
-	FOREIGN KEY (user_id) REFERENCES `BlogPHP`.user(id) ON DELETE CASCADE
+	FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
-CREATE TABLE `BlogPHP`.`comment`(  
+CREATE TABLE `comment`(  
     `id` SMALLINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `user_id` SMALLINT NOT NULL,
 	`post_id` SMALLINT NOT NULL,
     `content` TEXT NOT NULL,
 	`comment_date` DATETIME NOT NULL,
 	`status` BOOLEAN DEFAULT false NOT NULL,
-	FOREIGN KEY (user_id) REFERENCES `BlogPHP`.user(id) ON DELETE CASCADE,
-	FOREIGN KEY (post_id) REFERENCES `BlogPHP`.post(id) ON DELETE CASCADE
+	FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+	FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE
 );
 
 INSERT INTO `user` (`username`, `password`, `email`, `token`, `role`) 
@@ -51,7 +51,7 @@ VALUES ('1', 'Mon premier faux article', 'Extrait de l\'article', 'Lorem ipsum d
 ;
 
 INSERT INTO `comment` (`user_id`, `post_id`, `content`, `comment_date`, `status`) 
-VALUES ('3', '3', 'Excellent article! Les conseils sont très utiles pour améliorer l\'expérience utilisateur.', '2024-01-19 17:34:19', false),
+VALUES ('3', '3', 'Excellent article! Les conseils sont très utiles pour améliorer l\''expérience utilisateur.', '2024-01-19 17:34:19', false),
 ('1', '2', 'Très intéressant !', '2024-01-19 19:34:10', true),
 ('2', '2', 'Pas mal !', '2024-01-19 21:14:00', false)
 ;

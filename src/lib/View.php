@@ -10,15 +10,29 @@ class View
     private $loader;
     private $twig;
 
+    /**
+     * __construct
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->loader = new FilesystemLoader('../templates');
         $this->twig = new Environment($this->loader, [
             'cache' => false,
-            'debug' => true
+            'debug' => true,
         ]);
     }
 
+    /**
+     * render
+     * 
+     * Render the template with the provided data
+     *
+     * @param  string $template The template file path
+     * @param  array $data An associative array of data to pass to the template
+     * @return string
+     */
     public function render(string $template, array $data = []): string
     {
         try {

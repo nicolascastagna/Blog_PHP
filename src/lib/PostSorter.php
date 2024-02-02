@@ -4,10 +4,16 @@ namespace App\lib;
 
 class PostSorter
 {
-    public static function sortByModificationDate(array $posts): array
+    /**
+     * sortByRecentDate
+     *
+     * @param  array $posts
+     * @return array
+     */
+    public static function sortByRecentDate(array $posts): array
     {
-        usort($posts, function ($a, $b) {
-            return strtotime($b['creation_date']) - strtotime($a['creation_date']);
+        usort($posts, function ($asc, $desc) {
+            return (strtotime($desc->creationDate) - strtotime($asc->creationDate));
         });
 
         return $posts;

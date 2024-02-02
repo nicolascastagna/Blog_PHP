@@ -1,18 +1,30 @@
 {% extends 'layout.twig' %}
+
 {% block title %}Suppression de l'article
 {% endblock %}
 {% block content %}
-	<div class="container-single-post">
+	<div class="container-posts">
 		<div class="title">
 			<h2>Suppression de l'article</h2>
-			<div class="actions-single-post">
-				<h3>Souhaitez-vous vraiment supprimer cette article ?</h3>
-				<form action="/post/suppression" method="post">
-					<input class="button-form" value="Supprimer" type="submit"/>
-				</form>
-				<form action="/">
-					<input class="button-form" type="button">Revenir à l'accueil</input>
+		</div>
+		<div class="actions-single-post">
+			<h3>Souhaitez-vous vraiment supprimer cet article ?</h3>
+			<form action="/blog/suppression-article/{{ post.id }}" method="post">
+				<input type="hidden" name="_METHOD" value="DELETE"/>
+				<input class="button-form" value="Supprimer" type="submit"/>
 			</form>
+			<a class="button-form" href="/blog">Revenir à la page de blog</a>
+		</div>
+		<div class="card-post">
+			<div class="card-header">
+				<h2 class="title">{{ post.title }}</h2>
+				<h4>{{ post.username }}</h4>
+				<p>{{ post.creation_date }}</p>
+			</div>
+			<div class="card-content">
+				<p>{{ post.chapo }}</p>
+				<p>{{ post.content }}</p>
+			</div>
 		</div>
 	</div>
-</div>{% endblock %}
+{% endblock %}

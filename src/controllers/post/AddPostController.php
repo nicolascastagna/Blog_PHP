@@ -1,0 +1,74 @@
+<?php
+
+namespace App\controllers\post;
+
+use App\lib\DatabaseConnection;
+use App\lib\View;
+use App\model\PostRepository;
+use Exception;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
+class AddPostController
+{
+    /**
+     * getPostsRepository
+     *
+     * @return PostRepository
+     */
+    private function getPostsRepository(): PostRepository
+    {
+        $connection = new DatabaseConnection();
+        $postRepository = new PostRepository();
+        $postRepository->connection = $connection;
+
+        return $postRepository;
+    }
+
+    /**
+     * renderCreationForm
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public function renderCreationForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $view = new View();
+        $html = $view->render('post_add.twig', []);
+
+        $response->getBody()->write($html);
+
+        return $response;
+    }
+
+    /**
+     * add
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
+    public function add(RequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $formData = $request->getParsedBody();
+
+        if (!isset($formData['title']) && !isset($formData['chapo']) && !isset($formData['content'])) {
+            throw new Exception('Les données du formulaire sont invalides.');
+        }
+
+        $title = $formData['title'];
+        $chapo = $formData['chapo'];
+        $content = $formData['content'];
+
+        $user_id = 1;
+        $postRepository = $this->getPostsRepository();
+        $success = $postRepository->addPost($user_id, $title, $content, $chapo);
+
+        if (!$success) {
+            throw new \Exception('Impossible d\'ajouter l\'article !');
+        } else {
+            return $response->withHeader('Location', "/blog")->withStatus(302);
+        }
+    }
+}

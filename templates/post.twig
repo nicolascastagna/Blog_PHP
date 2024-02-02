@@ -6,24 +6,27 @@
 		<div class="card-post">
 			<div class="card-header">
 				<h2 class="title">{{ post.title }}</h2>
-				<h4>{{ post.author }}</h4>
-				<p>{{ post.creation_date }}</p>
-			</div>
-			<div class="card-content">
-				<p>{{ post.chapo }}</p>
-				<p>{{ post.content }}</p>
-			</div>
-			<div class="card-action">
-				<a href="#">Modifier</a>
-				<a href="#">Supprimer</a>
-			</div>
+				<h4>{{ post.username }}</h4>
+				<p>{{post.updateDate ? 'Modifié le' : 'Le'}}
+					{{post.updateDate ?? post.creationDate }}</p>
+			</p>
 		</div>
-		<div class="add-comments">
-			<h4>Ajoutez un commentaire</h4>
-			<form action="/" method="post">
-				<textarea name="content" id="content" required></textarea>
-			</form>
+		<div class="card-content">
+			<p>{{ post.chapo }}</p>
+			<p>{{ post.content }}</p>
 		</div>
-		{% include 'comment.twig' %}
+		<div class="card-action">
+			<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
+			<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
+		</div>
 	</div>
-{% endblock %}
+	<h4>{{comment.content}}</h4>
+	<div class="add-comments">
+		<h4>Ajoutez un commentaire</h4>
+		<form action="/blog/article/{{ post.id }}/ajout-commentaire" method="post">
+			<textarea name="content" id="content" required></textarea>
+			<input class="" type="submit" value="Ajouter le commentaire"/>
+		</form>
+	</div>
+	{% include 'comment.twig' %}
+</div>{% endblock %}
