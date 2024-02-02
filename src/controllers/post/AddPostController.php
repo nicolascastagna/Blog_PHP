@@ -10,7 +10,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class AddPostController
-{    
+{
     /**
      * getPostsRepository
      *
@@ -53,17 +53,14 @@ class AddPostController
     {
         $formData = $request->getParsedBody();
 
-        if (
-            !empty($formData['title'])
-            && !empty($formData['chapo'])
-            && !empty($formData['content'])
-        ) {
-            $title = $formData['title'];
-            $chapo = $formData['chapo'];
-            $content = $formData['content'];
-        } else {
+        if (!isset($formData['title']) && !isset($formData['chapo']) && !isset($formData['content'])) {
             throw new Exception('Les données du formulaire sont invalides.');
         }
+
+        $title = $formData['title'];
+        $chapo = $formData['chapo'];
+        $content = $formData['content'];
+
         $user_id = 1;
         $postRepository = $this->getPostsRepository();
         $success = $postRepository->addPost($user_id, $title, $content, $chapo);

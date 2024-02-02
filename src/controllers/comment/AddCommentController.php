@@ -1,18 +1,15 @@
 <?php
 
-namespace App\controllers\post;
+namespace App\controllers\comment;
 
-use App\controllers\comment\AddCommentController;
 use App\lib\DatabaseConnection;
-use App\lib\PostIdChecker;
-use App\lib\View;
 use App\model\CommentRepository;
 use App\model\PostRepository;
 use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class ShowPostController
+class AddCommentController
 {
     /**
      * getPostsRepository
@@ -43,33 +40,30 @@ class ShowPostController
     }
 
     /**
-     * show
+     * add
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
      * @return ResponseInterface
      */
-    public function show(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
+    public function add(RequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
-        $id = PostIdChecker::getId($args);
+        $formData = $request->getParsedBody();
 
-        $post = $this->getPostsRepository()->getPost($id);
-        $comment = $this->getCommentsRepository()->getComments($id);
-
-        $comments = array_filter($comment, function ($comment) {
-            return $comment->status == 1;
-        });
-
-        if ($request->getMethod() === 'POST') {
-            $commentController = new AddCommentController();
-            $commentController->add($request, $response, $args);
+        if (!isset($formData['content'])) {
+            throw new Exception('Les données du formulaire sont invalides.');
         }
 
-        $view = new View();
-        $html = $view->render('post.twig', ['post' => $post, 'comments' => $comments]);
+        $content = $formData['content'];
 
-        $response->getBody()->write($html);
+        $user_id = 1;
+        $commentRepository = $this->getCommentsRepository();
+        $success = $commentRepository->addComment($user_id, $args['id'], $content);
 
-        return $response;
+        if (!$success) {
+            throw new \Exception('Impossible d\'ajouter le commentaire !');
+        } else {
+            return $response->withHeader('Location', "/blog/article/{$args['id']}")->withStatus(302);
+        }
     }
 }
