@@ -31,6 +31,7 @@ class UpdatePostController
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
+     *
      * @return ResponseInterface
      */
     public function renderUpdateForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
@@ -49,6 +50,7 @@ class UpdatePostController
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
      * @param  array $args
+     *
      * @return ResponseInterface
      */
     public function update(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -71,7 +73,7 @@ class UpdatePostController
             if (!$success) {
                 throw new \Exception('Impossible de modifier l\'article !');
             } else {
-                return $response->withHeader('Location', "/blog")->withStatus(302);
+                return $response->withHeader('Location', '/blog')->withStatus(302);
             }
         } else {
             throw new \Exception('Une erreur est survenue');

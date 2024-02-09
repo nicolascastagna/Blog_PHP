@@ -6,7 +6,6 @@ use App\lib\DatabaseConnection;
 
 class PostRepository
 {
-
     /**
      * @var DatabaseConnection
      */
@@ -16,6 +15,7 @@ class PostRepository
      * getPost
      *
      * @param  int $id
+     *
      * @return Post
      */
     public function getPost(int $id): Post
@@ -60,6 +60,7 @@ class PostRepository
         foreach ($rows as $row) {
             $posts[] = $this->fetchPost($row);
         }
+
         return $posts;
     }
 
@@ -70,6 +71,7 @@ class PostRepository
      * @param  string $title
      * @param  string $chapo
      * @param  string $content
+     *
      * @return bool
      */
     public function addPost(int $user_id, string $title, string $chapo, string $content): bool
@@ -86,6 +88,7 @@ class PostRepository
      * deletePost
      *
      * @param  int $id
+     *
      * @return bool
      */
     public function deletePost(int $id): bool
@@ -105,6 +108,7 @@ class PostRepository
      * @param  string $title
      * @param  string $chapo
      * @param  string $content
+     *
      * @return bool
      */
     public function updatePost(int $id, string $title, string $chapo, string $content): bool
@@ -121,6 +125,7 @@ class PostRepository
      * fetchPost
      *
      * @param  array $row
+     *
      * @return Post
      */
     private function fetchPost(array $row): Post

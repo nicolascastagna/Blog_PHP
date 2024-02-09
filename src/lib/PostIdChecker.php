@@ -8,11 +8,13 @@ class PostIdChecker
 {
     /**
      * getId
-     * 
+     *
      * Get the id from the argument
      *
      * @param  array $args
+     *
      * @throws Exception
+     *
      * @return int
      */
     public static function getId(array $args): int

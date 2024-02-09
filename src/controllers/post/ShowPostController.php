@@ -8,7 +8,6 @@ use App\lib\PostIdChecker;
 use App\lib\View;
 use App\model\CommentRepository;
 use App\model\PostRepository;
-use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -48,6 +47,7 @@ class ShowPostController
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
      * @param  array $args
+     *
      * @return ResponseInterface
      */
     public function show(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -57,7 +57,7 @@ class ShowPostController
         $post = $this->getPostsRepository()->getPost($id);
         $comment = $this->getCommentsRepository()->getComments($id);
 
-        $comments = array_filter($comment, function ($comment) {
+        $comments = array_filter($comment, function($comment) {
             return $comment->status == 1;
         });
 

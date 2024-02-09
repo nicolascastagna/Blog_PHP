@@ -30,6 +30,7 @@ class AddPostController
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
+     *
      * @return ResponseInterface
      */
     public function renderCreationForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
@@ -47,6 +48,7 @@ class AddPostController
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
+     *
      * @return ResponseInterface
      */
     public function add(RequestInterface $request, ResponseInterface $response): ResponseInterface
@@ -68,7 +70,7 @@ class AddPostController
         if (!$success) {
             throw new \Exception('Impossible d\'ajouter l\'article !');
         } else {
-            return $response->withHeader('Location', "/blog")->withStatus(302);
+            return $response->withHeader('Location', '/blog')->withStatus(302);
         }
     }
 }

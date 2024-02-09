@@ -4,7 +4,6 @@ namespace App\controllers\comment;
 
 use App\lib\DatabaseConnection;
 use App\model\CommentRepository;
-use App\model\PostRepository;
 use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -31,6 +30,7 @@ class AddCommentController
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
      * @param  array $args
+     *
      * @return ResponseInterface
      */
     public function add(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface

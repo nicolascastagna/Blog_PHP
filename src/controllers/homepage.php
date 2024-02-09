@@ -2,7 +2,6 @@
 
 namespace App\controllers;
 
-use App\controllers\post\IndexPost;
 use App\lib\DatabaseConnection;
 use App\lib\PostSorter;
 use App\lib\View;
@@ -31,6 +30,7 @@ class Homepage
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
+     *
      * @return ResponseInterface
      */
     public function homepage(RequestInterface $request, ResponseInterface $response): ResponseInterface

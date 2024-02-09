@@ -6,7 +6,6 @@ use App\lib\DatabaseConnection;
 use App\lib\PostIdChecker;
 use App\lib\View;
 use App\model\PostRepository;
-use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -32,6 +31,7 @@ class DeletePostController
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
      * @param  array $args
+     *
      * @return ResponseInterface
      */
     public function renderDeleteForm(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -51,6 +51,7 @@ class DeletePostController
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
+     *
      * @return ResponseInterface
      */
     public function remove(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -63,7 +64,7 @@ class DeletePostController
             if (!$success) {
                 throw new \Exception('Impossible de supprimer l\'article !');
             } else {
-                return $response->withHeader('Location', "/blog")->withStatus(302);
+                return $response->withHeader('Location', '/blog')->withStatus(302);
             }
         } else {
             throw new \Exception('Une erreur est survenue');

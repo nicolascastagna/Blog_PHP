@@ -13,6 +13,7 @@ class Contact
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
+     *
      * @return ResponseInterface
      */
     public function contact(RequestInterface $request, ResponseInterface $response): ResponseInterface

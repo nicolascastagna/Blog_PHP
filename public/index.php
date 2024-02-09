@@ -6,6 +6,7 @@ use App\controllers\comment\AddCommentController;
 use App\controllers\Contact;
 use App\controllers\Homepage;
 use App\controllers\post\AddPostController;
+use App\controllers\user\AddUserController;
 use App\controllers\post\DeletePostController;
 use App\controllers\post\IndexPostController;
 use App\controllers\post\ShowPostController;
@@ -36,6 +37,7 @@ $app->post('/blog/suppression-article/{id}', [DeletePostController::class, 'remo
 $app->get('/blog/modification-article/{id}', [UpdatePostController::class, 'renderUpdateForm']);
 $app->post('/blog/modification-article/{id}', [UpdatePostController::class, 'update']);
 $app->post('/blog/article/{id}/ajout-commentaire', [AddCommentController::class, 'add']);
+$app->get('/inscription', [AddUserController::class, 'renderRegisterForm']);
 
 
 $app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {

@@ -6,7 +6,6 @@ use App\lib\DatabaseConnection;
 
 class CommentRepository
 {
-
     /**
      * @var DatabaseConnection
      */
@@ -16,6 +15,7 @@ class CommentRepository
      * getComments
      *
      * @param  int $postId
+     *
      * @return array
      */
     public function getComments(int $postId): array
@@ -37,6 +37,7 @@ class CommentRepository
         foreach ($rows as $row) {
             $comments[] = $this->fetchComment($row);
         }
+
         // var_dump($comments);
         return $comments;
     }
@@ -47,6 +48,7 @@ class CommentRepository
      * @param  int $user_id
      * @param  int $post_id
      * @param  string $content
+     *
      * @return bool
      */
     public function addComment(int $user_id, int $post_id, string $content): bool
@@ -63,6 +65,7 @@ class CommentRepository
      * fetchComment
      *
      * @param  array $row
+     *
      * @return Comment
      */
     private function fetchComment(array $row): Comment

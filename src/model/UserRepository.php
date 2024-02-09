@@ -6,7 +6,6 @@ use App\lib\DatabaseConnection;
 
 class UserRepository
 {
-
     /**
      * @var DatabaseConnection
      */
@@ -20,7 +19,7 @@ class UserRepository
     public function getUsers(): array
     {
         $statement = $this->connection->getConnection()->query(
-            "SELECT id, username, password, email, role FROM user"
+            'SELECT id, username, password, email, role FROM user'
         );
 
         $users = [];
@@ -36,6 +35,7 @@ class UserRepository
      * getUser
      *
      * @param  int $id
+     *
      * @return User
      */
     public function getUser(int $id): ?User
@@ -45,7 +45,7 @@ class UserRepository
         }
 
         $statement = $this->connection->getConnection()->prepare(
-            "SELECT id, username, password, email, role FROM user WHERE id = ?"
+            'SELECT id, username, password, email, role FROM user WHERE id = ?'
         );
         $statement->execute([$id]);
         $row = $statement->fetch();
@@ -61,6 +61,7 @@ class UserRepository
      * fetchUser
      *
      * @param  array $row
+     *
      * @return User
      */
     private function fetchUser(array $row): User

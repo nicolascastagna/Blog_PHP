@@ -30,6 +30,7 @@ class IndexPostController
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
+     *
      * @return ResponseInterface
      */
     public function index(RequestInterface $request, ResponseInterface $response): ResponseInterface
