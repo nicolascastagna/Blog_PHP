@@ -59,13 +59,22 @@ class DeletePostController
         if ($request->getMethod() === 'POST') {
             $postRepository = $this->getPostsRepository();
             $id = PostIdChecker::getId($args);
+            $error = null; // Initialisation de la variable d'erreur
+
             $success = $postRepository->deletePost($id);
 
             if (!$success) {
-                throw new \Exception('Impossible de supprimer l\'article !');
+                $error = 'Une erreur est survenue dans la suppression de l\'article.';
             } else {
                 return $response->withHeader('Location', '/blog')->withStatus(302);
             }
+
+            $view = new View();
+            $html = $view->render('post_delete.twig', ['error' => $error]);
+
+            $response->getBody()->write($html);
+
+            return $response;
         } else {
             throw new \Exception('Une erreur est survenue');
         }

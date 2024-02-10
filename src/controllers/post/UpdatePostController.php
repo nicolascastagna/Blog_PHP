@@ -57,24 +57,32 @@ class UpdatePostController
     {
         if ($request->getMethod() === 'POST') {
             $formData = $request->getParsedBody();
+            $error = null;
 
             if (!isset($formData['title']) && !isset($formData['chapo']) && !isset($formData['content'])) {
-                throw new Exception('Les données du formulaire sont invalides.');
-            }
-
-            $title = $formData['title'];
-            $chapo = $formData['chapo'];
-            $content = $formData['content'];
-
-            $id = PostIdChecker::getId($args);
-            $postRepository = $this->getPostsRepository();
-            $success = $postRepository->updatePost($id, $title, $chapo, $content);
-
-            if (!$success) {
-                throw new \Exception('Impossible de modifier l\'article !');
+                $error = 'Les données du formulaire sont invalides.';
             } else {
-                return $response->withHeader('Location', '/blog')->withStatus(302);
+                $title = $formData['title'];
+                $chapo = $formData['chapo'];
+                $content = $formData['content'];
+
+                $id = PostIdChecker::getId($args);
+                $postRepository = $this->getPostsRepository();
+                $success = $postRepository->updatePost($id, $title, $chapo, $content);
+
+                if (!$success) {
+                    $error = 'Une erreur est survenue dans la mise à jour de l\'article.';
+                } else {
+                    return $response->withHeader('Location', '/blog')->withStatus(302);
+                }
             }
+
+            $view = new View();
+            $html = $view->render('post_update.twig', ['error' => $error]);
+
+            $response->getBody()->write($html);
+
+            return $response;
         } else {
             throw new \Exception('Une erreur est survenue');
         }

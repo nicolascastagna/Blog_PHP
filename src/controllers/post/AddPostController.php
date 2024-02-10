@@ -54,23 +54,31 @@ class AddPostController
     public function add(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $formData = $request->getParsedBody();
+        $error = null;
 
-        if (!isset($formData['title']) && !isset($formData['chapo']) && !isset($formData['content'])) {
-            throw new Exception('Les données du formulaire sont invalides.');
-        }
-
-        $title = $formData['title'];
-        $chapo = $formData['chapo'];
-        $content = $formData['content'];
-
-        $user_id = 1;
-        $postRepository = $this->getPostsRepository();
-        $success = $postRepository->addPost($user_id, $title, $content, $chapo);
-
-        if (!$success) {
-            throw new \Exception('Impossible d\'ajouter l\'article !');
+        if (!isset($formData['title']) || !isset($formData['chapo']) || !isset($formData['content'])) {
+            $error = 'Les données du formulaire sont invalides.';
         } else {
-            return $response->withHeader('Location', '/blog')->withStatus(302);
+            $title = $formData['title'];
+            $chapo = $formData['chapo'];
+            $content = $formData['content'];
+
+            $user_id = 1;
+            $postRepository = $this->getPostsRepository();
+            $success = $postRepository->addPost($user_id, $title, $content, $chapo);
+
+            if (!$success) {
+                $error = 'Une erreur est survenue dans l\'ajout de l\'article.';
+            } else {
+                return $response->withHeader('Location', '/blog')->withStatus(302);
+            }
         }
+
+        $view = new View();
+        $html = $view->render('post_add.twig', ['error' => $error]);
+
+        $response->getBody()->write($html);
+
+        return $response;
     }
 }

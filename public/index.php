@@ -38,6 +38,7 @@ $app->get('/blog/modification-article/{id}', [UpdatePostController::class, 'rend
 $app->post('/blog/modification-article/{id}', [UpdatePostController::class, 'update']);
 $app->post('/blog/article/{id}/ajout-commentaire', [AddCommentController::class, 'add']);
 $app->get('/inscription', [AddUserController::class, 'renderRegisterForm']);
+$app->post('/inscription', [AddUserController::class, 'add']);
 
 
 $app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {

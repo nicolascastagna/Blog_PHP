@@ -53,6 +53,7 @@ class ShowPostController
     public function show(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $id = PostIdChecker::getId($args);
+        $error = null;
 
         $post = $this->getPostsRepository()->getPost($id);
         $comment = $this->getCommentsRepository()->getComments($id);
@@ -63,11 +64,15 @@ class ShowPostController
 
         if ($request->getMethod() === 'POST') {
             $commentController = new AddCommentController();
-            $commentController->add($request, $response, $args);
+            try {
+                $commentController->add($request, $response, $args);
+            } catch (\Exception $e) {
+                $error = $e->getMessage();
+            }
         }
 
         $view = new View();
-        $html = $view->render('post.twig', ['post' => $post, 'comments' => $comments]);
+        $html = $view->render('post.twig', ['post' => $post, 'comments' => $comments, 'error' => $error]);
 
         $response->getBody()->write($html);
 

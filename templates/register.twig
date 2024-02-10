@@ -9,6 +9,9 @@
 		<input type="password" id="password" name="password" required>
 		<label for="email">Adresse mail :</label>
 		<input type="email" id="email" name="email" required>
+		{% if error %}
+			<p class="error">{{ error }}</p>
+		{% endif %}
 		<button type="submit">Valider les informations</button>
 	</form>
 {% endblock %}

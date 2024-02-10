@@ -3,6 +3,7 @@
 namespace App\model;
 
 use App\lib\DatabaseConnection;
+use PDO;
 
 class UserRepository
 {
@@ -55,6 +56,44 @@ class UserRepository
         }
 
         return $this->fetchUser($row);
+    }
+
+    /**
+     * addUser
+     *
+     * @param  string $username
+     * @param  string $password
+     * @param  string $email
+     *
+     * @return bool
+     */
+    public function addUser(string $username, string $password, string $email): bool
+    {
+        $role = 'ROLE_USER';
+
+        $statement = $this->connection->getConnection()->prepare(
+            'INSERT INTO user(username, password, email, role) VALUES(?, ?, ?, ?)'
+        );
+        $affectedLines = $statement->execute([$username, $password, $email, $role]);
+
+        return ($affectedLines > 0);
+    }
+
+    /**
+     * emailExists
+     *
+     * @param  string $email
+     *
+     * @return bool
+     */
+    public function emailExists(string $email): bool
+    {
+        $statement = $this->connection->getConnection()->prepare(
+            'SELECT EXISTS(SELECT 1 FROM user WHERE email = ?)'
+        );
+        $statement->execute([$email]);
+
+        return $statement->fetchColumn();
     }
 
     /**

@@ -37,4 +37,46 @@ class AddUserController
 
         return $response;
     }
+
+    /**
+     * add
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     *
+     * @return ResponseInterface
+     */
+    public function add(RequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $formData = $request->getParsedBody();
+        $error = null;
+
+        if (!isset($formData['username']) && !isset($formData['password']) && !isset($formData['email'])) {
+            $error = 'Les données du formulaire sont invalides.';
+        } else {
+            $username = $formData['username'];
+            $password = $formData['password'];
+            $email = $formData['email'];
+
+            $userRepository = $this->getUserRepository();
+            if ($userRepository->emailExists($email)) {
+                $error = 'L\'adresse e-mail existe déjà.';
+            } else {
+                $success = $userRepository->addUser($username, $password, $email);
+
+                if (!$success) {
+                    $error = 'Une erreur est survenue dans l\'enregistrement.';
+                } else {
+                    return $response->withHeader('Location', '/blog')->withStatus(302);
+                }
+            }
+        }
+
+        $view = new View();
+        $html = $view->render('register.twig', ['error' => $error]);
+
+        $response->getBody()->write($html);
+
+        return $response;
+    }
 }

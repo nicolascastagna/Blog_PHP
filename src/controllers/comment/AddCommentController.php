@@ -38,7 +38,7 @@ class AddCommentController
         $formData = $request->getParsedBody();
 
         if (!isset($formData['content'])) {
-            throw new Exception('Les données du formulaire sont invalides.');
+            throw new Exception('Certaines informations sont manquantes.');
         }
 
         $content = $formData['content'];
@@ -48,7 +48,7 @@ class AddCommentController
         $success = $commentRepository->addComment($user_id, $args['id'], $content);
 
         if (!$success) {
-            throw new \Exception('Impossible d\'ajouter le commentaire !');
+            throw new \Exception('Une erreur est survenue dans l\'ajout du commentaire.');
         } else {
             return $response->withHeader('Location', "/blog/article/{$args['id']}")->withStatus(302);
         }
