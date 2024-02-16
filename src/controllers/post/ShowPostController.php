@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\controllers\post;
 
 use App\controllers\comment\AddCommentController;
 use App\lib\DatabaseConnection;
 use App\lib\PostIdChecker;
+use App\lib\SessionChecker;
 use App\lib\View;
 use App\model\CommentRepository;
 use App\model\PostRepository;
@@ -25,6 +28,8 @@ class ShowPostController
      */
     public function show(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
+        $sessionChecker = new SessionChecker();
+        $sessionChecker->sessionChecker();
         $id = PostIdChecker::getId($args);
         $error = null;
 
@@ -44,7 +49,7 @@ class ShowPostController
         }
 
         $view = new View();
-        $html = $view->render('post.twig', ['post' => $post, 'comments' => $comments, 'error' => $error]);
+        $html = $view->render('post.twig', ['post' => $post, 'comments' => $comments, 'error' => $error, 'session' => $_SESSION]);
 
         $response->getBody()->write($html);
 

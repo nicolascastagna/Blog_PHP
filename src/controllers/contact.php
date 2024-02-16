@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\controllers;
 
+use App\lib\SessionChecker;
 use App\lib\View;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -20,8 +21,10 @@ class Contact
      */
     public function contact(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $sessionChecker = new SessionChecker();
+        $sessionChecker->sessionChecker();
         $view = new View();
-        $html = $view->render('contact.twig', ['contact' => 'Contact']);
+        $html = $view->render('contact.twig', ['session' => $_SESSION]);
 
         $response->getBody()->write($html);
 

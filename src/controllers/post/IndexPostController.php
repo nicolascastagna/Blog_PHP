@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
 use App\lib\PostSorter;
+use App\lib\SessionChecker;
 use App\lib\View;
 use App\model\PostRepository;
 use Psr\Http\Message\RequestInterface;
@@ -21,13 +24,15 @@ class IndexPostController
      */
     public function index(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $sessionChecker = new SessionChecker();
+        $sessionChecker->sessionChecker();
         $posts = $this->getPostsRepository()->getPosts();
 
         $postSorter = new PostSorter();
         $sortedPosts = $postSorter->sortByRecentDate($posts);
 
         $view = new View();
-        $html = $view->render('blogpage.twig', ['posts' => $sortedPosts]);
+        $html = $view->render('blogpage.twig', ['posts' => $sortedPosts, 'session' => $_SESSION]);
 
         $response->getBody()->write($html);
 

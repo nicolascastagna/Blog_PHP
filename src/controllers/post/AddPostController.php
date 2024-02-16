@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
+use App\lib\SessionChecker;
 use App\lib\View;
 use App\model\PostRepository;
 use Psr\Http\Message\RequestInterface;
@@ -20,8 +23,10 @@ class AddPostController
      */
     public function renderCreationForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $sessionChecker = new SessionChecker();
+        $sessionChecker->sessionChecker();
         $view = new View();
-        $html = $view->render('post_add.twig', []);
+        $html = $view->render('post_add.twig', ['session' => $_SESSION]);
 
         $response->getBody()->write($html);
 

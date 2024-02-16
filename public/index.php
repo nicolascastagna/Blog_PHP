@@ -12,6 +12,7 @@ use App\controllers\post\IndexPostController;
 use App\controllers\post\ShowPostController;
 use App\controllers\post\UpdatePostController;
 use App\controllers\user\LoginUserController;
+use App\controllers\user\LogoutUserController;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Factory\AppFactory;
@@ -42,6 +43,7 @@ $app->get('/inscription', [AddUserController::class, 'renderRegisterForm']);
 $app->post('/inscription', [AddUserController::class, 'add']);
 $app->get('/connexion', [LoginUserController::class, 'renderLoginForm']);
 $app->post('/connexion', [LoginUserController::class, 'login']);
+$app->get('/deconnexion', [LogoutUserController::class, 'logout']);
 
 
 $app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {

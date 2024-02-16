@@ -67,7 +67,7 @@ class UserRepository
      *
      * @return bool
      */
-    public function setToken(int $userId, string $token): bool
+    public function setToken(?string $token, int $userId,): bool
     {
         $statement = $this->connection->getConnection()->prepare(
             'UPDATE user SET token = ? WHERE id = ?'

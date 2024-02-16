@@ -69,7 +69,7 @@ class LoginUserController
                     'token' => $token,
 
                 ];
-                $userRepository->setToken($user->id, $token);
+                $userRepository->setToken($token, $user->id);
 
                 return $response->withHeader('Location', '/')->withStatus(302);
             }

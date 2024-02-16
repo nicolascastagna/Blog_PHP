@@ -33,7 +33,7 @@ class Homepage
 
         $lastPosts = array_slice($sortedPosts, 0, 3);
         $view = new View();
-        $html = $view->render('homepage.twig', ['posts' => $lastPosts]);
+        $html = $view->render('homepage.twig', ['posts' => $lastPosts, 'session' => $_SESSION]);
 
         $response->getBody()->write($html);
 

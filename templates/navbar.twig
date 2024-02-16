@@ -14,9 +14,12 @@
 							<a class="link-menu" href="/">Accueil</a>
 							<a class="link-menu" href="/blog">Blog</a>
 							<a class="link-menu" href="/contact">Contact</a>
-							<a class="link-menu" href="/inscription">S'enregistrer</a>
-							<a class="link-menu" href="/connexion">Se connecter</a>
-							<a class="link-menu" href="/deconnecter">Se déconnecter</a>
+							{% if session != true %}
+								<a class="link-menu" href="/inscription">S'enregistrer</a>
+								<a class="link-menu" href="/connexion">Se connecter</a>
+							{% else %}
+								<a class="link-menu" href="/deconnexion">Se déconnecter</a>
+							{% endif %}
 						</nav>
 					</div>
 				</div>

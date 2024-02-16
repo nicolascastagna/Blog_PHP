@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
 use App\lib\PostIdChecker;
+use App\lib\SessionChecker;
 use App\lib\View;
 use App\model\PostRepository;
 use Exception;
@@ -23,11 +26,13 @@ class DeletePostController
      */
     public function renderDeleteForm(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
+        $sessionChecker = new SessionChecker();
+        $sessionChecker->sessionChecker();
         $view = new View();
         $id = PostIdChecker::getId($args);
         $post = $this->getPostsRepository()->getPost($id);
 
-        $html = $view->render('post_delete.twig', ['post' => $post]);
+        $html = $view->render('post_delete.twig', ['post' => $post, 'session' => $_SESSION]);
         $response->getBody()->write($html);
 
         return $response;
