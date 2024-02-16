@@ -11,6 +11,7 @@ use App\controllers\post\DeletePostController;
 use App\controllers\post\IndexPostController;
 use App\controllers\post\ShowPostController;
 use App\controllers\post\UpdatePostController;
+use App\controllers\user\LoginUserController;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Factory\AppFactory;
@@ -39,6 +40,8 @@ $app->post('/blog/modification-article/{id}', [UpdatePostController::class, 'upd
 $app->post('/blog/article/{id}/ajout-commentaire', [AddCommentController::class, 'add']);
 $app->get('/inscription', [AddUserController::class, 'renderRegisterForm']);
 $app->post('/inscription', [AddUserController::class, 'add']);
+$app->get('/connexion', [LoginUserController::class, 'renderLoginForm']);
+$app->post('/connexion', [LoginUserController::class, 'login']);
 
 
 $app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {

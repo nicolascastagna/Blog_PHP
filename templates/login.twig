@@ -2,5 +2,14 @@
 {% block title %}Se connecter
 {% endblock %}
 {% block content %}
-	Page de connexion
+	<form action="/connexion" method="post">
+		<label for="email">Adresse mail :</label>
+		<input type="email" id="email" name="email" required>
+		<label for="password">Mot de passe :</label>
+		<input type="password" id="password" name="password" required>
+		{% if error %}
+			<p class="error">{{ error }}</p>
+		{% endif %}
+		<button type="submit">Se connecter</button>
+	</form>
 {% endblock %}

@@ -75,7 +75,7 @@ class UserRepository
         $statement = $this->connection->getConnection()->prepare(
             'INSERT INTO user(username, password, email, role) VALUES(?, ?, ?, ?)'
         );
-        $affectedLines = $statement->execute([$username, $password, $email, $role]);
+        $affectedLines = $statement->execute([$username, MD5($password), $email, $role]);
 
         return ($affectedLines > 0);
     }
@@ -98,6 +98,30 @@ class UserRepository
     }
 
     /**
+     * login
+     *
+     * @param string $email
+     * @param string $password
+     *
+     * @return User|null
+     */
+    public function login(string $email, string $password): ?User
+    {
+        $statement = $this->connection->getConnection()->prepare(
+            "SELECT id, username, email, role FROM user WHERE email = ? AND password = ?"
+        );
+
+        $statement->execute([$email, md5($password)]);
+
+        $row = $statement->fetch();
+        if (!$row) {
+            return null;
+        }
+
+        return $this->fetchUser($row);
+    }
+
+    /**
      * fetchUser
      *
      * @param array $row
@@ -109,7 +133,6 @@ class UserRepository
         $user = new User();
         $user->id = $row['id'];
         $user->username = $row['username'];
-        $user->password = $row['password'];
         $user->email = $row['email'];
         $user->role = $row['role'];
 
