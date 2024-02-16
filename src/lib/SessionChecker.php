@@ -21,15 +21,15 @@ class SessionChecker
             $userRepository = $this->getUserRepository();
             $lastRefreshTime = $_SESSION['user']['last_refresh'] ?? 0;
 
-            if (time() - $lastRefreshTime >= 1800) {
+            if ((time() - $lastRefreshTime) >= 1800) {
                 $newToken = bin2hex(random_bytes(16));
 
                 $_SESSION['user']['token'] = $newToken;
                 $_SESSION['user']['last_refresh'] = time();
 
-                $userId = $_SESSION['user']['id'] ?? null;
-                if (null !== $userId) {
-                    $userRepository->setToken($userId, $newToken);
+                $userId = ($_SESSION['user']['id'] ?? null);
+                if ($userId !== null) {
+                    $userRepository->setToken($newToken, $userId);
                 } else {
                     session_unset();
                     session_destroy();

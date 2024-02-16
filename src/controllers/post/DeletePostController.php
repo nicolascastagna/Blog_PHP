@@ -29,8 +29,8 @@ class DeletePostController
         $sessionChecker = new SessionChecker();
         $sessionChecker->sessionChecker();
         $view = new View();
-        $id = PostIdChecker::getId($args);
-        $post = $this->getPostsRepository()->getPost($id);
+        $postId = PostIdChecker::getId($args);
+        $post = $this->getPostsRepository()->getPost($postId);
 
         $html = $view->render('post_delete.twig', ['post' => $post, 'session' => $_SESSION]);
         $response->getBody()->write($html);
@@ -49,14 +49,14 @@ class DeletePostController
      */
     public function remove(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        if ('POST' === $request->getMethod()) {
+        if ($request->getMethod() === 'POST') {
             $postRepository = $this->getPostsRepository();
-            $id = PostIdChecker::getId($args);
-            $error = null; // Initialisation de la variable d'erreur
+            $postId = PostIdChecker::getId($args);
+            $error = null;
 
-            $success = $postRepository->deletePost($id);
+            $success = $postRepository->deletePost($postId);
 
-            if (!$success) {
+            if ($success === false) {
                 $error = 'Une erreur est survenue dans la suppression de l\'article.';
             } else {
                 return $response->withHeader('Location', '/blog')->withStatus(302);

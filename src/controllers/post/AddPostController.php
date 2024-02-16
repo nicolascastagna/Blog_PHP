@@ -46,7 +46,7 @@ class AddPostController
         $formData = $request->getParsedBody();
         $error = null;
 
-        if (!isset($formData['title']) || !isset($formData['chapo']) || !isset($formData['content'])) {
+        if (isset($formData['title']) === false && isset($formData['chapo']) === false && isset($formData['content']) === false) {
             $error = 'Les données du formulaire sont invalides.';
         } else {
             $title = $formData['title'];
@@ -57,7 +57,7 @@ class AddPostController
             $postRepository = $this->getPostsRepository();
             $success = $postRepository->addPost($user_id, $title, $content, $chapo);
 
-            if (!$success) {
+            if ($success === false) {
                 $error = 'Une erreur est survenue dans l\'ajout de l\'article.';
             } else {
                 return $response->withHeader('Location', '/blog')->withStatus(302);

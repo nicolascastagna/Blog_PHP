@@ -47,7 +47,7 @@ class LoginUserController
         $formData = $request->getParsedBody();
         $error = null;
 
-        if (!isset($formData['email']) && !isset($formData['password'])) {
+        if (isset($formData['email']) === false && isset($formData['password']) === false) {
             $error = 'Les données du formulaire sont invalides.';
         } else {
             $email = $formData['email'];
@@ -56,17 +56,17 @@ class LoginUserController
             $userRepository = $this->getUserRepository();
             $user = $userRepository->login($email, $password);
 
-            if (null === $user) {
+            if ($user === null) {
                 $error = 'Identifiants invalides.';
             } else {
                 $token = bin2hex(random_bytes(16));
                 $_SESSION['user'] = [
-                    'id' => $user->id,
-                    'username' => $user->username,
-                    'email' => $user->email,
-                    'role' => $user->role,
-                    'last_refresh' => time(),
-                    'token' => $token,
+                    'id'            => $user->id,
+                    'username'      => $user->username,
+                    'email'         => $user->email,
+                    'role'          => $user->role,
+                    'last_refresh'  => time(),
+                    'token'         => $token,
                 ];
                 $userRepository->setToken($token, $user->id);
 
@@ -82,6 +82,11 @@ class LoginUserController
         return $response;
     }
 
+    /**
+     * getUserRepository
+     *
+     * @return UserRepository
+     */
     private function getUserRepository(): UserRepository
     {
         $connection = new DatabaseConnection();

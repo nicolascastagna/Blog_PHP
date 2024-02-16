@@ -25,9 +25,9 @@ class AddCommentController
     public function add(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $formData = $request->getParsedBody();
-        $id = PostIdChecker::getId($args);
+        $postId = PostIdChecker::getId($args);
 
-        if (!isset($formData['content'])) {
+        if (isset($formData['content']) === false) {
             throw new Exception('Certaines informations sont manquantes.');
         }
 
@@ -35,9 +35,9 @@ class AddCommentController
 
         $user_id = 1;
         $commentRepository = $this->getCommentsRepository();
-        $success = $commentRepository->addComment($user_id, $id, $content);
+        $success = $commentRepository->addComment($user_id, $postId, $content);
 
-        if (!$success) {
+        if ($success === false) {
             throw new Exception('Une erreur est survenue dans l\'ajout du commentaire.');
         }
 

@@ -46,22 +46,22 @@ class UpdatePostController
      */
     public function update(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        if ('POST' === $request->getMethod()) {
+        if ($request->getMethod() === 'POST') {
             $formData = $request->getParsedBody();
             $error = null;
 
-            if (!isset($formData['title']) && !isset($formData['chapo']) && !isset($formData['content'])) {
+            if (isset($formData['title']) === false && isset($formData['chapo']) === false && isset($formData['content']) === false) {
                 $error = 'Les données du formulaire sont invalides.';
             } else {
                 $title = $formData['title'];
                 $chapo = $formData['chapo'];
                 $content = $formData['content'];
 
-                $id = PostIdChecker::getId($args);
+                $postId = PostIdChecker::getId($args);
                 $postRepository = $this->getPostsRepository();
-                $success = $postRepository->updatePost($id, $title, $chapo, $content);
+                $success = $postRepository->updatePost($postId, $title, $chapo, $content);
 
-                if (!$success) {
+                if ($success === false) {
                     $error = 'Une erreur est survenue dans la mise à jour de l\'article.';
                 } else {
                     return $response->withHeader('Location', '/blog')->withStatus(302);

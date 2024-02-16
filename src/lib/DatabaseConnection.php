@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\lib;
 
@@ -17,7 +19,7 @@ class DatabaseConnection
      */
     public function getConnection(): PDO
     {
-        if (null === $this->database) {
+        if ($this->database === null) {
             $dotenv = Dotenv::createUnsafeImmutable(__DIR__ . '/../../');
             $dotenv->load();
 
@@ -26,7 +28,7 @@ class DatabaseConnection
             $user = getenv('DB_USER');
             $password = getenv('DB_PASSWORD');
 
-            if (false === $host || false === $dbname || false === $user || false === $password) {
+            if ($host === false || $dbname === false || $user === false || $password === false) {
                 throw new Exception('Missing required database configuration.');
             }
 

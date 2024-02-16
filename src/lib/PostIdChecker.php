@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\lib;
 
@@ -19,7 +21,7 @@ class PostIdChecker
      */
     public static function getId(array $args): int
     {
-        if (isset($args['id']) && false !== filter_var($args['id'], \FILTER_VALIDATE_INT) && $args['id'] > 0) {
+        if (isset($args['id']) && filter_var($args['id'], \FILTER_VALIDATE_INT) !== false && $args['id'] > 0) {
             return (int) $args['id'];
         }
 

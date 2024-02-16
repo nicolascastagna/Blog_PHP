@@ -52,7 +52,7 @@ class UserRepository
         $statement->execute([$id]);
         $row = $statement->fetch();
 
-        if (!$row) {
+        if ($row === false) {
             return null;
         }
 
@@ -132,7 +132,7 @@ class UserRepository
         $statement->execute([$email, md5($password)]);
 
         $row = $statement->fetch();
-        if (!$row) {
+        if ($row === false) {
             return null;
         }
 

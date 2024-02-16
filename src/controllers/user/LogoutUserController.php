@@ -21,13 +21,14 @@ class LogoutUserController
      */
     public function logout(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        session_start();
-        $userId = isset($_SESSION['user']['id']) ? $_SESSION['user']['id'] : null;
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $userId = isset($_SESSION['user']['id']) === true ? $_SESSION['user']['id'] : null;
 
-        session_unset();
         session_destroy();
 
-        if (null !== $userId) {
+        if ($userId !== null) {
             $userRepository = $this->getUserRepository();
             $userRepository->setToken(null, $userId);
         }
@@ -35,6 +36,11 @@ class LogoutUserController
         return $response->withHeader('Location', '/')->withStatus(302);
     }
 
+    /**
+     * getUserRepository
+     *
+     * @return UserRepository
+     */
     private function getUserRepository(): UserRepository
     {
         $connection = new DatabaseConnection();

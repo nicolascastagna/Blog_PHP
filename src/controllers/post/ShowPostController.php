@@ -30,15 +30,15 @@ class ShowPostController
     {
         $sessionChecker = new SessionChecker();
         $sessionChecker->sessionChecker();
-        $id = PostIdChecker::getId($args);
+        $postId = PostIdChecker::getId($args);
         $error = null;
 
-        $post = $this->getPostsRepository()->getPost($id);
-        $comment = $this->getCommentsRepository()->getComments($id);
+        $post = $this->getPostsRepository()->getPost($postId);
+        $comment = $this->getCommentsRepository()->getComments($postId);
 
-        $comments = array_filter($comment, fn ($comment) => 1 == $comment->status);
+        $comments = array_filter($comment, fn ($comment) => $comment->status == 1);
 
-        if ('POST' === $request->getMethod()) {
+        if ($request->getMethod() === 'POST') {
             $commentController = new AddCommentController();
 
             try {

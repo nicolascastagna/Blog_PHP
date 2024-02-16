@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\lib;
 
@@ -38,14 +40,14 @@ class View
     {
         try {
             return $this->twig->render($template, $data);
-        } catch (\Twig\Error\LoaderError $e) {
-            return 'Erreur de chargement du template: ' . $e->getMessage();
-        } catch (\Twig\Error\RuntimeError $e) {
-            return 'Erreur d\'exécution du template: ' . $e->getMessage();
-        } catch (\Twig\Error\SyntaxError $e) {
-            return 'Erreur de syntaxe du template: ' . $e->getMessage();
-        } catch (Exception $e) {
-            return 'Une erreur s\'est produite: ' . $e->getMessage();
+        } catch (\Twig\Error\LoaderError $exception) {
+            return 'Erreur de chargement du template: ' . $exception->getMessage();
+        } catch (\Twig\Error\RuntimeError $exception) {
+            return 'Erreur d\'exécution du template: ' . $exception->getMessage();
+        } catch (\Twig\Error\SyntaxError $exception) {
+            return 'Erreur de syntaxe du template: ' . $exception->getMessage();
+        } catch (Exception $exception) {
+            return 'Une erreur s\'est produite: ' . $exception->getMessage();
         }
     }
 }

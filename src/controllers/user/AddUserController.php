@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\controllers\user;
 
@@ -41,7 +43,7 @@ class AddUserController
         $formData = $request->getParsedBody();
         $error = null;
 
-        if (!isset($formData['username']) && !isset($formData['password']) && !isset($formData['email'])) {
+        if (isset($formData['username']) === false && isset($formData['password']) === false && isset($formData['email']) === false) {
             $error = 'Les données du formulaire sont invalides.';
         } else {
             $username = $formData['username'];
@@ -49,12 +51,12 @@ class AddUserController
             $email = $formData['email'];
 
             $userRepository = $this->getUserRepository();
-            if ($userRepository->emailExists($email)) {
+            if ($userRepository->emailExists($email) === true) {
                 $error = 'L\'adresse e-mail existe déjà.';
             } else {
                 $success = $userRepository->addUser($username, $password, $email);
 
-                if (!$success) {
+                if ($success === false) {
                     $error = 'Une erreur est survenue dans l\'enregistrement.';
                 } else {
                     return $response->withHeader('Location', '/blog')->withStatus(302);
@@ -70,6 +72,11 @@ class AddUserController
         return $response;
     }
 
+    /**
+     * getUserRepository
+     *
+     * @return UserRepository
+     */
     private function getUserRepository(): UserRepository
     {
         $connection = new DatabaseConnection();
