@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\model;
 
@@ -14,7 +14,7 @@ class PostRepository
     /**
      * getPost
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Post
      */
@@ -32,9 +32,8 @@ class PostRepository
         $statement->execute([$id]);
 
         $row = $statement->fetch();
-        $post = $this->fetchPost($row);
 
-        return $post;
+        return $this->fetchPost($row);
     }
 
     /**
@@ -67,10 +66,10 @@ class PostRepository
     /**
      * addPost
      *
-     * @param  int $user_id
-     * @param  string $title
-     * @param  string $chapo
-     * @param  string $content
+     * @param int    $user_id
+     * @param string $title
+     * @param string $chapo
+     * @param string $content
      *
      * @return bool
      */
@@ -87,7 +86,7 @@ class PostRepository
     /**
      * deletePost
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return bool
      */
@@ -104,10 +103,10 @@ class PostRepository
     /**
      * updatePost
      *
-     * @param  int $id
-     * @param  string $title
-     * @param  string $chapo
-     * @param  string $content
+     * @param int    $id
+     * @param string $title
+     * @param string $chapo
+     * @param string $content
      *
      * @return bool
      */
@@ -124,7 +123,7 @@ class PostRepository
     /**
      * fetchPost
      *
-     * @param  array $row
+     * @param array $row
      *
      * @return Post
      */

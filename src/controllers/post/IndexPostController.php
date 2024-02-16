@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\controllers\post;
 
@@ -12,24 +12,10 @@ use Psr\Http\Message\ResponseInterface;
 class IndexPostController
 {
     /**
-     * getPostsRepository
-     *
-     * @return PostRepository
-     */
-    private function getPostsRepository(): PostRepository
-    {
-        $connection = new DatabaseConnection();
-        $postRepository = new PostRepository();
-        $postRepository->connection = $connection;
-
-        return $postRepository;
-    }
-
-    /**
      * index
      *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */
@@ -46,5 +32,19 @@ class IndexPostController
         $response->getBody()->write($html);
 
         return $response;
+    }
+
+    /**
+     * getPostsRepository
+     *
+     * @return PostRepository
+     */
+    private function getPostsRepository(): PostRepository
+    {
+        $connection = new DatabaseConnection();
+        $postRepository = new PostRepository();
+        $postRepository->connection = $connection;
+
+        return $postRepository;
     }
 }

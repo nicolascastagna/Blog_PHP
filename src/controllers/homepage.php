@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\controllers;
 
 use App\lib\DatabaseConnection;
@@ -12,24 +14,10 @@ use Psr\Http\Message\ResponseInterface;
 class Homepage
 {
     /**
-     * getPostsRepository
-     *
-     * @return PostRepository
-     */
-    private function getPostsRepository(): PostRepository
-    {
-        $connection = new DatabaseConnection();
-        $postRepository = new PostRepository();
-        $postRepository->connection = $connection;
-
-        return $postRepository;
-    }
-
-    /**
      * homepage
      *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */
@@ -46,5 +34,19 @@ class Homepage
         $response->getBody()->write($html);
 
         return $response;
+    }
+
+    /**
+     * getPostsRepository.
+     *
+     * @return PostRepository
+     */
+    private function getPostsRepository(): PostRepository
+    {
+        $connection = new DatabaseConnection();
+        $postRepository = new PostRepository();
+        $postRepository->connection = $connection;
+
+        return $postRepository;
     }
 }

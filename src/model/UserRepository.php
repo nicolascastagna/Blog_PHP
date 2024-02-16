@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\model;
 
 use App\lib\DatabaseConnection;
-use PDO;
 
 class UserRepository
 {
@@ -35,7 +36,7 @@ class UserRepository
     /**
      * getUser
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return User
      */
@@ -61,9 +62,9 @@ class UserRepository
     /**
      * addUser
      *
-     * @param  string $username
-     * @param  string $password
-     * @param  string $email
+     * @param string $username
+     * @param string $password
+     * @param string $email
      *
      * @return bool
      */
@@ -82,11 +83,11 @@ class UserRepository
     /**
      * emailExists
      *
-     * @param  string $email
+     * @param string $email
      *
      * @return bool
      */
-    public function emailExists(string $email): bool
+    public function emailExists(string $email): int
     {
         $statement = $this->connection->getConnection()->prepare(
             'SELECT EXISTS(SELECT 1 FROM user WHERE email = ?)'
@@ -99,7 +100,7 @@ class UserRepository
     /**
      * fetchUser
      *
-     * @param  array $row
+     * @param array $row
      *
      * @return User
      */

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\model;
 
@@ -14,7 +14,7 @@ class CommentRepository
     /**
      * getComments
      *
-     * @param  int $postId
+     * @param int $postId
      *
      * @return array
      */
@@ -45,9 +45,9 @@ class CommentRepository
     /**
      * addComment
      *
-     * @param  int $user_id
-     * @param  int $post_id
-     * @param  string $content
+     * @param int    $user_id
+     * @param int    $post_id
+     * @param string $content
      *
      * @return bool
      */
@@ -64,7 +64,7 @@ class CommentRepository
     /**
      * fetchComment
      *
-     * @param  array $row
+     * @param array $row
      *
      * @return Comment
      */

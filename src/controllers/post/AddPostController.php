@@ -1,35 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
 use App\lib\View;
 use App\model\PostRepository;
-use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class AddPostController
 {
     /**
-     * getPostsRepository
-     *
-     * @return PostRepository
-     */
-    private function getPostsRepository(): PostRepository
-    {
-        $connection = new DatabaseConnection();
-        $postRepository = new PostRepository();
-        $postRepository->connection = $connection;
-
-        return $postRepository;
-    }
-
-    /**
      * renderCreationForm
      *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */
@@ -46,8 +31,8 @@ class AddPostController
     /**
      * add
      *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */
@@ -80,5 +65,19 @@ class AddPostController
         $response->getBody()->write($html);
 
         return $response;
+    }
+
+    /**
+     * getPostsRepository
+     *
+     * @return PostRepository
+     */
+    private function getPostsRepository(): PostRepository
+    {
+        $connection = new DatabaseConnection();
+        $postRepository = new PostRepository();
+        $postRepository->connection = $connection;
+
+        return $postRepository;
     }
 }

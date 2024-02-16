@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\controllers;
 
 use App\lib\View;
@@ -11,8 +13,8 @@ class Contact
     /**
      * contact
      *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */

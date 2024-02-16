@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\controllers\post;
 
@@ -13,24 +13,10 @@ use Psr\Http\Message\ResponseInterface;
 class UpdatePostController
 {
     /**
-     * getPostsRepository
-     *
-     * @return PostRepository
-     */
-    private function getPostsRepository(): PostRepository
-    {
-        $connection = new DatabaseConnection();
-        $postRepository = new PostRepository();
-        $postRepository->connection = $connection;
-
-        return $postRepository;
-    }
-
-    /**
      * renderUpdateForm
      *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */
@@ -47,15 +33,15 @@ class UpdatePostController
     /**
      * update
      *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
-     * @param  array $args
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
+     * @param array             $args
      *
      * @return ResponseInterface
      */
     public function update(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $formData = $request->getParsedBody();
             $error = null;
 
@@ -83,8 +69,22 @@ class UpdatePostController
             $response->getBody()->write($html);
 
             return $response;
-        } else {
-            throw new \Exception('Une erreur est survenue');
         }
+
+        throw new Exception('Une erreur est survenue');
+    }
+
+    /**
+     * getPostsRepository
+     *
+     * @return PostRepository
+     */
+    private function getPostsRepository(): PostRepository
+    {
+        $connection = new DatabaseConnection();
+        $postRepository = new PostRepository();
+        $postRepository->connection = $connection;
+
+        return $postRepository;
     }
 }

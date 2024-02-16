@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\model;
 
 class Comment
@@ -35,7 +37,7 @@ class Comment
     public string $commentDate;
 
     /**
-     * @var string|null
+     * @var int|null
      */
-    public ?string $status;
+    public ?int $status;
 }

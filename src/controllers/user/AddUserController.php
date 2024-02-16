@@ -1,30 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\controllers\user;
 
 use App\lib\DatabaseConnection;
 use App\lib\View;
 use App\model\UserRepository;
-use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class AddUserController
 {
-    private function getUserRepository(): UserRepository
-    {
-        $connection = new DatabaseConnection();
-        $userRepository = new UserRepository();
-        $userRepository->connection = $connection;
-
-        return $userRepository;
-    }
-
     /**
      * renderRegisterForm
      *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */
@@ -41,8 +31,8 @@ class AddUserController
     /**
      * add
      *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */
@@ -78,5 +68,14 @@ class AddUserController
         $response->getBody()->write($html);
 
         return $response;
+    }
+
+    private function getUserRepository(): UserRepository
+    {
+        $connection = new DatabaseConnection();
+        $userRepository = new UserRepository();
+        $userRepository->connection = $connection;
+
+        return $userRepository;
     }
 }

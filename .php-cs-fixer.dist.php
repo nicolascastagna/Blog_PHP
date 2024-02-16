@@ -17,5 +17,7 @@ return $config->setRules([
     'phpdoc_separation' => true,
     'phpdoc_add_missing_param_annotation' => true,
     'blank_line_before_statement' => ['statements' => ['return']],
+    'no_empty_phpdoc' => true,
+    'strict_param' => true,
 ])
     ->setFinder($finder);

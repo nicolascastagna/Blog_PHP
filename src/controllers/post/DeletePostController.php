@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\controllers\post;
 
@@ -6,31 +6,18 @@ use App\lib\DatabaseConnection;
 use App\lib\PostIdChecker;
 use App\lib\View;
 use App\model\PostRepository;
+use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class DeletePostController
 {
     /**
-     * getPostsRepository
-     *
-     * @return PostRepository
-     */
-    private function getPostsRepository(): PostRepository
-    {
-        $connection = new DatabaseConnection();
-        $postRepository = new PostRepository();
-        $postRepository->connection = $connection;
-
-        return $postRepository;
-    }
-
-    /**
      * renderDeleteForm
      *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
-     * @param  array $args
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
+     * @param array             $args
      *
      * @return ResponseInterface
      */
@@ -49,14 +36,15 @@ class DeletePostController
     /**
      * remove
      *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
+     * @param array             $args
      *
      * @return ResponseInterface
      */
     public function remove(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $postRepository = $this->getPostsRepository();
             $id = PostIdChecker::getId($args);
             $error = null; // Initialisation de la variable d'erreur
@@ -75,8 +63,22 @@ class DeletePostController
             $response->getBody()->write($html);
 
             return $response;
-        } else {
-            throw new \Exception('Une erreur est survenue');
         }
+
+        throw new Exception('Une erreur est survenue');
+    }
+
+    /**
+     * getPostsRepository
+     *
+     * @return PostRepository
+     */
+    private function getPostsRepository(): PostRepository
+    {
+        $connection = new DatabaseConnection();
+        $postRepository = new PostRepository();
+        $postRepository->connection = $connection;
+
+        return $postRepository;
     }
 }
