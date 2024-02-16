@@ -13,7 +13,7 @@ class SessionChecker
      */
     public function sessionChecker(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
+        if (\PHP_SESSION_NONE === session_status()) {
             session_start();
         }
 
@@ -28,7 +28,7 @@ class SessionChecker
                 $_SESSION['user']['last_refresh'] = time();
 
                 $userId = $_SESSION['user']['id'] ?? null;
-                if ($userId !== null) {
+                if (null !== $userId) {
                     $userRepository->setToken($userId, $newToken);
                 } else {
                     session_unset();

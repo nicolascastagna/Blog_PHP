@@ -27,14 +27,13 @@ class LogoutUserController
         session_unset();
         session_destroy();
 
-        if ($userId !== null) {
+        if (null !== $userId) {
             $userRepository = $this->getUserRepository();
             $userRepository->setToken(null, $userId);
         }
 
         return $response->withHeader('Location', '/')->withStatus(302);
     }
-
 
     private function getUserRepository(): UserRepository
     {

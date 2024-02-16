@@ -56,7 +56,7 @@ class LoginUserController
             $userRepository = $this->getUserRepository();
             $user = $userRepository->login($email, $password);
 
-            if ($user === null) {
+            if (null === $user) {
                 $error = 'Identifiants invalides.';
             } else {
                 $token = bin2hex(random_bytes(16));
@@ -67,7 +67,6 @@ class LoginUserController
                     'role' => $user->role,
                     'last_refresh' => time(),
                     'token' => $token,
-
                 ];
                 $userRepository->setToken($token, $user->id);
 
