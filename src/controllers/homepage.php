@@ -6,6 +6,7 @@ namespace App\controllers;
 
 use App\lib\DatabaseConnection;
 use App\lib\PostSorter;
+use App\lib\SessionChecker;
 use App\lib\View;
 use App\model\PostRepository;
 use Psr\Http\Message\RequestInterface;
@@ -23,6 +24,9 @@ class Homepage
      */
     public function homepage(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $sessionChecker = new SessionChecker();
+        $sessionChecker->sessionChecker();
+
         $posts = $this->getPostsRepository()->getPosts();
         $postSorter = new PostSorter();
         $sortedPosts = $postSorter->sortByRecentDate($posts);
