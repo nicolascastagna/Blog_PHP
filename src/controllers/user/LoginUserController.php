@@ -23,8 +23,12 @@ class LoginUserController
      */
     public function renderLoginForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $sessionChecker = new SessionChecker();
+        $sessionChecker->sessionChecker();
+        $sessionData = $sessionChecker->getSessionData();
+
         $view = new View();
-        $html = $view->render('login.twig', []);
+        $html = $view->render('login.twig', ['session' => $sessionData]);
 
         $response->getBody()->write($html);
 
@@ -73,7 +77,6 @@ class LoginUserController
                 return $response->withHeader('Location', '/')->withStatus(302);
             }
         }
-
         $view = new View();
         $html = $view->render('login.twig', ['error' => $error]);
 

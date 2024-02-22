@@ -28,11 +28,12 @@ class DeletePostController
     {
         $sessionChecker = new SessionChecker();
         $sessionChecker->sessionChecker();
+        $sessionData = $sessionChecker->getSessionData();
         $view = new View();
         $postId = PostIdChecker::getId($args);
         $post = $this->getPostsRepository()->getPost($postId);
 
-        $html = $view->render('post_delete.twig', ['post' => $post, 'session' => $_SESSION]);
+        $html = $view->render('post_delete.twig', ['post' => $post, 'session' => $sessionData]);
         $response->getBody()->write($html);
 
         return $response;

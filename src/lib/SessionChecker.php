@@ -39,6 +39,29 @@ class SessionChecker
     }
 
     /**
+     * getSessionData
+     *
+     * @return array
+     */
+    public function getSessionData(): array
+    {
+        if (isset($_SESSION['user'])) {
+            return [
+                'user' => [
+                    'id' => $_SESSION['user']['id'],
+                    'username' => $_SESSION['user']['username'],
+                    'email' => $_SESSION['user']['email'],
+                    'role' => $_SESSION['user']['role'],
+                    'last_refresh' => $_SESSION['user']['last_refresh'],
+                    'token' => $_SESSION['user']['token'],
+                ]
+            ];
+        } else {
+            return [];
+        }
+    }
+
+    /**
      * getUserRepository
      *
      * @return UserRepository

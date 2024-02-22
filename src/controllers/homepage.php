@@ -26,6 +26,7 @@ class Homepage
     {
         $sessionChecker = new SessionChecker();
         $sessionChecker->sessionChecker();
+        $sessionData = $sessionChecker->getSessionData();
 
         $posts = $this->getPostsRepository()->getPosts();
         $postSorter = new PostSorter();
@@ -33,7 +34,7 @@ class Homepage
 
         $lastPosts = array_slice($sortedPosts, 0, 3);
         $view = new View();
-        $html = $view->render('homepage.twig', ['posts' => $lastPosts, 'session' => $_SESSION]);
+        $html = $view->render('homepage.twig', ['posts' => $lastPosts, 'session' => $sessionData]);
 
         $response->getBody()->write($html);
 

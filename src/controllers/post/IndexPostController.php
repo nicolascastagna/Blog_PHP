@@ -26,13 +26,14 @@ class IndexPostController
     {
         $sessionChecker = new SessionChecker();
         $sessionChecker->sessionChecker();
+        $sessionData = $sessionChecker->getSessionData();
         $posts = $this->getPostsRepository()->getPosts();
 
         $postSorter = new PostSorter();
         $sortedPosts = $postSorter->sortByRecentDate($posts);
 
         $view = new View();
-        $html = $view->render('blogpage.twig', ['posts' => $sortedPosts, 'session' => $_SESSION]);
+        $html = $view->render('blogpage.twig', ['posts' => $sortedPosts, 'session' => $sessionData]);
 
         $response->getBody()->write($html);
 

@@ -40,7 +40,6 @@ class CommentRepository
             $comments[] = $this->fetchComment($row);
         }
 
-        // var_dump($comments);
         return $comments;
     }
 

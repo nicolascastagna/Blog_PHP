@@ -30,6 +30,7 @@ class ShowPostController
     {
         $sessionChecker = new SessionChecker();
         $sessionChecker->sessionChecker();
+        $sessionData = $sessionChecker->getSessionData();
         $postId = PostIdChecker::getId($args);
         $error = null;
 
@@ -49,7 +50,7 @@ class ShowPostController
         }
 
         $view = new View();
-        $html = $view->render('post.twig', ['post' => $post, 'comments' => $comments, 'error' => $error, 'session' => $_SESSION]);
+        $html = $view->render('post.twig', ['post' => $post, 'comments' => $comments, 'error' => $error, 'session' => $sessionData]);
 
         $response->getBody()->write($html);
 

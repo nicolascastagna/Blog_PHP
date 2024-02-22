@@ -27,8 +27,9 @@ class UpdatePostController
     {
         $sessionChecker = new SessionChecker();
         $sessionChecker->sessionChecker();
+        $sessionData = $sessionChecker->getSessionData();
         $view = new View();
-        $html = $view->render('post_update.twig', ['session' => $_SESSION]);
+        $html = $view->render('post_update.twig', ['session' => $sessionData]);
 
         $response->getBody()->write($html);
 
