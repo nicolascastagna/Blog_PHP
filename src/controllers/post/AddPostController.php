@@ -1,16 +1,82 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
+use App\lib\SessionChecker;
+use App\lib\SessionManager;
 use App\lib\View;
 use App\model\PostRepository;
-use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class AddPostController
 {
+    /**
+     * renderCreationForm
+     *
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
+     *
+     * @return ResponseInterface
+     */
+    public function renderCreationForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $sessionManager = new SessionManager();
+        $sessionChecker = new SessionChecker($sessionManager);
+
+        $sessionChecker->sessionChecker();
+        $sessionData = $sessionChecker->getSessionData();
+
+        $view = new View();
+        $html = $view->render('post_add.twig', ['session' => $sessionData]);
+
+        $response->getBody()->write($html);
+
+        return $response;
+    }
+
+    /**
+     * add
+     *
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
+     *
+     * @return ResponseInterface
+     */
+    public function add(RequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $formData = $request->getParsedBody();
+        $error = null;
+
+        if (isset($formData['title']) === false && isset($formData['chapo']) === false && isset($formData['content']) === false) {
+            $error = 'Les données du formulaire sont invalides.';
+        } else {
+            $title = $formData['title'];
+            $chapo = $formData['chapo'];
+            $content = $formData['content'];
+
+            $user_id = 1;
+            $postRepository = $this->getPostsRepository();
+            $success = $postRepository->addPost($user_id, $title, $content, $chapo);
+
+            if ($success === false) {
+                $error = 'Une erreur est survenue dans l\'ajout de l\'article.';
+            } else {
+                return $response->withHeader('Location', '/blog')->withStatus(302);
+            }
+        }
+
+        $view = new View();
+        $html = $view->render('post_add.twig', ['error' => $error]);
+
+        $response->getBody()->write($html);
+
+        return $response;
+    }
+
     /**
      * getPostsRepository
      *
@@ -23,52 +89,5 @@ class AddPostController
         $postRepository->connection = $connection;
 
         return $postRepository;
-    }
-
-    /**
-     * renderCreationForm
-     *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
-     * @return ResponseInterface
-     */
-    public function renderCreationForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
-    {
-        $view = new View();
-        $html = $view->render('post_add.twig', []);
-
-        $response->getBody()->write($html);
-
-        return $response;
-    }
-
-    /**
-     * add
-     *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
-     * @return ResponseInterface
-     */
-    public function add(RequestInterface $request, ResponseInterface $response): ResponseInterface
-    {
-        $formData = $request->getParsedBody();
-
-        if (!isset($formData['title']) && !isset($formData['chapo']) && !isset($formData['content'])) {
-            throw new Exception('Les données du formulaire sont invalides.');
-        }
-
-        $title = $formData['title'];
-        $chapo = $formData['chapo'];
-        $content = $formData['content'];
-
-        $user_id = 1;
-        $postRepository = $this->getPostsRepository();
-        $success = $postRepository->addPost($user_id, $title, $content, $chapo);
-
-        if (!$success) {
-            throw new \Exception('Impossible d\'ajouter l\'article !');
-        } else {
-            return $response->withHeader('Location', "/blog")->withStatus(302);
-        }
     }
 }

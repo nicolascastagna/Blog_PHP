@@ -2,5 +2,16 @@
 {% block title %}S'enregistrer
 {% endblock %}
 {% block content %}
-	S'enregistrer
+	<form action="/inscription" method="post">
+		<label for="username">Votre pseudo :</label>
+		<input type="text" id="username" name="username" required>
+		<label for="password">Mot de passe :</label>
+		<input type="password" id="password" name="password" required>
+		<label for="email">Adresse mail :</label>
+		<input type="email" id="email" name="email" required>
+		{% if error %}
+			<p class="error">{{ error }}</p>
+		{% endif %}
+		<button type="submit">Valider les informations</button>
+	</form>
 {% endblock %}

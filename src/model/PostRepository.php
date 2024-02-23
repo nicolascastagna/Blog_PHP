@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\model;
 
 use App\lib\DatabaseConnection;
 
 class PostRepository
 {
-
     /**
      * @var DatabaseConnection
      */
@@ -15,7 +16,8 @@ class PostRepository
     /**
      * getPost
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return Post
      */
     public function getPost(int $id): Post
@@ -32,9 +34,8 @@ class PostRepository
         $statement->execute([$id]);
 
         $row = $statement->fetch();
-        $post = $this->fetchPost($row);
 
-        return $post;
+        return $this->fetchPost($row);
     }
 
     /**
@@ -60,16 +61,18 @@ class PostRepository
         foreach ($rows as $row) {
             $posts[] = $this->fetchPost($row);
         }
+
         return $posts;
     }
 
     /**
      * addPost
      *
-     * @param  int $user_id
-     * @param  string $title
-     * @param  string $chapo
-     * @param  string $content
+     * @param int    $user_id
+     * @param string $title
+     * @param string $chapo
+     * @param string $content
+     *
      * @return bool
      */
     public function addPost(int $user_id, string $title, string $chapo, string $content): bool
@@ -85,7 +88,8 @@ class PostRepository
     /**
      * deletePost
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return bool
      */
     public function deletePost(int $id): bool
@@ -101,10 +105,11 @@ class PostRepository
     /**
      * updatePost
      *
-     * @param  int $id
-     * @param  string $title
-     * @param  string $chapo
-     * @param  string $content
+     * @param int    $id
+     * @param string $title
+     * @param string $chapo
+     * @param string $content
+     *
      * @return bool
      */
     public function updatePost(int $id, string $title, string $chapo, string $content): bool
@@ -120,7 +125,8 @@ class PostRepository
     /**
      * fetchPost
      *
-     * @param  array $row
+     * @param array $row
+     *
      * @return Post
      */
     private function fetchPost(array $row): Post

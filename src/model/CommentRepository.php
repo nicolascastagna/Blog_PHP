@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\model;
 
 use App\lib\DatabaseConnection;
 
 class CommentRepository
 {
-
     /**
      * @var DatabaseConnection
      */
@@ -15,7 +16,8 @@ class CommentRepository
     /**
      * getComments
      *
-     * @param  int $postId
+     * @param int $postId
+     *
      * @return array
      */
     public function getComments(int $postId): array
@@ -37,16 +39,17 @@ class CommentRepository
         foreach ($rows as $row) {
             $comments[] = $this->fetchComment($row);
         }
-        // var_dump($comments);
+
         return $comments;
     }
 
     /**
      * addComment
      *
-     * @param  int $user_id
-     * @param  int $post_id
-     * @param  string $content
+     * @param int    $user_id
+     * @param int    $post_id
+     * @param string $content
+     *
      * @return bool
      */
     public function addComment(int $user_id, int $post_id, string $content): bool
@@ -62,7 +65,8 @@ class CommentRepository
     /**
      * fetchComment
      *
-     * @param  array $row
+     * @param array $row
+     *
      * @return Comment
      */
     private function fetchComment(array $row): Comment

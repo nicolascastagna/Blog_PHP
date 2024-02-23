@@ -6,10 +6,13 @@ use App\controllers\comment\AddCommentController;
 use App\controllers\Contact;
 use App\controllers\Homepage;
 use App\controllers\post\AddPostController;
+use App\controllers\user\AddUserController;
 use App\controllers\post\DeletePostController;
 use App\controllers\post\IndexPostController;
 use App\controllers\post\ShowPostController;
 use App\controllers\post\UpdatePostController;
+use App\controllers\user\LoginUserController;
+use App\controllers\user\LogoutUserController;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Factory\AppFactory;
@@ -36,6 +39,11 @@ $app->post('/blog/suppression-article/{id}', [DeletePostController::class, 'remo
 $app->get('/blog/modification-article/{id}', [UpdatePostController::class, 'renderUpdateForm']);
 $app->post('/blog/modification-article/{id}', [UpdatePostController::class, 'update']);
 $app->post('/blog/article/{id}/ajout-commentaire', [AddCommentController::class, 'add']);
+$app->get('/inscription', [AddUserController::class, 'renderRegisterForm']);
+$app->post('/inscription', [AddUserController::class, 'add']);
+$app->get('/connexion', [LoginUserController::class, 'renderLoginForm']);
+$app->post('/connexion', [LoginUserController::class, 'login']);
+$app->get('/deconnexion', [LogoutUserController::class, 'logout']);
 
 
 $app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {

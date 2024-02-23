@@ -9,6 +9,9 @@
 		<textarea id="chapo" name="chapo" required></textarea>
 		<label for="content">Contenu :</label>
 		<textarea id="content" name="content" required></textarea>
+		{% if error %}
+			<p class="error">{{ error }}</p>
+		{% endif %}
 		<button type="submit">Ajouter l'article</button>
 	</form>
 {% endblock %}

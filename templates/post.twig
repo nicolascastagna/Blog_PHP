@@ -27,6 +27,9 @@
 			<textarea name="content" id="content" required></textarea>
 			<input class="" type="submit" value="Ajouter le commentaire"/>
 		</form>
+		{% if error %}
+			<p class="error">{{ error }}</p>
+		{% endif %}
 	</div>
 	{% include 'comment.twig' %}
 </div>{% endblock %}

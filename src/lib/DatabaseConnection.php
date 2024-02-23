@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\lib;
 
 use Dotenv\Dotenv;
@@ -30,7 +32,7 @@ class DatabaseConnection
                 throw new Exception('Missing required database configuration.');
             }
 
-            $this->database = new \PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $password);
+            $this->database = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $password);
         }
 
         return $this->database;

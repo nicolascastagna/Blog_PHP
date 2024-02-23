@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
 use App\lib\PostIdChecker;
+use App\lib\SessionChecker;
+use App\lib\SessionManager;
 use App\lib\View;
 use App\model\PostRepository;
 use Exception;
@@ -12,6 +16,74 @@ use Psr\Http\Message\ResponseInterface;
 
 class UpdatePostController
 {
+    /**
+     * renderUpdateForm
+     *
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
+     *
+     * @return ResponseInterface
+     */
+    public function renderUpdateForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $sessionManager = new SessionManager();
+        $sessionChecker = new SessionChecker($sessionManager);
+
+        $sessionChecker->sessionChecker();
+        $sessionData = $sessionChecker->getSessionData();
+
+        $view = new View();
+        $html = $view->render('post_update.twig', ['session' => $sessionData]);
+
+        $response->getBody()->write($html);
+
+        return $response;
+    }
+
+    /**
+     * update
+     *
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
+     * @param array             $args
+     *
+     * @return ResponseInterface
+     */
+    public function update(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        if ($request->getMethod() === 'POST') {
+            $formData = $request->getParsedBody();
+            $error = null;
+
+            if (isset($formData['title']) === false && isset($formData['chapo']) === false && isset($formData['content']) === false) {
+                $error = 'Les données du formulaire sont invalides.';
+            } else {
+                $title = $formData['title'];
+                $chapo = $formData['chapo'];
+                $content = $formData['content'];
+
+                $postId = PostIdChecker::getId($args);
+                $postRepository = $this->getPostsRepository();
+                $success = $postRepository->updatePost($postId, $title, $chapo, $content);
+
+                if ($success === false) {
+                    $error = 'Une erreur est survenue dans la mise à jour de l\'article.';
+                } else {
+                    return $response->withHeader('Location', '/blog')->withStatus(302);
+                }
+            }
+
+            $view = new View();
+            $html = $view->render('post_update.twig', ['error' => $error]);
+
+            $response->getBody()->write($html);
+
+            return $response;
+        }
+
+        throw new Exception('Une erreur est survenue');
+    }
+
     /**
      * getPostsRepository
      *
@@ -24,57 +96,5 @@ class UpdatePostController
         $postRepository->connection = $connection;
 
         return $postRepository;
-    }
-
-    /**
-     * renderUpdateForm
-     *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
-     * @return ResponseInterface
-     */
-    public function renderUpdateForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
-    {
-        $view = new View();
-        $html = $view->render('post_update.twig', []);
-
-        $response->getBody()->write($html);
-
-        return $response;
-    }
-
-    /**
-     * update
-     *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
-     * @param  array $args
-     * @return ResponseInterface
-     */
-    public function update(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    {
-        if ($request->getMethod() === 'POST') {
-            $formData = $request->getParsedBody();
-
-            if (!isset($formData['title']) && !isset($formData['chapo']) && !isset($formData['content'])) {
-                throw new Exception('Les données du formulaire sont invalides.');
-            }
-
-            $title = $formData['title'];
-            $chapo = $formData['chapo'];
-            $content = $formData['content'];
-
-            $id = PostIdChecker::getId($args);
-            $postRepository = $this->getPostsRepository();
-            $success = $postRepository->updatePost($id, $title, $chapo, $content);
-
-            if (!$success) {
-                throw new \Exception('Impossible de modifier l\'article !');
-            } else {
-                return $response->withHeader('Location', "/blog")->withStatus(302);
-            }
-        } else {
-            throw new \Exception('Une erreur est survenue');
-        }
     }
 }

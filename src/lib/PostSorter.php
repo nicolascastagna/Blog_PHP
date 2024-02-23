@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\lib;
 
 class PostSorter
@@ -7,14 +9,13 @@ class PostSorter
     /**
      * sortByRecentDate
      *
-     * @param  array $posts
+     * @param array $posts
+     *
      * @return array
      */
     public static function sortByRecentDate(array $posts): array
     {
-        usort($posts, function ($asc, $desc) {
-            return (strtotime($desc->creationDate) - strtotime($asc->creationDate));
-        });
+        usort($posts, fn ($asc, $desc) => (strtotime($desc->creationDate) - strtotime($asc->creationDate)));
 
         return $posts;
     }

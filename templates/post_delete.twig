@@ -13,6 +13,9 @@
 				<input type="hidden" name="_METHOD" value="DELETE"/>
 				<input class="button-form" value="Supprimer" type="submit"/>
 			</form>
+			{% if error %}
+				<p class="error">{{ error }}</p>
+			{% endif %}
 			<a class="button-form" href="/blog">Revenir à la page de blog</a>
 		</div>
 		<div class="card-post">

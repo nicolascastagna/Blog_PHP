@@ -16,6 +16,9 @@
 					<input class="input-file" type="file" name="file" id="file"/>
 				</div>
 			</div>
+			{% if error %}
+				<p class="error">{{ error }}</p>
+			{% endif %}
 			<input class="button-form" type="submit" value="Modifier"/>
 		</form>
 	</div>
