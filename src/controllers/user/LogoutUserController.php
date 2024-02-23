@@ -27,8 +27,9 @@ class LogoutUserController
         $sessionChecker = new SessionChecker($sessionManager);
 
         $sessionChecker->sessionChecker();
+        $sessionData = $sessionChecker->getSessionData();
 
-        $userId = isset($_SESSION['user']['id']) === true ? $_SESSION['user']['id'] : null;
+        $userId = isset($sessionData['id']) === true ? $sessionData['id'] : null;
         $sessionManager->destroy();
 
         if ($userId !== null) {
