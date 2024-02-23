@@ -7,6 +7,7 @@ namespace App\controllers\post;
 use App\lib\DatabaseConnection;
 use App\lib\PostIdChecker;
 use App\lib\SessionChecker;
+use App\lib\SessionManager;
 use App\lib\View;
 use App\model\PostRepository;
 use Exception;
@@ -26,9 +27,12 @@ class DeletePostController
      */
     public function renderDeleteForm(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $sessionChecker = new SessionChecker();
+        $sessionManager = new SessionManager();
+        $sessionChecker = new SessionChecker($sessionManager);
+
         $sessionChecker->sessionChecker();
         $sessionData = $sessionChecker->getSessionData();
+
         $view = new View();
         $postId = PostIdChecker::getId($args);
         $post = $this->getPostsRepository()->getPost($postId);

@@ -7,6 +7,7 @@ namespace App\controllers\post;
 use App\lib\DatabaseConnection;
 use App\lib\PostIdChecker;
 use App\lib\SessionChecker;
+use App\lib\SessionManager;
 use App\lib\View;
 use App\model\PostRepository;
 use Exception;
@@ -25,9 +26,12 @@ class UpdatePostController
      */
     public function renderUpdateForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $sessionChecker = new SessionChecker();
+        $sessionManager = new SessionManager();
+        $sessionChecker = new SessionChecker($sessionManager);
+
         $sessionChecker->sessionChecker();
         $sessionData = $sessionChecker->getSessionData();
+
         $view = new View();
         $html = $view->render('post_update.twig', ['session' => $sessionData]);
 

@@ -7,6 +7,7 @@ namespace App\controllers\post;
 use App\lib\DatabaseConnection;
 use App\lib\PostSorter;
 use App\lib\SessionChecker;
+use App\lib\SessionManager;
 use App\lib\View;
 use App\model\PostRepository;
 use Psr\Http\Message\RequestInterface;
@@ -24,9 +25,12 @@ class IndexPostController
      */
     public function index(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $sessionChecker = new SessionChecker();
+        $sessionManager = new SessionManager();
+        $sessionChecker = new SessionChecker($sessionManager);
+
         $sessionChecker->sessionChecker();
         $sessionData = $sessionChecker->getSessionData();
+
         $posts = $this->getPostsRepository()->getPosts();
 
         $postSorter = new PostSorter();

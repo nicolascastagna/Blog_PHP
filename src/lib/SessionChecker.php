@@ -8,31 +8,44 @@ use App\model\UserRepository;
 
 class SessionChecker
 {
+    private SessionManager $sessionManager;
+
+    /**
+     * __construct
+     *
+     * @param  SessionManager $sessionManager
+     */
+    public function __construct(SessionManager $sessionManager)
+    {
+        $this->sessionManager = $sessionManager;
+    }
+
     /**
      * sessionChecker
+     *
      */
     public function sessionChecker(): void
     {
-        if (\PHP_SESSION_NONE === session_status()) {
-            session_start();
-        }
+        $this->sessionManager->startSession();
 
-        if (isset($_SESSION['user'])) {
+        if ($user = $this->sessionManager->get('user')) {
             $userRepository = $this->getUserRepository();
-            $lastRefreshTime = $_SESSION['user']['last_refresh'] ?? 0;
+            $lastRefreshTime = $user['last_refresh'] ?? 0;
 
-            if ((time() - $lastRefreshTime) >= 1800) {
+            if ((time() - $lastRefreshTime) >= 600) {
                 $newToken = bin2hex(random_bytes(16));
 
-                $_SESSION['user']['token'] = $newToken;
-                $_SESSION['user']['last_refresh'] = time();
+                $this->sessionManager->set('user', [
+                    ...$user,
+                    'token' => $newToken,
+                    'last_refresh' => time(),
+                ]);
 
-                $userId = ($_SESSION['user']['id'] ?? null);
+                $userId = $user['id'];
                 if ($userId !== null) {
                     $userRepository->setToken($newToken, $userId);
                 } else {
-                    session_unset();
-                    session_destroy();
+                    $this->sessionManager->destroy();
                 }
             }
         }
@@ -45,20 +58,7 @@ class SessionChecker
      */
     public function getSessionData(): array
     {
-        if (isset($_SESSION['user'])) {
-            return [
-                'user' => [
-                    'id' => $_SESSION['user']['id'],
-                    'username' => $_SESSION['user']['username'],
-                    'email' => $_SESSION['user']['email'],
-                    'role' => $_SESSION['user']['role'],
-                    'last_refresh' => $_SESSION['user']['last_refresh'],
-                    'token' => $_SESSION['user']['token'],
-                ]
-            ];
-        } else {
-            return [];
-        }
+        return $this->sessionManager->get('user') ?? [];
     }
 
     /**

@@ -6,6 +6,7 @@ namespace App\controllers\user;
 
 use App\lib\DatabaseConnection;
 use App\lib\SessionChecker;
+use App\lib\SessionManager;
 use App\lib\View;
 use App\model\UserRepository;
 use Psr\Http\Message\RequestInterface;
@@ -23,7 +24,9 @@ class LoginUserController
      */
     public function renderLoginForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $sessionChecker = new SessionChecker();
+        $sessionManager = new SessionManager();
+        $sessionChecker = new SessionChecker($sessionManager);
+
         $sessionChecker->sessionChecker();
         $sessionData = $sessionChecker->getSessionData();
 
@@ -45,7 +48,9 @@ class LoginUserController
      */
     public function login(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $sessionChecker = new SessionChecker();
+        $sessionManager = new SessionManager();
+
+        $sessionChecker = new SessionChecker($sessionManager);
         $sessionChecker->sessionChecker();
 
         $formData = $request->getParsedBody();

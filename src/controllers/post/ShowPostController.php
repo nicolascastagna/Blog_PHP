@@ -8,6 +8,7 @@ use App\controllers\comment\AddCommentController;
 use App\lib\DatabaseConnection;
 use App\lib\PostIdChecker;
 use App\lib\SessionChecker;
+use App\lib\SessionManager;
 use App\lib\View;
 use App\model\CommentRepository;
 use App\model\PostRepository;
@@ -28,9 +29,12 @@ class ShowPostController
      */
     public function show(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $sessionChecker = new SessionChecker();
+        $sessionManager = new SessionManager();
+        $sessionChecker = new SessionChecker($sessionManager);
+
         $sessionChecker->sessionChecker();
         $sessionData = $sessionChecker->getSessionData();
+
         $postId = PostIdChecker::getId($args);
         $error = null;
 

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\controllers\user;
 
 use App\lib\DatabaseConnection;
+use App\lib\SessionChecker;
+use App\lib\SessionManager;
 use App\model\UserRepository;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -21,12 +23,13 @@ class LogoutUserController
      */
     public function logout(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        $userId = isset($_SESSION['user']['id']) === true ? $_SESSION['user']['id'] : null;
+        $sessionManager = new SessionManager();
+        $sessionChecker = new SessionChecker($sessionManager);
 
-        session_destroy();
+        $sessionChecker->sessionChecker();
+
+        $userId = isset($_SESSION['user']['id']) === true ? $_SESSION['user']['id'] : null;
+        $sessionManager->destroy();
 
         if ($userId !== null) {
             $userRepository = $this->getUserRepository();

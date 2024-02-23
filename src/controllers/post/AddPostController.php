@@ -6,6 +6,7 @@ namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
 use App\lib\SessionChecker;
+use App\lib\SessionManager;
 use App\lib\View;
 use App\model\PostRepository;
 use Psr\Http\Message\RequestInterface;
@@ -23,9 +24,12 @@ class AddPostController
      */
     public function renderCreationForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $sessionChecker = new SessionChecker();
+        $sessionManager = new SessionManager();
+        $sessionChecker = new SessionChecker($sessionManager);
+
         $sessionChecker->sessionChecker();
         $sessionData = $sessionChecker->getSessionData();
+
         $view = new View();
         $html = $view->render('post_add.twig', ['session' => $sessionData]);
 
