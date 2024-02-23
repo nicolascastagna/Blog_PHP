@@ -140,6 +140,28 @@ class UserRepository
     }
 
     /**
+     * checkToken
+     *
+     * @param  string $token
+     * @return User|null
+     */
+    public function checkToken(string $token): ?User
+    {
+        $statement = $this->connection->getConnection()->prepare(
+            "SELECT id, username, email, role FROM user WHERE token = ?"
+        );
+
+        $statement->execute([$token]);
+
+        $row = $statement->fetch();
+        if ($row === false) {
+            return null;
+        }
+
+        return $this->fetchUser($row);
+    }
+
+    /**
      * fetchUser
      *
      * @param array $row

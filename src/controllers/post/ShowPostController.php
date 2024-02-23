@@ -9,6 +9,7 @@ use App\lib\DatabaseConnection;
 use App\lib\PostIdChecker;
 use App\lib\SessionChecker;
 use App\lib\SessionManager;
+use App\Lib\UserChecker;
 use App\lib\View;
 use App\model\CommentRepository;
 use App\model\PostRepository;
@@ -45,7 +46,6 @@ class ShowPostController
 
         if ($request->getMethod() === 'POST') {
             $commentController = new AddCommentController();
-
             try {
                 $commentController->add($request, $response, $args);
             } catch (Exception $e) {

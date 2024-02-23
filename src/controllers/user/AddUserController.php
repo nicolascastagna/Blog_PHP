@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\controllers\user;
 
 use App\lib\DatabaseConnection;
+use App\Lib\UserChecker;
 use App\lib\View;
 use App\model\UserRepository;
 use Psr\Http\Message\RequestInterface;
@@ -22,6 +23,11 @@ class AddUserController
      */
     public function renderRegisterForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $userChecker = new UserChecker();
+        if ($userChecker->isAuthenticated($sessionData['token'] ?? '')) {
+            return $response->withHeader('Location', '/')->withStatus(302);
+        }
+
         $view = new View();
         $html = $view->render('register.twig', []);
 
