@@ -1,7 +1,11 @@
 {% block footer %}
 	<footer>
 		<div class="footer-container">
-			<a class="link-menu" href="/admin">Accès administrateur</a>
+			{% if session is defined and session.id is defined %}
+				{% if session.role == 'ROLE_ADMIN' %}
+					<a class="link-menu" href="/admin">Accès administrateur</a>
+				{% endif %}
+			{% endif %}
 			<a class="link-menu" href="/contact">Formulaire de Contact</a>
 		</div>
 	</footer>

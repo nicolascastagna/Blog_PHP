@@ -7,29 +7,38 @@
 			<div class="card-header">
 				<h2 class="title">{{ post.title }}</h2>
 				<h4>{{ post.username }}</h4>
-				<p>{{post.updateDate ? 'Modifié le' : 'Le'}}
-					{{post.updateDate ?? post.creationDate }}</p>
-			</p>
+				<p>{{ post.updateDate ? 'Modifié le' : 'Le'}}
+					{{ post.updateDate ?? post.creationDate }}</p>
+			</div>
+			<div class="card-content">
+				<p>{{ post.chapo }}</p>
+				<p>{{ post.content }}</p>
+			</div>
+			<div class="card-action">
+				{% if session is defined and session.id is defined and session.id == post.userId %}
+					{% if session.role == 'ROLE_ADMIN' %}
+						<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
+						<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
+					{% elseif post.userId == session.id %}
+						<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
+						<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
+					{% endif %}
+				{% endif %}
+			</div>
 		</div>
-		<div class="card-content">
-			<p>{{ post.chapo }}</p>
-			<p>{{ post.content }}</p>
+		<h4>{{comment.content}}</h4>
+		<div class="add-comments">
+			{% if session is defined and session.id is defined %}
+				<h4>Ajoutez un commentaire</h4>
+				<form action="/blog/article/{{ post.id }}/ajout-commentaire" method="post">
+					<textarea name="content" id="content" required></textarea>
+					<input class="" type="submit" value="Ajouter le commentaire"/>
+				</form>
+			{% endif %}
+			{% if error %}
+				<p class="error">{{ error }}</p>
+			{% endif %}
 		</div>
-		<div class="card-action">
-			<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
-			<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
-		</div>
+		{% include 'comment.twig' %}
 	</div>
-	<h4>{{comment.content}}</h4>
-	<div class="add-comments">
-		<h4>Ajoutez un commentaire</h4>
-		<form action="/blog/article/{{ post.id }}/ajout-commentaire" method="post">
-			<textarea name="content" id="content" required></textarea>
-			<input class="" type="submit" value="Ajouter le commentaire"/>
-		</form>
-		{% if error %}
-			<p class="error">{{ error }}</p>
-		{% endif %}
-	</div>
-	{% include 'comment.twig' %}
-</div>{% endblock %}
+{% endblock %}
