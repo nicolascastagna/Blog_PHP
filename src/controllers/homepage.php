@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\controllers;
 
 use App\lib\DatabaseConnection;
-use App\lib\PostSorter;
 use App\lib\SessionChecker;
 use App\lib\SessionManager;
 use App\lib\View;
@@ -32,10 +31,8 @@ class Homepage
         $sessionData = $sessionChecker->getSessionData();
 
         $posts = $this->getPostsRepository()->getPosts();
-        $postSorter = new PostSorter();
-        $sortedPosts = $postSorter->sortByRecentDate($posts);
 
-        $lastPosts = array_slice($sortedPosts, 0, 3);
+        $lastPosts = array_slice($posts, 0, 3);
         $view = new View();
         $html = $view->render('homepage.twig', ['posts' => $lastPosts, 'session' => $sessionData]);
 

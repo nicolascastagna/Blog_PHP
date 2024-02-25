@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
-use App\lib\PostSorter;
 use App\lib\SessionChecker;
 use App\lib\SessionManager;
 use App\lib\View;
@@ -33,11 +32,8 @@ class IndexPostController
 
         $posts = $this->getPostsRepository()->getPosts();
 
-        $postSorter = new PostSorter();
-        $sortedPosts = $postSorter->sortByRecentDate($posts);
-
         $view = new View();
-        $html = $view->render('blogpage.twig', ['posts' => $sortedPosts, 'session' => $sessionData]);
+        $html = $view->render('blogpage.twig', ['posts' => $posts, 'session' => $sessionData]);
 
         $response->getBody()->write($html);
 

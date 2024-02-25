@@ -52,7 +52,7 @@ class PostRepository
                 user.username 
                 FROM post 
                 LEFT JOIN user ON post.user_id = user.id
-                ORDER BY post.creation_date DESC"
+                ORDER BY COALESCE(post.update_date, post.creation_date) DESC"
         );
 
         $rows = $statement->fetchAll();
