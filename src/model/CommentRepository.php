@@ -72,7 +72,7 @@ class CommentRepository
     private function fetchComment(array $row): Comment
     {
         $comment = new Comment();
-        $comment->id = $row['id'];
+        $comment->commentId = $row['id'];
         $comment->userId = $row['user_id'];
         $comment->postId = $row['post_id'];
         $comment->username = $row['username'];

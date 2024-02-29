@@ -4,7 +4,9 @@
 {% block content %}
 	<div class="error">
 		<div class="error-content">
-			<h2>Oops... La page demandée est introuvable</h2>
+			<h2>
+				{{ error ? '' ~ error ~ '' : 'Oops... La page demandée est introuvable !' }}
+			</h2>
 			<p>Cliquez
 				<a href="/">
 					<strong>ici</strong>

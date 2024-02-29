@@ -9,7 +9,7 @@
 		</div>
 		<div class="actions-single-post">
 			<h3>Souhaitez-vous vraiment supprimer cet article ?</h3>
-			<form action="/blog/suppression-article/{{ post.id }}" method="post">
+			<form action="/blog/suppression-article/{{ post.postId }}" method="post">
 				<input type="hidden" name="_METHOD" value="DELETE"/>
 				<input class="button-form" value="Supprimer" type="submit"/>
 			</form>

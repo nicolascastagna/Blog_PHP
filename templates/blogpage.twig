@@ -6,22 +6,31 @@
 		<div class="container-cards">
 			<h2>Listes des articles</h2>
 			<div class="container-posts">
-				<a href="/blog/ajout-article" class="button">Ajouter un nouvel article</a>
+				{% if session is defined and session.id is defined %}
+					<a href="/blog/ajout-article" class="button">Ajouter un nouvel article</a>
+				{% endif %}
 				{% for post in posts %}
 					<div class="card-post">
 						<div class="card-header">
 							<h2 class="title">{{ post.title }}</h2>
 							<h4>{{ post.username }}</h4>
-							<p>{{post.updateDate ? 'Modifié le' : 'Le'}}
-								{{post.updateDate ?? post.creationDate }}</p>
+							<p>{{ post.updateDate ? 'Modifié le' : 'Le' }}
+								{{ post.updateDate ?? post.creationDate }}</p>
 						</div>
 						<div class="card-content">
 							<p>{{ post.chapo }}</p>
-							<a href="/blog/article/{{ post.id }}">Lire la suite</a>
+							<a href="/blog/article/{{ post.postId }}">Lire la suite</a>
 						</div>
 						<div class="card-action">
-							<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
-							<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
+							{% if session is defined and session.id is defined %}
+								{% if session.role == 'ROLE_ADMIN' %}
+									<a href="/blog/modification-article/{{ post.postId }}">Modifier</a>
+									<a href="/blog/suppression-article/{{ post.postId }}">Supprimer</a>
+								{% elseif post.userId == session.id %}
+									<a href="/blog/modification-article/{{ post.postId }}">Modifier</a>
+									<a href="/blog/suppression-article/{{ post.postId }}">Supprimer</a>
+								{% endif %}
+							{% endif %}
 						</div>
 					</div>
 				{% endfor %}
