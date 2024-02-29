@@ -38,10 +38,10 @@ CREATE TABLE `comment`(
 );
 
 INSERT INTO `user` (`username`, `password`, `email`, `token`, `role`) 
-VALUES ('Admin', 'HD64HDH847562940DNDY', 'admin@nicolascastagna.com', NULL, 'ROLE_ADMIN'),
-('User', 'KIJ754FHJH3SGK07YFVF', 'user@nicolascastagna.com', NULL, 'ROLE_USER'),
-('JohnDoe', 'KIJ754FHJH3SGK07YFVF', 'john.doe@hotmail.com', NULL, 'ROLE_USER'),
-('JeanDupont', 'KIJ754FHJH3SGK07YFVF', 'jeandupon@hotmail.com', NULL, 'ROLE_USER')
+VALUES ('Admin', MD5('5f66a2f90e8b79adfc10d94e3923d7ab'), 'admin@nicolascastagna.com', NULL, 'ROLE_ADMIN'),
+('User', MD5('5f66a2f90e8b79adfc10d94e3923d7ab'), 'user@nicolascastagna.com', NULL, 'ROLE_USER'),
+('JohnDoe', MD5('51ab6c0f84d431e28f5a2f94d0b5f2d8'), 'john.doe@hotmail.com', NULL, 'ROLE_USER'),
+('JeanDupont', MD5('3fbfa916d5c6c6140b87d33c8930dfae'), 'jeandupon@hotmail.com', NULL, 'ROLE_USER')
 ;
 
 INSERT INTO `post` (`user_id`, `title`, `chapo`, `content`, `creation_date`, `update_date`, `image`) 
@@ -51,7 +51,7 @@ VALUES ('1', 'Mon premier faux article', 'Extrait de l\'article', 'Lorem ipsum d
 ;
 
 INSERT INTO `comment` (`user_id`, `post_id`, `content`, `comment_date`, `status`) 
-VALUES ('3', '3', 'Excellent article! Les conseils sont très utiles pour améliorer l\''expérience utilisateur.', '2024-01-19 17:34:19', false),
+VALUES ('3', '3', 'Excellent article! Les conseils sont très utiles pour améliorer l\'expérience utilisateur.', '2024-01-19 17:34:19', false),
 ('1', '2', 'Très intéressant !', '2024-01-19 19:34:10', true),
 ('2', '2', 'Pas mal !', '2024-01-19 21:14:00', false)
 ;
