@@ -10,6 +10,7 @@ use App\lib\SessionChecker;
 use App\lib\SessionManager;
 use App\Lib\UserChecker;
 use App\lib\View;
+use App\model\Post;
 use App\model\PostRepository;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -79,46 +80,62 @@ class UpdatePostController
         $fetchPost = $postRepository->getPost($postId);
 
         $error = null;
-        $view = new View();
-
         if (
             ($userChecker->isAuthenticated($sessionData['token'] ?? '')
                 && $userChecker->isCurrentUser($fetchPost->userId, $sessionData['id']))
             || $userChecker->isAdmin($sessionData['role'] ??  'ROLE_USER')
         ) {
-            if ($request->getMethod() === 'POST') {
-                $formData = $request->getParsedBody();
-
-                if (isset($formData['title']) === false || isset($formData['chapo']) === false || isset($formData['content']) === false) {
-                    $error = 'Les données du formulaire sont invalides.';
-                } else {
-                    $title = $formData['title'];
-                    $chapo = $formData['chapo'];
-                    $content = $formData['content'];
-
-                    $title = $title !== '' ? $title : $fetchPost->title;
-                    $chapo = $chapo !== '' ? $chapo : $fetchPost->chapo;
-                    $content = $content !== '' ? $content : $fetchPost->content;
-
-                    $success = $postRepository->updatePost($postId, $title, $chapo, $content);
-
-                    if ($success === false) {
-                        $error = 'Une erreur est survenue dans la mise à jour de l\'article.';
-                    } else {
-                        return $response->withHeader('Location', '/blog')->withStatus(302);
-                    }
-                }
-
-                $html = $view->render('post_update.twig', ['error' => $error, 'session' => $sessionData]);
-
-                $response->getBody()->write($html);
-
-                return $response;
-            }
+            return $this->handlePostRequest($request, $response, $fetchPost, $sessionData, $postRepository);
         } else {
             $error = 'Vous n\'avez pas accès à cette page !';
 
             return $this->renderErrorResponse($response, $error);
+        }
+
+        return $response;
+    }
+
+    /**
+     * handlePostRequest
+     *
+     * @param  RequestInterface $request
+     * @param  ResponseInterface $response
+     * @param  Post $fetchPost
+     * @param  array $sessionData
+     * @param  PostRepository $postRepository
+     *
+     * @return ResponseInterface
+     */
+    private function handlePostRequest(RequestInterface $request, ResponseInterface $response, Post $fetchPost, array $sessionData, PostRepository $postRepository): ResponseInterface
+    {
+        if ($request->getMethod() === 'POST') {
+            $formData = $request->getParsedBody();
+
+            if (isset($formData['title']) === false || isset($formData['chapo']) === false || isset($formData['content']) === false) {
+                $error = 'Les données du formulaire sont invalides.';
+            } else {
+                $title = $formData['title'];
+                $chapo = $formData['chapo'];
+                $content = $formData['content'];
+
+                $title = $title !== '' ? $title : $fetchPost->title;
+                $chapo = $chapo !== '' ? $chapo : $fetchPost->chapo;
+                $content = $content !== '' ? $content : $fetchPost->content;
+
+                $success = $postRepository->updatePost($fetchPost->id, $title, $chapo, $content);
+
+                if ($success === false) {
+                    $error = 'Une erreur est survenue dans la mise à jour de l\'article.';
+                } else {
+                    return $response->withHeader('Location', '/blog')->withStatus(302);
+                }
+            }
+
+            $view = new View();
+            $html = $view->render('post_update.twig', ['error' => $error, 'session' => $sessionData]);
+            $response->getBody()->write($html);
+
+            return $response;
         }
 
         return $response;

@@ -25,6 +25,12 @@ class LoginUserController
      */
     public function renderLoginForm(RequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $sessionManager = new SessionManager();
+        $sessionChecker = new SessionChecker($sessionManager);
+
+        $sessionChecker->sessionChecker();
+        $sessionData = $sessionChecker->getSessionData();
+
         $userChecker = new UserChecker();
         if ($userChecker->isAuthenticated($sessionData['token'] ?? '')) {
             return $response->withHeader('Location', '/')->withStatus(302);
