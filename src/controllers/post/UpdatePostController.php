@@ -42,9 +42,9 @@ class UpdatePostController
 
         $view = new View();
         if (
-            ($userChecker->isAuthenticated($sessionData['token'] ?? '')
-                && $userChecker->isCurrentUser($post->userId, $sessionData['id']))
-            || $userChecker->isAdmin($sessionData['role'] ??  'ROLE_USER')
+            ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true
+            && $userChecker->isCurrentUser($post->userId, $sessionData['id']) === true)
+            || $userChecker->isAdmin($sessionData['role'] ?? 'ROLE_USER')
         ) {
             $html = $view->render('post_update.twig', ['session' => $sessionData, 'error' => $error]);
             $response->getBody()->write($html);
@@ -81,9 +81,9 @@ class UpdatePostController
 
         $error = null;
         if (
-            ($userChecker->isAuthenticated($sessionData['token'] ?? '')
-                && $userChecker->isCurrentUser($fetchPost->userId, $sessionData['id']))
-            || $userChecker->isAdmin($sessionData['role'] ??  'ROLE_USER')
+            ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true
+                && $userChecker->isCurrentUser($fetchPost->userId, $sessionData['id']) === true)
+            || $userChecker->isAdmin($sessionData['role'] ?? 'ROLE_USER')
         ) {
             return $this->handlePostRequest($request, $response, $fetchPost, $sessionData, $postRepository);
         } else {

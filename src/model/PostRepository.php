@@ -140,15 +140,15 @@ class PostRepository
     private function fetchPost(array $row): Post
     {
         $post = new Post();
-        $post->postId = $row['id'] ?? 0;
-        $post->userId = $row['user_id'] ?? 0;
-        $post->username = $row['username'] ?? '';
-        $post->title = $row['title'] ?? '';
-        $post->chapo = $row['chapo'] ?? '';
-        $post->content = $row['content'] ?? '';
-        $post->creationDate = $row['creation_date'] ?? '';
-        $post->updateDate = $row['update_date'] ?? '';
-        $post->image = $row['image'] ?? '';
+        $post->postId = ($row['id'] ?? 0);
+        $post->userId = ($row['user_id'] ?? 0);
+        $post->username = ($row['username'] ?? '');
+        $post->title = ($row['title'] ?? '');
+        $post->chapo = ($row['chapo'] ?? '');
+        $post->content = ($row['content'] ?? '');
+        $post->creationDate = ($row['creation_date'] ?? '');
+        $post->updateDate = ($row['update_date'] ?? '');
+        $post->image = ($row['image'] ?? '');
 
         return $post;
     }

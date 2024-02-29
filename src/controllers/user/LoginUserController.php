@@ -32,7 +32,7 @@ class LoginUserController
         $sessionData = $sessionChecker->getSessionData();
 
         $userChecker = new UserChecker();
-        if ($userChecker->isAuthenticated($sessionData['token'] ?? '')) {
+        if ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true) {
             return $response->withHeader('Location', '/')->withStatus(302);
         }
 

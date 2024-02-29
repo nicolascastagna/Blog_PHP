@@ -38,7 +38,7 @@ class AddCommentController
         $formData = $request->getParsedBody();
         $postId = PostIdChecker::getId($args);
 
-        if ($userChecker->isAuthenticated($sessionData['token'] ?? '')) {
+        if ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true) {
             if (isset($formData['content']) === false) {
                 throw new Exception('Certaines informations sont manquantes.');
             }

@@ -40,9 +40,9 @@ class DeletePostController
         $post = $this->getPostsRepository()->getPost($postId);
 
         if (
-            ($userChecker->isAuthenticated($sessionData['token'] ?? '')
-                && $userChecker->isCurrentUser($post->userId, $sessionData['id']))
-            || $userChecker->isAdmin($sessionData['role'] ??  'ROLE_USER')
+            ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true
+            && $userChecker->isCurrentUser($post->userId, $sessionData['id']) === true)
+            || $userChecker->isAdmin($sessionData['role'] ?? 'ROLE_USER')
         ) {
             $html = $view->render('post_delete.twig', ['post' => $post, 'session' => $sessionData, 'error' => $error]);
             $response->getBody()->write($html);

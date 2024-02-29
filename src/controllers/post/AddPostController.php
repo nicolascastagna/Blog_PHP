@@ -36,7 +36,7 @@ class AddPostController
 
         $view = new View();
 
-        if ($userChecker->isAuthenticated($sessionData['token'] ?? '')) {
+        if ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true) {
             $html = $view->render('post_add.twig', ['session' => $sessionData, 'error' => $error]);
             $response->getBody()->write($html);
         } else {
@@ -68,7 +68,7 @@ class AddPostController
         $error = null;
         $view = new View();
 
-        if ($userChecker->isAuthenticated($sessionData['token'] ?? '')) {
+        if ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true) {
             $formData = $request->getParsedBody();
 
             if (isset($formData['title']) === false && isset($formData['chapo']) === false && isset($formData['content']) === false) {

@@ -21,7 +21,11 @@ class UserChecker
         $userRepository = new UserRepository();
         $userRepository->connection = new DatabaseConnection();
 
-        return $userRepository->checkToken($token) ? true : false;
+        if ($userRepository->checkToken($token)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -34,7 +38,11 @@ class UserChecker
      */
     public function isCurrentUser(int $userId, int $current_user_id): bool
     {
-        return $userId === $current_user_id ? true : false;
+        if ($userId === $current_user_id) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -46,6 +54,10 @@ class UserChecker
      */
     public function isAdmin(string $user_role): bool
     {
-        return $user_role === 'ROLE_ADMIN' ? true : false;
+        if ($user_role === 'ROLE_ADMIN') {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
