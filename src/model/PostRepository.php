@@ -80,15 +80,16 @@ class PostRepository
      * @param string $title
      * @param string $chapo
      * @param string $content
+     * @param string|null $image
      *
      * @return bool
      */
-    public function addPost(int $user_id, string $title, string $chapo, string $content): bool
+    public function addPost(int $user_id, string $title, string $chapo, string $content, ?string $image): bool
     {
         $statement = $this->connection->getConnection()->prepare(
-            'INSERT INTO post(user_id, title, chapo, content, creation_date) VALUES(?, ?, ?, ?, NOW())'
+            'INSERT INTO post(user_id, title, chapo, content, image, creation_date) VALUES(?, ?, ?, ?, ?, NOW())'
         );
-        $affectedLines = $statement->execute([$user_id, $title, $chapo, $content]);
+        $affectedLines = $statement->execute([$user_id, $title, $chapo, $content, $image]);
 
         return ($affectedLines > 0);
     }

@@ -10,8 +10,12 @@ use App\lib\SessionManager;
 use App\Lib\UserChecker;
 use App\lib\View;
 use App\model\PostRepository;
+use Exception;
+use InvalidArgumentException;
+use Nyholm\Psr7\UploadedFile;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UploadedFileInterface;
 
 class AddPostController
 {
@@ -78,8 +82,19 @@ class AddPostController
                 $chapo = $formData['chapo'];
                 $content = $formData['content'];
 
+                $image = null;
+                $uploadedFiles = $request->getUploadedFiles();
+
+                if (isset($uploadedFiles['file']) === true && $uploadedFiles['file']->getError() === UPLOAD_ERR_OK) {
+                    if (!$this->processImage($request, $image, $error)) {
+                        $html = $view->render('post_add.twig', ['error' => $error, 'session' => $sessionData]);
+                        $response->getBody()->write($html);
+                        return $response;
+                    }
+                }
+
                 $postRepository = $this->getPostsRepository();
-                $success = $postRepository->addPost($sessionData['id'], $title, $content, $chapo);
+                $success = $postRepository->addPost($sessionData['id'], $title, $content, $chapo, $image);
 
                 if ($success === false) {
                     $error = 'Une erreur est survenue dans l\'ajout de l\'article.';
@@ -99,6 +114,81 @@ class AddPostController
         }
 
         return $response;
+    }
+
+    /**
+     * processImage
+     *
+     * @param  RequestInterface $request
+     * @param  string|null $image
+     * @param  string|null $error
+     * @return bool
+     */
+    private function processImage(RequestInterface $request, ?string &$image, ?string &$error): bool
+    {
+        $uploadedFiles = $request->getUploadedFiles();
+
+        if (isset($uploadedFiles['file'])) {
+            $uploadedFile = $uploadedFiles['file'];
+
+            if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+                $image = $this->moveUploadedFile($uploadedFile);
+                return true;
+            } else {
+                switch ($uploadedFile->getError()) {
+                    case UPLOAD_ERR_INI_SIZE:
+                        $error = 'La taille du fichier dépasse la limite autorisée.';
+                        break;
+                    case UPLOAD_ERR_FORM_SIZE:
+                        $error = 'La taille du fichier téléchargé dépasse la limite définie dans le formulaire.';
+                        break;
+                    case UPLOAD_ERR_PARTIAL:
+                        $error = 'Le fichier n\'a été que partiellement téléchargé.';
+                        break;
+                    case UPLOAD_ERR_NO_FILE:
+                        $error = 'Aucun fichier n\'a été téléchargé.';
+                        break;
+                    case UPLOAD_ERR_NO_TMP_DIR:
+                        $error = 'Le dossier temporaire est manquant.';
+                        break;
+                    case UPLOAD_ERR_CANT_WRITE:
+                        $error = 'Échec de l\'écriture du fichier sur le disque.';
+                        break;
+                    case UPLOAD_ERR_EXTENSION:
+                        $error = 'Une extension PHP a arrêté le téléchargement du fichier.';
+                        break;
+                    default:
+                        $error = 'Une erreur inconnue est survenue lors du téléchargement du fichier.';
+                }
+                return false;
+            }
+        } else {
+            $error = 'Aucun fichier n\'a été envoyé.';
+            return true;
+        }
+    }
+
+    /**
+     * moveUploadedFile
+     *
+     * @param  UploadedFileInterface $uploadedFile
+     * @return string
+     */
+    private function moveUploadedFile(UploadedFileInterface $uploadedFile): string
+    {
+        $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
+        $allowedExtensions = ['png', 'jpg', 'jpeg'];
+
+        if (!in_array(strtolower($extension), $allowedExtensions)) {
+            throw new InvalidArgumentException('Le format de l\'image n\'est pas pris en charge.');
+        }
+
+        $directory = './assets/posts';
+        $filename = uniqid() . '.' . $extension;
+
+        $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
+
+        return $filename;
     }
 
     /**

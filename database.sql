@@ -55,8 +55,3 @@ VALUES ('3', '3', 'Excellent article! Les conseils sont très utiles pour améli
 ('1', '2', 'Très intéressant !', '2024-01-19 19:34:10', true),
 ('2', '2', 'Pas mal !', '2024-01-19 21:14:00', false)
 ;
-
-
-
-
-

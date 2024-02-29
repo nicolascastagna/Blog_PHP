@@ -2,13 +2,14 @@
 {% block title %}Ajouter un nouvel article
 {% endblock %}
 {% block content %}
-	<form action="/blog/ajout-article" method="post">
+	<form action="/blog/ajout-article" method="post" enctype="multipart/form-data">
 		<label for="title">Titre :</label>
 		<input type="text" id="title" name="title" required>
 		<label for="chapo">Chapo :</label>
 		<textarea id="chapo" name="chapo" required></textarea>
 		<label for="content">Contenu :</label>
 		<textarea id="content" name="content" required></textarea>
+		<input class="input-file" type="file" name="file" id="file"/>
 		{% if error %}
 			<p class="error">{{ error }}</p>
 		{% endif %}
