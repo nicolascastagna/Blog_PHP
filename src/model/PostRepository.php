@@ -35,6 +35,10 @@ class PostRepository
 
         $row = $statement->fetch();
 
+        if ($row === false) {
+            return $this->fetchPost([]);
+        }
+
         return $this->fetchPost($row);
     }
 
@@ -57,6 +61,10 @@ class PostRepository
 
         $rows = $statement->fetchAll();
         $posts = [];
+
+        if ($rows === false) {
+            return null;
+        }
 
         foreach ($rows as $row) {
             $posts[] = $this->fetchPost($row);
@@ -132,15 +140,15 @@ class PostRepository
     private function fetchPost(array $row): Post
     {
         $post = new Post();
-        $post->id = $row['id'];
-        $post->userId = $row['user_id'];
-        $post->username = $row['username'];
-        $post->title = $row['title'];
-        $post->chapo = $row['chapo'];
-        $post->content = $row['content'];
-        $post->creationDate = $row['creation_date'];
-        $post->updateDate = $row['update_date'];
-        $post->image = $row['image'];
+        $post->id = $row['id'] ?? 0;
+        $post->userId = $row['user_id'] ?? 0;
+        $post->username = $row['username'] ?? '';
+        $post->title = $row['title'] ?? '';
+        $post->chapo = $row['chapo'] ?? '';
+        $post->content = $row['content'] ?? '';
+        $post->creationDate = $row['creation_date'] ?? '';
+        $post->updateDate = $row['update_date'] ?? '';
+        $post->image = $row['image'] ?? '';
 
         return $post;
     }

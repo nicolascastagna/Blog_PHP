@@ -38,25 +38,28 @@ class AddCommentController
         $formData = $request->getParsedBody();
         $postId = PostIdChecker::getId($args);
 
-        if (!$userChecker->isAuthenticated($sessionData['token'] ?? '')) {
+        if ($userChecker->isAuthenticated($sessionData['token'] ?? '')) {
+            if (isset($formData['content']) === false) {
+                throw new Exception('Certaines informations sont manquantes.');
+            }
+
+            $content = $formData['content'];
+
+            $commentRepository = $this->getCommentsRepository();
+            $success = $commentRepository->addComment($sessionData['id'], $postId, $content);
+
+            if ($success === false) {
+                throw new Exception('Une erreur est survenue dans l\'ajout du commentaire.');
+            }
+
+            return $response->withHeader('Location', "/blog/article/{$args['id']}")->withStatus(302);
+        } else {
             $error = 'Vous n\'avez pas accès à cette page !';
+
             return $this->renderErrorResponse($response, $error);
         }
 
-        if (isset($formData['content']) === false) {
-            throw new Exception('Certaines informations sont manquantes.');
-        }
-
-        $content = $formData['content'];
-
-        $commentRepository = $this->getCommentsRepository();
-        $success = $commentRepository->addComment($sessionData['id'], $postId, $content);
-
-        if ($success === false) {
-            throw new Exception('Une erreur est survenue dans l\'ajout du commentaire.');
-        }
-
-        return $response->withHeader('Location', "/blog/article/{$args['id']}")->withStatus(302);
+        return $response;
     }
 
     /**
@@ -64,6 +67,7 @@ class AddCommentController
      *
      * @param  ResponseInterface $response
      * @param  string $error
+     *
      * @return ResponseInterface
      */
     private function renderErrorResponse(ResponseInterface $response, string $error): ResponseInterface
@@ -71,7 +75,8 @@ class AddCommentController
         $view = new View();
         $html = $view->render('error.twig', ['error' => $error]);
         $response->getBody()->write($html);
-        return $response;
+
+        return $response->withStatus(403);
     }
 
     /**

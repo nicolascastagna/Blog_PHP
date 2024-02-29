@@ -15,11 +15,11 @@
 				<p>{{ post.content }}</p>
 			</div>
 			<div class="card-action">
-				{% if session is defined and session.id is defined and session.id == post.userId %}
+				{% if session is defined and session.id is defined %}
 					{% if session.role == 'ROLE_ADMIN' %}
 						<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
 						<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
-					{% elseif post.userId == session.id %}
+					{% elseif session.id == post.userId %}
 						<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
 						<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
 					{% endif %}

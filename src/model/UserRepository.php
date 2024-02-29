@@ -143,6 +143,7 @@ class UserRepository
      * checkToken
      *
      * @param  string $token
+     *
      * @return User|null
      */
     public function checkToken(string $token): ?User

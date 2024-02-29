@@ -13,6 +13,7 @@ class UserChecker
      * isAuthenticated
      *
      * @param  string $token
+     *
      * @return bool
      */
     public function isAuthenticated(string $token): bool
@@ -28,6 +29,7 @@ class UserChecker
      *
      * @param  int $userId
      * @param  int $current_user_id
+     *
      * @return bool
      */
     public function isCurrentUser(int $userId, int $current_user_id): bool
@@ -39,6 +41,7 @@ class UserChecker
      * isAdmin
      *
      * @param  string $user_role
+     *
      * @return bool
      */
     public function isAdmin(string $user_role): bool
