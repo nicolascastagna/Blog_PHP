@@ -9,7 +9,7 @@ class User
     /**
      * @var int
      */
-    public int $id;
+    public int $userId;
 
     /**
      * @var string

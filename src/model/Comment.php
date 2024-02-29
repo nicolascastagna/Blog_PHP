@@ -9,7 +9,7 @@ class Comment
     /**
      * @var int
      */
-    public int $id;
+    public int $commentId;
 
     /**
      * @var int

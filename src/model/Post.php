@@ -9,7 +9,7 @@ class Post
     /**
      * @var int
      */
-    public int $id;
+    public int $postId;
 
     /**
      * @var int

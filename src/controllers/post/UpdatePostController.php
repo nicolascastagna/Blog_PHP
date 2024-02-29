@@ -122,7 +122,7 @@ class UpdatePostController
                 $chapo = $chapo !== '' ? $chapo : $fetchPost->chapo;
                 $content = $content !== '' ? $content : $fetchPost->content;
 
-                $success = $postRepository->updatePost($fetchPost->id, $title, $chapo, $content);
+                $success = $postRepository->updatePost($fetchPost->userId, $title, $chapo, $content);
 
                 if ($success === false) {
                     $error = 'Une erreur est survenue dans la mise à jour de l\'article.';

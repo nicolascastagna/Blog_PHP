@@ -76,14 +76,14 @@ class LoginUserController
             } else {
                 $token = bin2hex(random_bytes(16));
                 $_SESSION['user'] = [
-                    'id'            => $user->id,
+                    'id'            => $user->userId,
                     'username'      => $user->username,
                     'email'         => $user->email,
                     'role'          => $user->role,
                     'last_refresh'  => time(),
                     'token'         => $token,
                 ];
-                $userRepository->setToken($token, $user->id);
+                $userRepository->setToken($token, $user->userId);
 
                 return $response->withHeader('Location', '/')->withStatus(302);
             }

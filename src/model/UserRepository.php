@@ -36,20 +36,20 @@ class UserRepository
     /**
      * getUser
      *
-     * @param int $id
+     * @param int $userId
      *
      * @return User
      */
-    public function getUser(int $id): ?User
+    public function getUser(int $userId): ?User
     {
-        if (!is_int($id)) {
+        if (!is_int($userId)) {
             return null;
         }
 
         $statement = $this->connection->getConnection()->prepare(
             'SELECT id, username, password, email, role FROM user WHERE id = ?'
         );
-        $statement->execute([$id]);
+        $statement->execute([$userId]);
         $row = $statement->fetch();
 
         if ($row === false) {
@@ -172,7 +172,7 @@ class UserRepository
     private function fetchUser(array $row): User
     {
         $user = new User();
-        $user->id = $row['id'];
+        $user->userId = $row['id'];
         $user->username = $row['username'];
         $user->email = $row['email'];
         $user->role = $row['role'];

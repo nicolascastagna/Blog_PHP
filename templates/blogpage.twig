@@ -19,16 +19,16 @@
 						</div>
 						<div class="card-content">
 							<p>{{ post.chapo }}</p>
-							<a href="/blog/article/{{ post.id }}">Lire la suite</a>
+							<a href="/blog/article/{{ post.postId }}">Lire la suite</a>
 						</div>
 						<div class="card-action">
 							{% if session is defined and session.id is defined %}
 								{% if session.role == 'ROLE_ADMIN' %}
-									<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
-									<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
+									<a href="/blog/modification-article/{{ post.postId }}">Modifier</a>
+									<a href="/blog/suppression-article/{{ post.postId }}">Supprimer</a>
 								{% elseif post.userId == session.id %}
-									<a href="/blog/modification-article/{{ post.id }}">Modifier</a>
-									<a href="/blog/suppression-article/{{ post.id }}">Supprimer</a>
+									<a href="/blog/modification-article/{{ post.postId }}">Modifier</a>
+									<a href="/blog/suppression-article/{{ post.postId }}">Supprimer</a>
 								{% endif %}
 							{% endif %}
 						</div>
