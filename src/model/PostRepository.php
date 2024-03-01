@@ -118,15 +118,16 @@ class PostRepository
      * @param string $title
      * @param string $chapo
      * @param string $content
+     * @param string|null $image
      *
      * @return bool
      */
-    public function updatePost(int $postId, string $title, string $chapo, string $content): bool
+    public function updatePost(int $postId, string $title, string $chapo, string $content, ?string $image): bool
     {
         $statement = $this->connection->getConnection()->prepare(
-            'UPDATE post SET title = ?, chapo = ?, content = ?, update_date = NOW() WHERE id = ?'
+            'UPDATE post SET title = ?, chapo = ?, content = ?, update_date = NOW(), image = ? WHERE id = ?'
         );
-        $affectedLines = $statement->execute([$title, $chapo, $content, $postId]);
+        $affectedLines = $statement->execute([$title, $chapo, $content, $image, $postId]);
 
         return ($affectedLines > 0);
     }

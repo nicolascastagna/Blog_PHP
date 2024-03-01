@@ -12,7 +12,6 @@ use App\lib\View;
 use App\model\PostRepository;
 use Exception;
 use InvalidArgumentException;
-use Nyholm\Psr7\UploadedFile;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UploadedFileInterface;
@@ -85,11 +84,24 @@ class AddPostController
                 $image = null;
                 $uploadedFiles = $request->getUploadedFiles();
 
-                if (isset($uploadedFiles['file']) === true && $uploadedFiles['file']->getError() === UPLOAD_ERR_OK) {
-                    if (!$this->processImage($request, $image, $error)) {
+                if (isset($uploadedFiles['file']) && $uploadedFiles['file']->getError() !== UPLOAD_ERR_NO_FILE) {
+                    if ($uploadedFiles['file']->getError() !== UPLOAD_ERR_OK) {
+                        $error = $this->getErrorUploadMessage($uploadedFiles['file']->getError());
                         $html = $view->render('post_add.twig', ['error' => $error, 'session' => $sessionData]);
                         $response->getBody()->write($html);
+
                         return $response;
+                    } else {
+                        try {
+                            $uploadedFile = $uploadedFiles['file'];
+                            $image = $this->moveUploadedFile($uploadedFile);
+                        } catch (Exception $e) {
+                            $error = $e->getMessage();
+                            $html = $view->render('post_add.twig', ['error' => $error, 'session' => $sessionData]);
+                            $response->getBody()->write($html);
+
+                            return $response;
+                        }
                     }
                 }
 
@@ -117,54 +129,31 @@ class AddPostController
     }
 
     /**
-     * processImage
-     *
-     * @param  RequestInterface $request
-     * @param  string|null $image
-     * @param  string|null $error
-     * @return bool
+     * getErrorUploadMessage
+     * 
+     * @param int $errorCode
+     * 
+     * @return string
      */
-    private function processImage(RequestInterface $request, ?string &$image, ?string &$error): bool
+    private function getErrorUploadMessage(int $errorCode): string
     {
-        $uploadedFiles = $request->getUploadedFiles();
-
-        if (isset($uploadedFiles['file'])) {
-            $uploadedFile = $uploadedFiles['file'];
-
-            if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-                $image = $this->moveUploadedFile($uploadedFile);
-                return true;
-            } else {
-                switch ($uploadedFile->getError()) {
-                    case UPLOAD_ERR_INI_SIZE:
-                        $error = 'La taille du fichier dépasse la limite autorisée.';
-                        break;
-                    case UPLOAD_ERR_FORM_SIZE:
-                        $error = 'La taille du fichier téléchargé dépasse la limite définie dans le formulaire.';
-                        break;
-                    case UPLOAD_ERR_PARTIAL:
-                        $error = 'Le fichier n\'a été que partiellement téléchargé.';
-                        break;
-                    case UPLOAD_ERR_NO_FILE:
-                        $error = 'Aucun fichier n\'a été téléchargé.';
-                        break;
-                    case UPLOAD_ERR_NO_TMP_DIR:
-                        $error = 'Le dossier temporaire est manquant.';
-                        break;
-                    case UPLOAD_ERR_CANT_WRITE:
-                        $error = 'Échec de l\'écriture du fichier sur le disque.';
-                        break;
-                    case UPLOAD_ERR_EXTENSION:
-                        $error = 'Une extension PHP a arrêté le téléchargement du fichier.';
-                        break;
-                    default:
-                        $error = 'Une erreur inconnue est survenue lors du téléchargement du fichier.';
-                }
-                return false;
-            }
-        } else {
-            $error = 'Aucun fichier n\'a été envoyé.';
-            return true;
+        switch ($errorCode) {
+            case UPLOAD_ERR_INI_SIZE:
+                return 'La taille du fichier dépasse la limite autorisée.';
+            case UPLOAD_ERR_FORM_SIZE:
+                return 'La taille du fichier téléchargé dépasse la limite définie dans le formulaire.';
+            case UPLOAD_ERR_PARTIAL:
+                return 'Le fichier n\'a été que partiellement téléchargé.';
+            case UPLOAD_ERR_NO_FILE:
+                return 'Aucun fichier n\'a été téléchargé.';
+            case UPLOAD_ERR_NO_TMP_DIR:
+                return 'Le dossier temporaire est manquant.';
+            case UPLOAD_ERR_CANT_WRITE:
+                return 'Échec de l\'écriture du fichier sur le disque.';
+            case UPLOAD_ERR_EXTENSION:
+                return 'Une extension PHP a arrêté le téléchargement du fichier.';
+            default:
+                return 'Une erreur inconnue est survenue lors du téléchargement du fichier.';
         }
     }
 
@@ -172,6 +161,7 @@ class AddPostController
      * moveUploadedFile
      *
      * @param  UploadedFileInterface $uploadedFile
+     *
      * @return string
      */
     private function moveUploadedFile(UploadedFileInterface $uploadedFile): string
@@ -179,7 +169,7 @@ class AddPostController
         $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
         $allowedExtensions = ['png', 'jpg', 'jpeg'];
 
-        if (!in_array(strtolower($extension), $allowedExtensions)) {
+        if (!in_array(strtolower($extension), $allowedExtensions, true)) {
             throw new InvalidArgumentException('Le format de l\'image n\'est pas pris en charge.');
         }
 

@@ -12,8 +12,11 @@ use App\Lib\UserChecker;
 use App\lib\View;
 use App\model\Post;
 use App\model\PostRepository;
+use Exception;
+use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UploadedFileInterface;
 
 class UpdatePostController
 {
@@ -43,7 +46,7 @@ class UpdatePostController
         $view = new View();
         if (
             ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true
-            && $userChecker->isCurrentUser($post->userId, $sessionData['id']) === true)
+                && $userChecker->isCurrentUser($post->userId, $sessionData['id']) === true)
             || $userChecker->isAdmin($sessionData['role'] ?? 'ROLE_USER')
         ) {
             $html = $view->render('post_update.twig', ['session' => $sessionData, 'error' => $error]);
@@ -110,6 +113,7 @@ class UpdatePostController
     {
         if ($request->getMethod() === 'POST') {
             $formData = $request->getParsedBody();
+            $view = new View();
 
             if (isset($formData['title']) === false || isset($formData['chapo']) === false || isset($formData['content']) === false) {
                 $error = 'Les données du formulaire sont invalides.';
@@ -118,11 +122,36 @@ class UpdatePostController
                 $chapo = $formData['chapo'];
                 $content = $formData['content'];
 
+                $image = null;
+                $uploadedFiles = $request->getUploadedFiles();
+
+                if (isset($uploadedFiles['file']) && $uploadedFiles['file']->getError() !== UPLOAD_ERR_NO_FILE) {
+                    if ($uploadedFiles['file']->getError() !== UPLOAD_ERR_OK) {
+                        $error = $this->getErrorUploadMessage($uploadedFiles['file']->getError());
+                        $html = $view->render('post_add.twig', ['error' => $error, 'session' => $sessionData]);
+                        $response->getBody()->write($html);
+
+                        return $response;
+                    } else {
+                        try {
+                            $uploadedFile = $uploadedFiles['file'];
+                            $image = $this->moveUploadedFile($uploadedFile);
+                        } catch (Exception $e) {
+                            $error = $e->getMessage();
+                            $html = $view->render('post_add.twig', ['error' => $error, 'session' => $sessionData]);
+                            $response->getBody()->write($html);
+
+                            return $response;
+                        }
+                    }
+                }
+
                 $title = $title !== '' ? $title : $fetchPost->title;
                 $chapo = $chapo !== '' ? $chapo : $fetchPost->chapo;
                 $content = $content !== '' ? $content : $fetchPost->content;
+                $image = $image !== '' ? $image : $fetchPost->image;
 
-                $success = $postRepository->updatePost($fetchPost->userId, $title, $chapo, $content);
+                $success = $postRepository->updatePost($fetchPost->userId, $title, $chapo, $content, $image);
 
                 if ($success === false) {
                     $error = 'Une erreur est survenue dans la mise à jour de l\'article.';
@@ -131,7 +160,6 @@ class UpdatePostController
                 }
             }
 
-            $view = new View();
             $html = $view->render('post_update.twig', ['error' => $error, 'session' => $sessionData]);
             $response->getBody()->write($html);
 
@@ -139,6 +167,58 @@ class UpdatePostController
         }
 
         return $response;
+    }
+    /**
+     * getErrorUploadMessage
+     * 
+     * @param int $errorCode
+     * 
+     * @return string
+     */
+    private function getErrorUploadMessage(int $errorCode): string
+    {
+        switch ($errorCode) {
+            case UPLOAD_ERR_INI_SIZE:
+                return 'La taille du fichier dépasse la limite autorisée.';
+            case UPLOAD_ERR_FORM_SIZE:
+                return 'La taille du fichier téléchargé dépasse la limite définie dans le formulaire.';
+            case UPLOAD_ERR_PARTIAL:
+                return 'Le fichier n\'a été que partiellement téléchargé.';
+            case UPLOAD_ERR_NO_FILE:
+                return 'Aucun fichier n\'a été téléchargé.';
+            case UPLOAD_ERR_NO_TMP_DIR:
+                return 'Le dossier temporaire est manquant.';
+            case UPLOAD_ERR_CANT_WRITE:
+                return 'Échec de l\'écriture du fichier sur le disque.';
+            case UPLOAD_ERR_EXTENSION:
+                return 'Une extension PHP a arrêté le téléchargement du fichier.';
+            default:
+                return 'Une erreur inconnue est survenue lors du téléchargement du fichier.';
+        }
+    }
+
+    /**
+     * moveUploadedFile
+     *
+     * @param  UploadedFileInterface $uploadedFile
+     *
+     * @return string
+     */
+    private function moveUploadedFile(UploadedFileInterface $uploadedFile): string
+    {
+        $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
+        $allowedExtensions = ['png', 'jpg', 'jpeg'];
+
+        if (!in_array(strtolower($extension), $allowedExtensions, true)) {
+            throw new InvalidArgumentException('Le format de l\'image n\'est pas pris en charge.');
+        }
+
+        $directory = './assets/posts';
+        $filename = uniqid() . '.' . $extension;
+
+        $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
+
+        return $filename;
     }
 
     /**
