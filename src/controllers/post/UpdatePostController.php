@@ -85,7 +85,7 @@ class UpdatePostController
         $error = null;
         if (
             ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true
-                && $userChecker->isCurrentUser($fetchPost->userId, $sessionData['id']) === true)
+            && $userChecker->isCurrentUser($fetchPost->userId, $sessionData['id']) === true)
             || $userChecker->isAdmin($sessionData['role'] ?? 'ROLE_USER')
         ) {
             return $this->handlePostRequest($request, $response, $fetchPost, $sessionData, $postRepository);
