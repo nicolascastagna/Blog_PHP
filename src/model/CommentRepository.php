@@ -44,6 +44,38 @@ class CommentRepository
     }
 
     /**
+     * getComments
+     *
+     * @return array
+     */
+    public function getWaitingComments(): array
+    {
+        $statement = $this->connection->getConnection()->prepare(
+            "SELECT comment.id, comment.user_id, comment.post_id, comment.content, status,
+            DATE_FORMAT(comment.comment_date, '%d/%m/%Y à %Hh%imin%ss') AS comment_date, 
+            user.username 
+            FROM comment 
+            LEFT JOIN user ON comment.user_id = user.id
+            WHERE status = 0
+            ORDER BY comment.comment_date DESC"
+        );
+        $statement->execute();
+
+        $rows = $statement->fetchAll();
+        $comments = [];
+
+        if ($rows === false) {
+            return null;
+        }
+
+        foreach ($rows as $row) {
+            $comments[] = $this->fetchComment($row);
+        }
+
+        return $comments;
+    }
+
+    /**
      * addComment
      *
      * @param int    $user_id
