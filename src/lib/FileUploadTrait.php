@@ -13,6 +13,7 @@ trait FileUploadTrait
      * getErrorUploadMessage
      *
      * @param  int $errorCode
+     *
      * @return string
      */
     private function getErrorUploadMessage(int $errorCode): string
@@ -41,6 +42,7 @@ trait FileUploadTrait
      * moveUploadedFile
      *
      * @param  UploadedFileInterface $uploadedFile
+     *
      * @return string
      */
     private function moveUploadedFile(UploadedFileInterface $uploadedFile): string

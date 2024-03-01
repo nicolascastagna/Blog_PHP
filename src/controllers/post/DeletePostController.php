@@ -94,6 +94,7 @@ class DeletePostController
                     if (file_exists($imagePath)) {
                         unlink($imagePath);
                     }
+
                     return $response->withHeader('Location', '/blog')->withStatus(302);
                 }
 

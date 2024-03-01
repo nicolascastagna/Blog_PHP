@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
+use App\lib\FileUploadTrait;
 use App\lib\PostIdChecker;
 use App\lib\SessionChecker;
 use App\lib\SessionManager;
@@ -15,8 +16,6 @@ use App\model\PostRepository;
 use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-
-use App\lib\FileUploadTrait;
 
 class UpdatePostController
 {
