@@ -81,7 +81,7 @@ class DeletePostController
         $view = new View();
         if (
             ($userChecker->isAuthenticated($sessionData['token'] ?? '')
-                && $userChecker->isCurrentUser($fetchPost->userId, $sessionData['id']))
+            && $userChecker->isCurrentUser($fetchPost->userId, $sessionData['id']))
             || $userChecker->isAdmin($sessionData['role'] ??  'ROLE_USER')
         ) {
             if ($request->getMethod() === 'POST') {
@@ -90,6 +90,11 @@ class DeletePostController
                 if ($success === false) {
                     $error = 'Une erreur est survenue dans la suppression de l\'article.';
                 } else {
+                    $imagePath = './assets/posts/' . $fetchPost->image;
+                    if (file_exists($imagePath)) {
+                        unlink($imagePath);
+                    }
+
                     return $response->withHeader('Location', '/blog')->withStatus(302);
                 }
 

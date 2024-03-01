@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
+use App\lib\FileUploadTrait;
 use App\lib\SessionChecker;
 use App\lib\SessionManager;
 use App\Lib\UserChecker;
 use App\lib\View;
 use App\model\PostRepository;
+use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class AddPostController
 {
+    use FileUploadTrait;
+
     /**
      * renderCreationForm
      *
@@ -78,8 +82,32 @@ class AddPostController
                 $chapo = $formData['chapo'];
                 $content = $formData['content'];
 
+                $image = null;
+                $uploadedFiles = $request->getUploadedFiles();
+
+                if (isset($uploadedFiles['file']) && $uploadedFiles['file']->getError() !== UPLOAD_ERR_NO_FILE) {
+                    if ($uploadedFiles['file']->getError() !== UPLOAD_ERR_OK) {
+                        $error = $this->getErrorUploadMessage($uploadedFiles['file']->getError());
+                        $html = $view->render('post_add.twig', ['error' => $error, 'session' => $sessionData]);
+                        $response->getBody()->write($html);
+
+                        return $response;
+                    } else {
+                        try {
+                            $uploadedFile = $uploadedFiles['file'];
+                            $image = $this->moveUploadedFile($uploadedFile);
+                        } catch (Exception $e) {
+                            $error = $e->getMessage();
+                            $html = $view->render('post_add.twig', ['error' => $error, 'session' => $sessionData]);
+                            $response->getBody()->write($html);
+
+                            return $response;
+                        }
+                    }
+                }
+
                 $postRepository = $this->getPostsRepository();
-                $success = $postRepository->addPost($sessionData['id'], $title, $content, $chapo);
+                $success = $postRepository->addPost($sessionData['id'], $title, $content, $chapo, $image);
 
                 if ($success === false) {
                     $error = 'Une erreur est survenue dans l\'ajout de l\'article.';

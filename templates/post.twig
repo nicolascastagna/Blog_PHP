@@ -8,10 +8,13 @@
 				<h2 class="title">{{ post.title }}</h2>
 				<h4>{{ post.username }}</h4>
 				<p>{{ post.updateDate ? 'Modifié le' : 'Le'}}
-					{{ post.updateDate ?? post.creationDate }}</p>
+					{{ post.updateDate ? post.updateDate : post.creationDate }}</p>
 			</div>
 			<div class="card-content">
 				<p>{{ post.chapo }}</p>
+				{% if post.image %}
+					<img src="/assets/posts/{{ post.image }}" alt={{ post.title }}>
+				{% endif %}
 				<p>{{ post.content }}</p>
 			</div>
 			<div class="card-action">

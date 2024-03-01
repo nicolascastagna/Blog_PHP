@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\controllers\post;
 
 use App\lib\DatabaseConnection;
+use App\lib\FileUploadTrait;
 use App\lib\PostIdChecker;
 use App\lib\SessionChecker;
 use App\lib\SessionManager;
@@ -12,11 +13,14 @@ use App\Lib\UserChecker;
 use App\lib\View;
 use App\model\Post;
 use App\model\PostRepository;
+use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class UpdatePostController
 {
+    use FileUploadTrait;
+
     /**
      * renderUpdateForm
      *
@@ -43,7 +47,7 @@ class UpdatePostController
         $view = new View();
         if (
             ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true
-            && $userChecker->isCurrentUser($post->userId, $sessionData['id']) === true)
+                && $userChecker->isCurrentUser($post->userId, $sessionData['id']) === true)
             || $userChecker->isAdmin($sessionData['role'] ?? 'ROLE_USER')
         ) {
             $html = $view->render('post_update.twig', ['session' => $sessionData, 'error' => $error]);
@@ -110,6 +114,7 @@ class UpdatePostController
     {
         if ($request->getMethod() === 'POST') {
             $formData = $request->getParsedBody();
+            $view = new View();
 
             if (isset($formData['title']) === false || isset($formData['chapo']) === false || isset($formData['content']) === false) {
                 $error = 'Les données du formulaire sont invalides.';
@@ -118,11 +123,41 @@ class UpdatePostController
                 $chapo = $formData['chapo'];
                 $content = $formData['content'];
 
+                $image = $fetchPost->image;
+                $uploadedFiles = $request->getUploadedFiles();
+
+                if (isset($uploadedFiles['file']) && $uploadedFiles['file']->getError() !== UPLOAD_ERR_NO_FILE) {
+                    if ($uploadedFiles['file']->getError() !== UPLOAD_ERR_OK) {
+                        $error = $this->getErrorUploadMessage($uploadedFiles['file']->getError());
+                        $html = $view->render('post_update.twig', ['error' => $error, 'session' => $sessionData]);
+                        $response->getBody()->write($html);
+
+                        return $response;
+                    } else {
+                        try {
+                            $imagePath = './assets/posts/' . $fetchPost->image;
+                            if (file_exists($imagePath)) {
+                                unlink($imagePath);
+                            }
+                            $uploadedFile = $uploadedFiles['file'];
+                            $image = $this->moveUploadedFile($uploadedFile);
+                        } catch (Exception $e) {
+                            $error = $e->getMessage();
+                            $html = $view->render('post_update.twig', ['error' => $error, 'session' => $sessionData]);
+                            $response->getBody()->write($html);
+
+                            return $response;
+                        }
+                    }
+                } else {
+                    $image = $fetchPost->image;
+                }
+
                 $title = $title !== '' ? $title : $fetchPost->title;
                 $chapo = $chapo !== '' ? $chapo : $fetchPost->chapo;
                 $content = $content !== '' ? $content : $fetchPost->content;
 
-                $success = $postRepository->updatePost($fetchPost->userId, $title, $chapo, $content);
+                $success = $postRepository->updatePost($fetchPost->userId, $title, $chapo, $content, $image);
 
                 if ($success === false) {
                     $error = 'Une erreur est survenue dans la mise à jour de l\'article.';
@@ -131,7 +166,6 @@ class UpdatePostController
                 }
             }
 
-            $view = new View();
             $html = $view->render('post_update.twig', ['error' => $error, 'session' => $sessionData]);
             $response->getBody()->write($html);
 

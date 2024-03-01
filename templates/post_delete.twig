@@ -26,6 +26,9 @@
 			</div>
 			<div class="card-content">
 				<p>{{ post.chapo }}</p>
+				{% if post.image %}
+					<img src="/assets/posts/{{ post.image }}" alt={{ post.title }}>
+				{% endif %}
 				<p>{{ post.content }}</p>
 			</div>
 		</div>

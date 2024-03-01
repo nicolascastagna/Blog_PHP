@@ -76,12 +76,12 @@ class LoginUserController
             } else {
                 $token = bin2hex(random_bytes(16));
                 $_SESSION['user'] = [
-                    'id'            => $user->userId,
-                    'username'      => $user->username,
-                    'email'         => $user->email,
-                    'role'          => $user->role,
-                    'last_refresh'  => time(),
-                    'token'         => $token,
+                    'id' => $user->userId,
+                    'username' => $user->username,
+                    'email' => $user->email,
+                    'role' => $user->role,
+                    'last_refresh' => time(),
+                    'token' => $token,
                 ];
                 $userRepository->setToken($token, $user->userId);
 
