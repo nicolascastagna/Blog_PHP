@@ -46,6 +46,7 @@ $app->get('/connexion', [LoginUserController::class, 'renderLoginForm']);
 $app->post('/connexion', [LoginUserController::class, 'login']);
 $app->get('/deconnexion', [LogoutUserController::class, 'logout']);
 $app->get('/admin', [ManageCommentsController::class, 'renderComments']);
+$app->post('/admin/valider-commentaire/{id}', [ManageCommentsController::class, 'validateComments']);
 
 
 $app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {

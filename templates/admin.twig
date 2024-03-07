@@ -5,13 +5,26 @@
 	<h2>Listes de commentaires en attente de validation</h2>
 	<div class="containers-comments">
 		<div class="card-comment">
-			{% for comment in comments %}
-				<h4>{{ comment.username }}</h4>
-				<p>Le
-					{{ comment.commentDate }}</p>
-				<p>{{ comment.content }}</p>
-				<a href="/blog/article/{{ comment.postId }}">Voir le post</a>
-			{% endfor %}
+			{% if comments is empty %}
+				<p>Aucun commentaire en attente de validation.</p>
+			{% else %}
+				{% for comment in comments %}
+					<h4>{{ comment.username }}</h4>
+					<p>Le
+						{{ comment.commentDate }}</p>
+					<p>{{ comment.content }}</p>
+					<a href="/blog/article/{{ comment.postId }}">Voir le post</a>
+					<div>
+						<form action="/admin/valider-commentaire/{{ comment.commentId }}" method="post">
+							<input class="button-form" value="Valider" type="submit"/>
+						</form>
+						<form action="/admin/suppression-commentaire/{{ comment.commentId }}" method="post">
+							<input type="hidden" name="_METHOD" value="DELETE"/>
+							<input class="button-form" value="Supprimer" type="submit"/>
+						</form>
+					</div>
+				{% endfor %}
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}
