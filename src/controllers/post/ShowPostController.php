@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\controllers\post;
 
 use App\controllers\comment\AddCommentController;
+use App\lib\CheckerId;
 use App\lib\DatabaseConnection;
-use App\lib\PostIdChecker;
 use App\lib\SessionChecker;
 use App\lib\SessionManager;
 use App\lib\View;
@@ -35,7 +35,7 @@ class ShowPostController
         $sessionChecker->sessionChecker();
         $sessionData = $sessionChecker->getSessionData();
 
-        $postId = PostIdChecker::getId($args);
+        $postId = CheckerId::getId($args);
         $error = null;
 
         $post = $this->getPostsRepository()->getPost($postId);

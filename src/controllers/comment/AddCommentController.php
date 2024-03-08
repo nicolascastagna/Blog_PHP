@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\controllers\comment;
 
+use App\lib\CheckerId;
 use App\lib\DatabaseConnection;
-use App\lib\PostIdChecker;
 use App\lib\SessionChecker;
 use App\lib\SessionManager;
 use App\Lib\UserChecker;
@@ -36,7 +36,7 @@ class AddCommentController
 
         $userChecker = new UserChecker();
         $formData = $request->getParsedBody();
-        $postId = PostIdChecker::getId($args);
+        $postId = CheckerId::getId($args);
 
         if ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true) {
             if (isset($formData['content']) === false) {

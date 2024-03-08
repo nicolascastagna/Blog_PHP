@@ -6,7 +6,7 @@ namespace App\lib;
 
 use Exception;
 
-class PostIdChecker
+class CheckerId
 {
     /**
      * getId

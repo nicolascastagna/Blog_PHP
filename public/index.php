@@ -3,6 +3,7 @@
 namespace App\public;
 
 use App\controllers\comment\AddCommentController;
+use App\controllers\comment\ManageCommentsController;
 use App\controllers\Contact;
 use App\controllers\Homepage;
 use App\controllers\post\AddPostController;
@@ -44,6 +45,9 @@ $app->post('/inscription', [AddUserController::class, 'add']);
 $app->get('/connexion', [LoginUserController::class, 'renderLoginForm']);
 $app->post('/connexion', [LoginUserController::class, 'login']);
 $app->get('/deconnexion', [LogoutUserController::class, 'logout']);
+$app->get('/admin', [ManageCommentsController::class, 'renderComments']);
+$app->post('/admin/valider-commentaire/{id}', [ManageCommentsController::class, 'validateComments']);
+$app->post('/admin/suppression-commentaire/{id}', [ManageCommentsController::class, 'invalidateComments']);
 
 
 $app->get('/{routes:.+}', function (RequestInterface $request, ResponseInterface $response) use ($twig) {

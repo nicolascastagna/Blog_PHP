@@ -44,6 +44,98 @@ class CommentRepository
     }
 
     /**
+     * getComment
+     *
+     * @param int $commentId
+     *
+     * @return Comment
+     */
+    public function getComment(int $commentId): Comment
+    {
+        $statement = $this->connection->getConnection()->prepare(
+            "SELECT comment.id, comment.user_id, comment.post_id, comment.content, status,
+            DATE_FORMAT(comment.comment_date, '%d/%m/%Y à %Hh%imin%ss') AS comment_date
+            FROM comment 
+            WHERE comment.id = ?"
+        );
+        $statement->execute([$commentId]);
+
+        $row = $statement->fetch();
+
+        if ($row === false) {
+            return $this->fetchComment([]);
+        }
+
+        return $this->fetchComment($row);
+    }
+
+    /**
+     * getComments
+     *
+     * @return array
+     */
+    public function getWaitingComments(): array
+    {
+        $statement = $this->connection->getConnection()->prepare(
+            "SELECT comment.id, comment.user_id, comment.post_id, comment.content, status,
+            DATE_FORMAT(comment.comment_date, '%d/%m/%Y à %Hh%imin%ss') AS comment_date, 
+            user.username 
+            FROM comment 
+            LEFT JOIN user ON comment.user_id = user.id
+            WHERE status = 0
+            ORDER BY comment.comment_date DESC"
+        );
+        $statement->execute();
+
+        $rows = $statement->fetchAll();
+        $comments = [];
+
+        if ($rows === false) {
+            return null;
+        }
+
+        foreach ($rows as $row) {
+            $comments[] = $this->fetchComment($row);
+        }
+
+        return $comments;
+    }
+
+    /**
+     * updateCommentStatus
+     *
+     * @param int $commentId
+     *
+     * @return bool
+     */
+    public function updateCommentStatus(int $commentId): bool
+    {
+        $statement = $this->connection->getConnection()->prepare(
+            'UPDATE comment SET status = 1 WHERE id = ?'
+        );
+        $affectedLines = $statement->execute([$commentId]);
+
+        return ($affectedLines > 0);
+    }
+
+    /**
+     * deleteComment
+     *
+     * @param int $commentId
+     *
+     * @return bool
+     */
+    public function deleteComment(int $commentId): bool
+    {
+        $statement = $this->connection->getConnection()->prepare(
+            'DELETE FROM comment WHERE id = ?'
+        );
+        $affectedLines = $statement->execute([$commentId]);
+
+        return ($affectedLines > 0);
+    }
+
+    /**
      * addComment
      *
      * @param int    $user_id
@@ -72,13 +164,13 @@ class CommentRepository
     private function fetchComment(array $row): Comment
     {
         $comment = new Comment();
-        $comment->commentId = $row['id'];
-        $comment->userId = $row['user_id'];
-        $comment->postId = $row['post_id'];
-        $comment->username = $row['username'];
-        $comment->content = $row['content'];
-        $comment->commentDate = $row['comment_date'];
-        $comment->status = $row['status'];
+        $comment->commentId = ($row['id'] ?? 0);
+        $comment->userId = ($row['user_id'] ?? 0);
+        $comment->postId = ($row['post_id'] ?? 0);
+        $comment->username = ($row['username'] ?? '');
+        $comment->content = ($row['content'] ?? '');
+        $comment->commentDate = ($row['comment_date'] ?? '');
+        $comment->status = ($row['status'] ?? 0);
 
         return $comment;
     }
