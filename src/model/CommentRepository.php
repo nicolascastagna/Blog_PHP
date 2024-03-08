@@ -119,6 +119,23 @@ class CommentRepository
     }
 
     /**
+     * deleteComment
+     *
+     * @param int $commentId
+     *
+     * @return bool
+     */
+    public function deleteComment(int $commentId): bool
+    {
+        $statement = $this->connection->getConnection()->prepare(
+            'DELETE FROM comment WHERE id = ?'
+        );
+        $affectedLines = $statement->execute([$commentId]);
+
+        return ($affectedLines > 0);
+    }
+
+    /**
      * addComment
      *
      * @param int    $user_id

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\controllers\comment;
 
+use App\lib\CheckerId;
 use App\lib\DatabaseConnection;
-use App\lib\PostIdChecker;
 use App\lib\SessionChecker;
 use App\lib\SessionManager;
 use App\Lib\UserChecker;
@@ -69,7 +69,7 @@ class ManageCommentsController
         $sessionData = $sessionChecker->getSessionData();
         $userChecker = new UserChecker();
 
-        $commentId = PostIdChecker::getId($args);
+        $commentId = CheckerId::getId($args);
         $commentRepository = $this->getCommentsRepository();
         $fetchComment = $commentRepository->getComment($commentId);
 
@@ -84,6 +84,55 @@ class ManageCommentsController
 
                 if ($success === false) {
                     $error = 'Une erreur est survenue dans la validation du commentaire';
+                } else {
+                    return $response->withHeader('Location', '/admin')->withStatus(302);
+                }
+            }
+        } else {
+            $error = 'Vous n\'avez pas accès à cette page !';
+
+            return $this->renderErrorResponse($response, $error);
+        }
+
+        $html = $view->render('admin.twig', ['error' => $error, 'session' => $sessionData]);
+        $response->getBody()->write($html);
+
+        return $response;
+    }
+
+    /**
+     * invalidateComments
+     *
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
+     * @param array             $args
+     *
+     * @return ResponseInterface
+     */
+    public function invalidateComments(RequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $sessionManager = new SessionManager();
+        $sessionChecker = new SessionChecker($sessionManager);
+
+        $sessionChecker->sessionChecker();
+        $sessionData = $sessionChecker->getSessionData();
+        $userChecker = new UserChecker();
+
+        $commentId = CheckerId::getId($args);
+        $commentRepository = $this->getCommentsRepository();
+        $fetchComment = $commentRepository->getComment($commentId);
+
+        $error = null;
+        $view = new View();
+        if (
+            $userChecker->isAuthenticated($sessionData['token'] ?? '') === true
+            && $userChecker->isAdmin($sessionData['role'] ?? '')
+        ) {
+            if ($request->getMethod() === 'POST') {
+                $success = $commentRepository->deleteComment($fetchComment->commentId);
+
+                if ($success === false) {
+                    $error = 'Une erreur est survenue dans la suppression du commentaire';
                 } else {
                     return $response->withHeader('Location', '/admin')->withStatus(302);
                 }

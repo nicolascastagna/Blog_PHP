@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\controllers\post;
 
+use App\lib\CheckerId;
 use App\lib\DatabaseConnection;
-use App\lib\PostIdChecker;
 use App\lib\SessionChecker;
 use App\lib\SessionManager;
 use App\Lib\UserChecker;
@@ -36,12 +36,12 @@ class DeletePostController
         $error = null;
 
         $view = new View();
-        $postId = PostIdChecker::getId($args);
+        $postId = CheckerId::getId($args);
         $post = $this->getPostsRepository()->getPost($postId);
 
         if (
             ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true
-            && $userChecker->isCurrentUser($post->userId, $sessionData['id']) === true)
+                && $userChecker->isCurrentUser($post->userId, $sessionData['id']) === true)
             || $userChecker->isAdmin($sessionData['role'] ?? 'ROLE_USER')
         ) {
             $html = $view->render('post_delete.twig', ['post' => $post, 'session' => $sessionData, 'error' => $error]);
@@ -74,14 +74,14 @@ class DeletePostController
         $userChecker = new UserChecker();
 
         $postRepository = $this->getPostsRepository();
-        $postId = PostIdChecker::getId($args);
+        $postId = CheckerId::getId($args);
         $fetchPost = $postRepository->getPost($postId);
 
         $error = null;
         $view = new View();
         if (
             ($userChecker->isAuthenticated($sessionData['token'] ?? '')
-            && $userChecker->isCurrentUser($fetchPost->userId, $sessionData['id']))
+                && $userChecker->isCurrentUser($fetchPost->userId, $sessionData['id']))
             || $userChecker->isAdmin($sessionData['role'] ??  'ROLE_USER')
         ) {
             if ($request->getMethod() === 'POST') {

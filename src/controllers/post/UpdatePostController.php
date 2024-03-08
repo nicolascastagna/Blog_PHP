@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\controllers\post;
 
+use App\lib\CheckerId;
 use App\lib\DatabaseConnection;
 use App\lib\FileUploadTrait;
-use App\lib\PostIdChecker;
 use App\lib\SessionChecker;
 use App\lib\SessionManager;
 use App\Lib\UserChecker;
@@ -38,7 +38,7 @@ class UpdatePostController
         $sessionChecker->sessionChecker();
         $sessionData = $sessionChecker->getSessionData();
 
-        $postId = PostIdChecker::getId($args);
+        $postId = CheckerId::getId($args);
         $post = $this->getPostsRepository()->getPost($postId);
 
         $userChecker = new UserChecker();
@@ -79,7 +79,7 @@ class UpdatePostController
         $sessionData = $sessionChecker->getSessionData();
         $userChecker = new UserChecker();
 
-        $postId = PostIdChecker::getId($args);
+        $postId = CheckerId::getId($args);
         $postRepository = $this->getPostsRepository();
         $fetchPost = $postRepository->getPost($postId);
 
