@@ -5,17 +5,18 @@
 	<div class="container-posts">
 		<div class="card-post">
 			<div class="card-header">
-				<h2 class="title">{{ post.title }}</h2>
-				<h4>{{ post.username }}</h4>
+				<h2>{{ post.title }}</h2>
+				<h4>Créé par
+					{{ post.username }}</h4>
 				<p>{{ post.updateDate ? 'Modifié le' : 'Le'}}
 					{{ post.updateDate ? post.updateDate : post.creationDate }}</p>
 			</div>
 			<div class="card-content">
-				<p>{{ post.chapo }}</p>
+				<p class="post-chapo">{{ post.chapo }}</p>
 				{% if post.image %}
 					<img src="/assets/posts/{{ post.image }}" alt={{ post.title }}>
 				{% endif %}
-				<p>{{ post.content }}</p>
+				<p class="post-content">{{ post.content }}</p>
 			</div>
 			<div class="card-action">
 				{% if session is defined and session.id is defined %}
@@ -42,6 +43,7 @@
 				<p class="error">{{ error }}</p>
 			{% endif %}
 		</div>
+		<h3 class="title">Commentaires</h3>
 		{% include 'comment.twig' %}
 	</div>
 {% endblock %}

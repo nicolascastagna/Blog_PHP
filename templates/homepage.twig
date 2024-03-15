@@ -18,18 +18,20 @@
 						<ul>
 							<li><a target="_blank" href="https://github.com/nicolascastagna"><img src="assets/icons/github.webp" loading="lazy" alt=""></a></li>
 							<li><a target="_blank" href="https://www.linkedin.com/in/nicolas-castagna-259bb61b1/"><img src="assets/icons/linkedin.webp" loading="lazy" alt=""></a></li>
+							<li><a target="_blank" href="/assets/documents/NicolasCastagnaCV.pdf"><img src="assets/icons/CV.png" loading="lazy" alt=""></a></li>
 						</ul>
 					</div>
 				</div>
 				<div>
 					<div class="container-cards">
-						<h2>Derniers articles</h2>
+						<h2 class="title">Derniers articles</h2>
 						<div class="container-posts">
 							{% for post in posts %}
 								<div class="card-post">
 									<div class="card-header">
-										<h2 class="title">{{ post.title }}</h2>
-										<h4>{{ post.username }}</h4>
+										<h2>{{ post.title }}</h2>
+										<h4>Créé par
+											{{ post.username }}</h4>
 										<p>Le
 											{{post.creationDate }}</p>
 									</div>
