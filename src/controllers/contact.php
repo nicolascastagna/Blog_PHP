@@ -66,7 +66,7 @@ class Contact
 
                 $formData = $request->getParsedBody();
 
-                if (!$this->checkFormData($formData)) {
+                if ($this->checkFormData($formData) === false) {
                     $error = 'Tous les champs doivent être remplis.';
 
                     throw new Exception($error);
@@ -122,11 +122,15 @@ class Contact
      *
      * @param  string $input
      *
-     * @return string
+     * @return string|null
      */
-    private function validateInput(string $input): string
+    private function validateInput(string $input): ?string
     {
-        return (is_string($input)) ? strip_tags($input) : null;
+        if (is_string($input) === true) {
+            return strip_tags($input);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -134,9 +138,9 @@ class Contact
      *
      * @param  string $email
      *
-     * @return string
+     * @return string|null
      */
-    private function validateEmail(string $email): string
+    private function validateEmail(string $email): ?string
     {
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return strip_tags($email);
@@ -155,7 +159,7 @@ class Contact
     private function checkFormData(array $formData): bool
     {
         foreach ($formData as $field) {
-            if (empty($field)) {
+            if (empty($field) === true) {
                 return false;
             }
         }
