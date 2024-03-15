@@ -31,7 +31,8 @@ $app->add(TwigMiddleware::create($app, $twig));
 
 $app->get('/', [Homepage::class, 'homepage']);
 $app->get('/blog', [IndexPostController::class, 'index']);
-$app->get('/contact', [Contact::class, 'contact']);
+$app->get('/contact', [Contact::class, 'renderForm']);
+$app->post('/contact', [Contact::class, 'sendEmail']);
 $app->get('/blog/article/{id}', [ShowPostController::class, 'show']);
 $app->get('/blog/ajout-article', [AddPostController::class, 'renderCreationForm']);
 $app->post('/blog/ajout-article', [AddPostController::class, 'add']);
