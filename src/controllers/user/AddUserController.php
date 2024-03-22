@@ -10,6 +10,7 @@ use App\lib\SessionManager;
 use App\Lib\UserChecker;
 use App\lib\View;
 use App\model\UserRepository;
+use PDOException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -60,20 +61,20 @@ class AddUserController
         if (isset($formData['username']) === false && isset($formData['password']) === false && isset($formData['email']) === false) {
             $error = 'Les données du formulaire sont invalides.';
         } else {
-            $username = $formData['username'];
-            $password = $formData['password'];
-            $email = $formData['email'];
+            $username = htmlspecialchars($formData['username']);
+            $password = htmlspecialchars($formData['password']);
+            $email = htmlspecialchars($formData['email']);
 
             $userRepository = $this->getUserRepository();
-            if ($userRepository->emailExists($email) === true) {
-                $error = 'L\'adresse e-mail existe déjà.';
-            } else {
-                $success = $userRepository->addUser($username, $password, $email);
 
-                if ($success === false) {
-                    $error = 'Une erreur est survenue dans l\'enregistrement.';
+            try {
+                $userRepository->addUser($username, $password, $email);
+                return $response->withHeader('Location', '/connexion')->withStatus(302);
+            } catch (PDOException $exception) {
+                if ($exception->getCode() === '23000') {
+                    $error = 'Cette adresse mail existe déjà.';
                 } else {
-                    return $response->withHeader('Location', '/blog')->withStatus(302);
+                    $error = 'Une erreur est survenue dans l\'enregistrement.';
                 }
             }
         }

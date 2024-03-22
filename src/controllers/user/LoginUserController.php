@@ -65,8 +65,8 @@ class LoginUserController
         if (isset($formData['email']) === false && isset($formData['password']) === false) {
             $error = 'Les données du formulaire sont invalides.';
         } else {
-            $email = $formData['email'];
-            $password = $formData['password'];
+            $email = htmlspecialchars($formData['email']);
+            $password = htmlspecialchars($formData['password']);
 
             $userRepository = $this->getUserRepository();
             $user = $userRepository->login($email, $password);
@@ -85,7 +85,7 @@ class LoginUserController
                 ];
                 $userRepository->setToken($token, $user->userId);
 
-                return $response->withHeader('Location', '/')->withStatus(302);
+                return $response->withHeader('Location', '/blog')->withStatus(302);
             }
         }
         $view = new View();

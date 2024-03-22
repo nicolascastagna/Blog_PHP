@@ -2,25 +2,28 @@
 {% block title %}Modification d'article
 {% endblock %}
 {% block content %}
-	<div class="container-posts">
+	<div class="wrapper-inputs">
 		<h2 class="title">Modification de l'article</h2>
-		<div class="card-post">
-			<form method="post" enctype="multipart/form-data">
-				<div class="card-header">
-					<input type="text" id="title" name="title" value="{{ post.title }}">
-					<h4>{{ post.author }}</h4>
-					<p>{{ post.creation_date }}</p>
-				</div>
-				<div class="card-content">
-					<textarea id="chapo" name="chapo">{{ post.chapo }}</textarea>
-					<textarea id="content" name="content">{{ post.content }}</textarea>
-					<input class="input-file" type="file" name="file" id="file"/>
-				</div>
+		<form action="/blog/modification-article/{{ post.postId }}" method="post" enctype="multipart/form-data">
+			<div class="input-container">
+				<label for="title">Titre :</label>
+				<input type="text" class="form-control" id="title" name="title" value="{{ post.title }}" required>
+			</div>
+			<div class="input-container">
+				<label for="chapo">Chapo :</label>
+				<textarea class="form-control" id="chapo" name="chapo" required>{{ post.chapo }}</textarea>
+			</div>
+			<div class="input-container">
+				<label for="content">Contenu :</label>
+				<textarea class="form-control post-textarea" id="content" name="content" required>{{ post.content }}</textarea>
+			</div>
+			<div class="input-container">
+				<input class="input-file form-control" type="file" name="file" id="file"/>
 			</div>
 			{% if error %}
 				<p class="error">{{ error }}</p>
 			{% endif %}
-			<input class="button-form" type="submit" value="Modifier"/>
+			<button class="btn btn-primary" type="submit">Modifier l'article</button>
 		</form>
 	</div>
 {% endblock %}

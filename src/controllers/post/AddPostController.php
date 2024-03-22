@@ -78,9 +78,9 @@ class AddPostController
             if (isset($formData['title']) === false && isset($formData['chapo']) === false && isset($formData['content']) === false) {
                 $error = 'Les données du formulaire sont invalides.';
             } else {
-                $title = $formData['title'];
-                $chapo = $formData['chapo'];
-                $content = $formData['content'];
+                $title = htmlspecialchars($formData['title']);
+                $chapo = htmlspecialchars($formData['chapo']);
+                $content = htmlspecialchars($formData['content']);
 
                 $image = null;
                 $uploadedFiles = $request->getUploadedFiles();
@@ -107,7 +107,7 @@ class AddPostController
                 }
 
                 $postRepository = $this->getPostsRepository();
-                $success = $postRepository->addPost($sessionData['id'], $title, $content, $chapo, $image);
+                $success = $postRepository->addPost($sessionData['id'], $title, $chapo, $content, $image);
 
                 if ($success === false) {
                     $error = 'Une erreur est survenue dans l\'ajout de l\'article.';

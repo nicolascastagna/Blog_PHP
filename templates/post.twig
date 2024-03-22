@@ -3,7 +3,7 @@
 {% endblock %}
 {% block content %}
 	<div class="container-posts">
-		<div class="card-post">
+		<div class="card-post post-detail">
 			<div class="card-header">
 				<h2>{{ post.title }}</h2>
 				<h4>Créé par
@@ -31,19 +31,23 @@
 			</div>
 		</div>
 		<h4>{{comment.content}}</h4>
-		<div class="add-comments">
+		<div class="wrapper-add-comment">
 			{% if session is defined and session.id is defined %}
 				<h4>Ajoutez un commentaire</h4>
 				<form action="/blog/article/{{ post.postId }}/ajout-commentaire" method="post">
-					<textarea name="content" id="content" required></textarea>
-					<input class="" type="submit" value="Ajouter le commentaire"/>
+					<div class="input-container">
+						<textarea name="content" id="content" required></textarea>
+						<button class="btn-primary btn" type="submit">Ajouter le commentaire</button>
+					</div>
 				</form>
 			{% endif %}
 			{% if error %}
-				<p class="error">{{ error }}</p>
+				<p>{{ error }}</p>
 			{% endif %}
 		</div>
-		<h3 class="title">Commentaires</h3>
-		{% include 'comment.twig' %}
+		<div class="comments-list">
+			<h3 class="title">Commentaires</h3>
+			{% include 'comment.twig' %}
+		</div>
 	</div>
 {% endblock %}
