@@ -1,6 +1,6 @@
 <?php
 
-namespace App\public;
+namespace App;
 
 use App\controllers\Homepage;
 use App\controllers\Contact;
