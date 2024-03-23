@@ -2,17 +2,28 @@
 {% block title %}Ajouter un nouvel article
 {% endblock %}
 {% block content %}
-	<form action="/blog/ajout-article" method="post" enctype="multipart/form-data">
-		<label for="title">Titre :</label>
-		<input type="text" id="title" name="title" required>
-		<label for="chapo">Chapo :</label>
-		<textarea id="chapo" name="chapo" required></textarea>
-		<label for="content">Contenu :</label>
-		<textarea id="content" name="content" required></textarea>
-		<input class="input-file" type="file" name="file" id="file"/>
-		{% if error %}
-			<p class="error">{{ error }}</p>
-		{% endif %}
-		<button type="submit">Ajouter l'article</button>
-	</form>
+	<div class="wrapper-inputs">
+		<h2 class="title">Ajouter un article</h2>
+		<form action="/blog/ajout-article" method="post" enctype="multipart/form-data">
+			<div class="input-container">
+				<label for="title">Titre :</label>
+				<input type="text" class="form-control" id="title" name="title" required>
+			</div>
+			<div class="input-container">
+				<label for="chapo">Chapo :</label>
+				<textarea class="form-control" id="chapo" name="chapo" required></textarea>
+			</div>
+			<div class="input-container">
+				<label for="content">Contenu :</label>
+				<textarea class="form-control post-textarea" id="content" name="content" required></textarea>
+			</div>
+			<div class="input-container">
+				<input class="input-file form-control" type="file" name="file" id="file"/>
+			</div>
+			{% if error %}
+				<p>{{ error }}</p>
+			{% endif %}
+			<button class="btn btn-primary" type="submit">Ajouter l'article</button>
+		</form>
+	</div>
 {% endblock %}

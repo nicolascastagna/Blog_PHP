@@ -43,7 +43,7 @@ class AddCommentController
                 throw new Exception('Certaines informations sont manquantes.');
             }
 
-            $content = $formData['content'];
+            $content = htmlspecialchars($formData['content']);
 
             $commentRepository = $this->getCommentsRepository();
             $success = $commentRepository->addComment($sessionData['id'], $postId, $content);

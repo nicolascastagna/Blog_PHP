@@ -4,16 +4,17 @@
 {% block content %}
 	<div>
 		<div class="container-cards">
-			<h2>Listes des articles</h2>
+			<h2 class='title'>Listes des articles</h2>
 			<div class="container-posts">
 				{% if session is defined and session.id is defined %}
-					<a href="/blog/ajout-article" class="button">Ajouter un nouvel article</a>
+					<a href="/blog/ajout-article" class="btn btn-primary">Ajouter un nouvel article</a>
 				{% endif %}
 				{% for post in posts %}
 					<div class="card-post">
 						<div class="card-header">
-							<h2 class="title">{{ post.title }}</h2>
-							<h4>{{ post.username }}</h4>
+							<h2>{{ post.title }}</h2>
+							<h4>Créé par
+								{{ post.username }}</h4>
 							<p>{{ post.updateDate ? 'Modifié le' : 'Le' }}
 								{{ post.updateDate ? post.updateDate : post.creationDate }}</p>
 						</div>

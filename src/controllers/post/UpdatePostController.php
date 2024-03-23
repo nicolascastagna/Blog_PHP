@@ -50,7 +50,7 @@ class UpdatePostController
                 && $userChecker->isCurrentUser($post->userId, $sessionData['id']) === true)
             || $userChecker->isAdmin($sessionData['role'] ?? 'ROLE_USER')
         ) {
-            $html = $view->render('post_update.twig', ['session' => $sessionData, 'error' => $error]);
+            $html = $view->render('post_update.twig', ['post' => $post, 'session' => $sessionData, 'error' => $error]);
             $response->getBody()->write($html);
         } else {
             $error = 'Vous n\'avez pas accès à cette page !';
@@ -119,9 +119,9 @@ class UpdatePostController
             if (isset($formData['title']) === false || isset($formData['chapo']) === false || isset($formData['content']) === false) {
                 $error = 'Les données du formulaire sont invalides.';
             } else {
-                $title = $formData['title'];
-                $chapo = $formData['chapo'];
-                $content = $formData['content'];
+                $title = htmlspecialchars($formData['title']);
+                $chapo = htmlspecialchars($formData['chapo']);
+                $content = htmlspecialchars($formData['content']);
 
                 $image = $fetchPost->image;
                 $uploadedFiles = $request->getUploadedFiles();

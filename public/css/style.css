@@ -12,18 +12,24 @@
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
     font-family: var(--font-title);
 }
 
 p,
 a,
-li {
+li,
+.form-label {
     font-family: var(--font-content);
 }
 
 body {
     margin: auto;
+}
+
+section {
+    min-height: 90vh;
 }
 
 .grid-container {
@@ -34,6 +40,11 @@ body {
 img {
     max-width: 100%;
     height: auto;
+}
+
+.title {
+    padding-left: 10px;
+    width: 90%;
 }
 
 /* Header */
@@ -162,11 +173,10 @@ nav a:hover:before {
 /* Hero */
 .hero {
     width: 100%;
-    display: flex;
+    text-align: center;
 }
 
 .hero-title {
-    width: 60%;
     margin-top: auto;
     margin-bottom: auto;
     margin-left: 30px;
@@ -180,6 +190,8 @@ nav a:hover:before {
 .hero-img {
     width: 40%;
     min-width: 250px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .sub-title {
@@ -190,6 +202,7 @@ nav a:hover:before {
 .icons-container ul {
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
 }
 
 .icons-container li {
@@ -198,11 +211,15 @@ nav a:hover:before {
 
 .icons-container img {
     margin: 5px;
-    width: 30px;
+    width: 34px;
+}
+.icons-container img:hover {
+    scale: 1.2;
+    transition: 0.1s;
 }
 /* Posts */
-.container-cards h2 {
-    margin: 50px 10px 25px;
+.container-cards .title {
+    margin: 50px 0px 25px;
 }
 
 .container-posts {
@@ -214,9 +231,14 @@ nav a:hover:before {
 .card-post {
     box-shadow: 0 0 10px rgba(0, 0, 0, 10%);
     margin: 10px;
-    padding: 10px;
     box-sizing: border-box;
     width: 100%;
+    padding: 10px;
+}
+
+.post-detail {
+    box-shadow: unset;
+    padding: 0;
 }
 
 .card-header {
@@ -233,26 +255,149 @@ nav a:hover:before {
     margin-bottom: 10px;
 }
 
+.card-content img {
+    max-width: 500px;
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+}
+
+.post-chapo {
+    font-style: italic;
+    font-size: 16px;
+}
+
+.post-content {
+    text-align: justify;
+    line-height: 27px;
+}
+
+.post-textarea {
+    min-height: 300px !important;
+    resize: vertical !important;
+}
+
+.input-file {
+    padding: 5px;
+    color: var(--title);
+    background-color: var(--background-color-footer);
+    border-radius: 5px;
+}
+.input-file::file-selector-button {
+    padding: 10px 20px 10px 20px;
+    color: #fff;
+    background-color: var(--primary);
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
 .card-action {
     display: flex;
     justify-content: space-between;
 }
 
-.card-action a {
+.card-action a,
+.card-content a {
     text-decoration: none;
     color: var(--primary);
 }
 
-.card-action a:hover {
+.card-action a:hover,
+.card-content a:hover {
     transition: all 0.2s;
     color: var(--secondary);
 }
 
+.container-single-post {
+    width: 100%;
+}
+
+.container-single-post .title {
+    text-align: center;
+}
+
+.container-single-post form {
+    margin-bottom: 0 !important;
+}
+
+.post-actions-delete {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.post-actions-delete .btn {
+    margin-top: 10px;
+}
+
 /* Comments */
+.comments-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.comments-list h3 {
+    /* padding-left: 0; */
+    margin-bottom: 0;
+}
+
+.containers-comments {
+    padding: 10px;
+    min-height: 100px;
+}
+
+.no-comments {
+    text-align: center;
+}
+
+.wrapper-add-comment {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin-top: 50px;
+    justify-content: center;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.wrapper-add-comment h4 {
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.wrapper-add-comment textarea {
+    resize: vertical !important;
+    width: 100%;
+    border-radius: 5px;
+    outline: 0;
+}
+
+.wrapper-add-comment .btn {
+    float: right;
+}
+
+.comment-action {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Hero */
 
 /* Footer */
 footer {
     background-color: var(--background-color-footer);
+    margin-top: 30px;
+    min-height: 63.5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .footer-container a {
@@ -262,6 +407,94 @@ footer {
     display: flex;
     justify-content: center;
     padding: 10px;
+}
+
+/* Contact */
+.wrapper-inputs {
+    max-width: 100%;
+    padding: 20px;
+}
+
+.wrapper-inputs form {
+    margin-bottom: 65px;
+}
+
+.wrapper-inputs button {
+    float: right;
+}
+
+.input-container {
+    margin-bottom: 20px;
+}
+
+.input-container input,
+.input-container textarea {
+    margin-top: 10px;
+}
+
+.input-container textarea {
+    height: 100px;
+    margin-bottom: 15px;
+    resize: none;
+}
+
+.form-control {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 14px;
+}
+
+.btn {
+    padding: 12px 22px;
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    font-family: var(--font-content);
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: var(--secondary);
+}
+
+.wrapper-inputs form input[type="text"]:focus,
+.wrapper-inputs form input[type="email"]:focus,
+.wrapper-inputs form input[type="password"]:focus,
+.wrapper-inputs form textarea:focus,
+.wrapper-inputs form input[type="text"]:hover,
+.wrapper-inputs form input[type="email"]:hover,
+.wrapper-inputs form input[type="password"]:hover,
+.wrapper-inputs form textarea:hover,
+.wrapper-add-comment form textarea:focus,
+.wrapper-add-comment textarea:hover {
+    border-color: var(--primary);
+    border-width: 2px;
+    box-shadow: 0 0 5px rgba(var(--primary), 0.5);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.input-container,
+.btn {
+    animation: fadeInUp 0.5s ease-in-out;
 }
 
 /* Error */
@@ -280,6 +513,15 @@ footer {
 }
 
 /* Media Query */
+@media all and (min-width: 768px) {
+    .hero {
+        display: flex;
+    }
+
+    .hero-title {
+        width: 60%;
+    }
+}
 @media all and (min-width: 1024px) {
     .group-menus {
         margin-left: 0;
@@ -300,5 +542,9 @@ footer {
         color: var(--title);
         font-size: 20px;
         padding-right: 10px;
+    }
+    .wrapper-inputs {
+        max-width: 600px;
+        margin: 0 auto;
     }
 }

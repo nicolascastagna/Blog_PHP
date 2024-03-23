@@ -2,34 +2,35 @@
 {% block title %}Contact
 {% endblock %}
 {% block content %}
-	<h1>Formulaire de contact</h1>
-	{% if success %}
-		<div class="success">
-			{{ success }}
-		</div>
-	{% endif %}
-	<form action="/contact" method="post">
-		<div class="mb-3">
-			<label for="firstName" class="form-label">Prénom</label>
-			<input type="text" class="form-control" id="firstName" name="firstName" required>
-		</div>
-		<div class="mb-3">
-			<label for="lastName" class="form-label">Nom</label>
-			<input type="text" class="form-control" id="lastName" name="lastName" required>
-		</div>
-		<div class="mb-3">
-			<label for="email" class="form-label">Adresse email</label>
-			<input type="email" class="form-control" id="email" name="email" required>
-		</div>
-		<div class="mb-3">
-			<label for="subject" class="form-label">Sujet</label>
-			<input type="text" class="form-control" id="subject" name="subject" required>
-		</div>
-		<div class="mb-3">
-			<label for="body" class="form-label">Message</label>
-			<textarea class="form-control" id="body" name="body" rows="5" required></textarea>
-		</div>
-		<button type="submit" class="btn btn-primary">Envoyer</button>
-	</form>
-
+	<div class="wrapper-inputs">
+		<h2 class="title">Formulaire de contact</h2>
+		<form action="/contact" method="post">
+			<div class="input-container">
+				<label for="firstName" class="form-label">Prénom</label>
+				<input type="text" class="form-control" id="firstName" name="firstName" required>
+			</div>
+			<div class="input-container">
+				<label for="lastName" class="form-label">Nom</label>
+				<input type="text" class="form-control" id="lastName" name="lastName" required>
+			</div>
+			<div class="input-container">
+				<label for="email" class="form-label">Adresse email</label>
+				<input type="email" class="form-control" id="email" name="email" required>
+			</div>
+			<div class="input-container">
+				<label for="subject" class="form-label">Sujet</label>
+				<input type="text" class="form-control" id="subject" name="subject" required>
+			</div>
+			<div class="input-container">
+				<label for="body" class="form-label">Message</label>
+				<textarea class="form-control" id="body" name="body" required></textarea>
+			</div>
+			{% if success %}
+				<p>
+					{{ success }}
+				</p>
+			{% endif %}
+			<button type="submit" class="btn btn-primary">Envoyer</button>
+		</form>
+	</div>
 {% endblock %}
