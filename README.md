@@ -1,4 +1,7 @@
 # Projet 5 - Créez votre premier blog en PHP
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/43b9019771ce48a7856b43fbb2c3cb22)](https://app.codacy.com/gh/nicolascastagna/Blog_PHP?utm_source=github.com&utm_medium=referral&utm_content=nicolascastagna/Blog_PHP&utm_campaign=Badge_Grade)
+
 ### Parcours Développeur d'application PHP/Symfony
 
 ## Prérequis
