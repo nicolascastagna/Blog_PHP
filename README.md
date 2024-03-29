@@ -1,6 +1,8 @@
 # Projet 5 - Créez votre premier blog en PHP
 ### Parcours Développeur d'application PHP/Symfony
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/8e3925f31313462c9bc522882c75073a)](https://app.codacy.com/gh/nicolascastagna/Blog_PHP/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 ## Prérequis
 
 - Serveur local sous PHP 8.2 ([MAMP](https://www.wampserver.com/) pour macOs ou [WAMP](https://www.mamp.info/en/mamp/mac/) pour windows)
