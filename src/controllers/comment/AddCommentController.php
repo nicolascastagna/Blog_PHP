@@ -11,6 +11,7 @@ use App\lib\SessionManager;
 use App\Lib\UserChecker;
 use App\lib\View;
 use App\model\CommentRepository;
+use App\model\PostRepository;
 use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -36,7 +37,12 @@ class AddCommentController
 
         $userChecker = new UserChecker();
         $formData = $request->getParsedBody();
+
         $postId = CheckerId::getId($args);
+        $post = $this->getPostsRepository()->getPost($postId);
+
+        $view = new View();
+        $successMessage = null;
 
         if ($userChecker->isAuthenticated($sessionData['token'] ?? '') === true) {
             if (isset($formData['content']) === false) {
@@ -46,13 +52,17 @@ class AddCommentController
             $content = htmlspecialchars($formData['content']);
 
             $commentRepository = $this->getCommentsRepository();
+            $comment = $commentRepository->getComments($postId);
+            $comments = array_filter($comment, fn ($comment) => $comment->status == 1);
             $success = $commentRepository->addComment($sessionData['id'], $postId, $content);
 
             if ($success === false) {
                 throw new Exception('Une erreur est survenue dans l\'ajout du commentaire.');
+            } else {
+                $successMessage = 'Votre commentaire a bien été envoyé et en attente de validation';
             }
-
-            return $response->withHeader('Location', "/blog/article/{$args['id']}")->withStatus(302);
+            $html = $view->render('post.twig', ['post' => $post, 'comments' => $comments, 'session' => $sessionData, 'success' => $successMessage]);
+            $response->getBody()->write($html);
         } else {
             $error = 'Vous n\'avez pas accès à cette page !';
 
@@ -77,6 +87,20 @@ class AddCommentController
         $response->getBody()->write($html);
 
         return $response->withStatus(403);
+    }
+
+    /**
+     * getPostsRepository
+     *
+     * @return PostRepository
+     */
+    private function getPostsRepository(): PostRepository
+    {
+        $connection = new DatabaseConnection();
+        $postRepository = new PostRepository();
+        $postRepository->connection = $connection;
+
+        return $postRepository;
     }
 
     /**
